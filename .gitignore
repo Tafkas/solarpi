@@ -45,3 +45,7 @@ docs/_build
 # Virtualenvs
 env
 env*
+
+README.rst
+
+.idea/*
