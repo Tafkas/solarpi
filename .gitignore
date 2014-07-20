@@ -49,3 +49,4 @@ env*
 README.rst
 
 .idea/*
+dev.db
