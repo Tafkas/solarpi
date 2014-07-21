@@ -60,11 +60,15 @@
 
 {% include "footer.html" %}
 
+
 <!-- JavaScript at the bottom for fast page loading -->
 {% assets "js_all" %}
     <script type="text/javascript" src="{{ ASSET_URL }}"></script>
 {% endassets %}
-{% block js %}{% endblock %}
+{% block js %}
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="/static/js/charts.js"></script>
+{% endblock %}
 <!-- end scripts -->
 {% endblock %}
 </body>

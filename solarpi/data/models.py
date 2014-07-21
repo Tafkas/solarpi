@@ -15,7 +15,7 @@ from solarpi.database import (
 class Data(SurrogatePK, Model):
     __tablename__ = 'data'
 
-    created_at = Column(db.DateTime, nullable=False, default=dt.datetime.utcnow)
+    created_at = Column(db.Text, nullable=False, default=dt.datetime.utcnow)
     dc_1_u = Column(db.Integer(), nullable=True)
     dc_1_i = Column(db.Integer(), nullable=True)
     dc_1_p = Column(db.Integer(), nullable=True)
