@@ -11,7 +11,7 @@ blueprint = Blueprint("data", __name__, url_prefix='/data',
 
 @blueprint.route("/")
 def index():
-    data = Data.query.limit(350)
+    data = Data.query.limit(500)
     categories = [1000 * calendar.timegm(datetime.strptime(d.created_at, "%Y-%m-%dT%H:%M:%S").timetuple()) for d in
                   data]
     series = [int(d.dc_1_i or 0) for d in data]
