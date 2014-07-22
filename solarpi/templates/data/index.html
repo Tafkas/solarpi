@@ -1,10 +1,20 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>Solar Data</h1>
+    <h1>Solar Data for {{ today.strftime('%Y-%m-%d') }}</h1>
     <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
     <script>
-        var data = {{ data|safe }}
+        var data = {{ data|safe }};
     </script>
+
+    <div>
+        <ul>
+            <li>
+                <a href="{{ url_for('data.index', date=yesterday.strftime('%Y-%m-%d')) }}">Yesterday</a></li>
+            <li><a href="{{ url_for('data.index', date=tomorrow.strftime('%Y-%m-%d')) }}">Tomorrow</a></li>
+        </ul>
+
+    </div>
+
 
 {% endblock %}
