@@ -11,10 +11,10 @@ blueprint = Blueprint("data", __name__, url_prefix='/data',
 
 @blueprint.route("/")
 @blueprint.route("/<date>")
-def index(date):
+def index(date=datetime.now().strftime('%Y-%m-%d')):
     try:
         current_date = datetime.strptime(date, "%Y-%m-%d")
-    except ValueError:
+    except ValueError, TypeError:
         current_date = datetime.strptime('2014-04-21', "%Y-%m-%d")
     yesterday = current_date - timedelta(days=1)
     tomorrow = current_date + timedelta(days=1)
