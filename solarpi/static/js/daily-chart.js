@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $(function () {
-        $('#container').highcharts({
+        $('#daily-chart').highcharts({
             chart: {
                 type: 'column'
             },

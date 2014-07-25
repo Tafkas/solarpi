@@ -15,7 +15,7 @@ js = Bundle(
     "libs/metisMenu/metisMenu.js",
     "js/plugins.js",
     "js/sb-admin-2.js",
-    "js/charts.js",
+    "js/daily-chart.js",
     "js/monthly-overview-chart.js",
     filters='jsmin',
     output="public/js/common.js"
