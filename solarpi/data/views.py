@@ -9,9 +9,9 @@ blueprint = Blueprint("data", __name__, url_prefix='/data',
                       static_folder="../static")
 
 
-@blueprint.route("/")
-@blueprint.route("/<date>")
-def index(date=datetime.now().strftime('%Y-%m-%d')):
+@blueprint.route("/daily")
+@blueprint.route("/daily/<date>")
+def daily(date=datetime.now().strftime('%Y-%m-%d')):
     try:
         current_date = datetime.strptime(date, "%Y-%m-%d")
     except ValueError, TypeError:
@@ -24,4 +24,4 @@ def index(date=datetime.now().strftime('%Y-%m-%d')):
                   data]
     series = [(float(d.dc_1_p or 0) + float(d.dc_2_p or 0)) for d in data]
     data = [list(x) for x in zip(categories, series)]
-    return render_template("data/index.html", data=data, yesterday=yesterday, today=current_date, tomorrow=tomorrow)
+    return render_template("data/daily.html", data=data, yesterday=yesterday, today=current_date, tomorrow=tomorrow)
