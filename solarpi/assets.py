@@ -16,6 +16,7 @@ js = Bundle(
     "js/plugins.js",
     "js/sb-admin-2.js",
     "js/charts.js",
+    "js/monthly-overview-chart.js",
     filters='jsmin',
     output="public/js/common.js"
 )
