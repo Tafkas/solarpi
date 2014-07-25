@@ -27,6 +27,7 @@ def daily(date=datetime.now().strftime('%Y-%m-%d')):
     data = [list(x) for x in zip(categories, series)]
     return render_template("data/daily.html", data=data, yesterday=yesterday, today=current_date, tomorrow=tomorrow)
 
+
 @blueprint.route("/monthly")
 def monthly(date=datetime.now().strftime('%Y-%m-%d')):
     try:
@@ -39,5 +40,4 @@ def monthly(date=datetime.now().strftime('%Y-%m-%d')):
                   data]
     series = [(float(d.dc_1_p or 0) + float(d.dc_2_p or 0)) for d in data]
     data = [list(x) for x in zip(categories, series)]
-    print data
     return render_template("data/monthly.html", data=data)
