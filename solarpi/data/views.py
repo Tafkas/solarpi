@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 import calendar
 from datetime import datetime, timedelta
-from flask.ext.login import login_required
+
 from flask import Blueprint, render_template
 from sqlalchemy import extract
+
 from solarpi.data.models import Data
+
+import helper
 
 blueprint = Blueprint("data", __name__, url_prefix='/data',
                       static_folder="../static")
@@ -25,7 +28,11 @@ def daily(date=datetime.now().strftime('%Y-%m-%d')):
                   data]
     series = [(float(d.dc_1_p or 0) + float(d.dc_2_p or 0)) for d in data]
     data = [list(x) for x in zip(categories, series)]
-    return render_template("data/daily.html", data=data, yesterday=yesterday, today=current_date, tomorrow=tomorrow)
+
+    daily_energy = helper.integrate(series, 0.25) / 1000  # in kW
+
+    return render_template("data/daily.html", data=data, yesterday=yesterday, today=current_date, tomorrow=tomorrow,
+                           daily_energy=daily_energy)
 
 
 @blueprint.route("/monthly")
