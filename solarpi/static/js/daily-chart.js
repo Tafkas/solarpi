@@ -27,7 +27,8 @@ $(document).ready(function () {
             plotOptions: {
                 column: {
                     pointPadding: 0.2,
-                    borderWidth: 0
+                    borderWidth: 0,
+                    pointWidth: 5
                 }
             },
             series: [
