@@ -24,12 +24,15 @@ def daily(date=datetime.now().strftime('%Y-%m-%d')):
     tomorrow = current_date + timedelta(days=1)
     data = Data.query.filter(Data.created_at > current_date.strftime('%Y-%m-%d')).filter(
         Data.created_at < tomorrow.strftime('%Y-%m-%d'))
-    categories = [1000 * calendar.timegm(datetime.strptime(d.created_at, "%Y-%m-%dT%H:%M:%S").timetuple()) for d in
-                  data]
-    series = [(float(d.dc_1_p or 0) + float(d.dc_2_p or 0)) for d in data]
-    data = [list(x) for x in zip(categories, series)]
 
-    daily_energy = helper.integrate(series, 0.25) / 1000  # in kW
+    daily_energy = data[-1].daily_energy
+
+    categories = [1000 * calendar.timegm(datetime.strptime(d.created_at.split(".")[0], "%Y-%m-%dT%H:%M:%S").timetuple())
+                  for d in
+                  data]
+
+    series = [(int(d.actual_energy or 0)) for d in data]
+    data = [list(x) for x in zip(categories, series)]
 
     return render_template("data/daily.html", data=data, yesterday=yesterday, today=current_date, tomorrow=tomorrow,
                            daily_energy=daily_energy)
