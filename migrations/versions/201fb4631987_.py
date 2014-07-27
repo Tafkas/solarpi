@@ -31,7 +31,7 @@ def upgrade():
                     sa.Column('ac_3_i', sa.Float(), nullable=True),
                     sa.Column('dc_3_u', sa.Integer(), nullable=True),
                     sa.Column('dc_3_p', sa.Integer(), nullable=True),
-                    sa.Column('actual_energy', sa.Intege(), nullable=True),
+                    sa.Column('current_power', sa.Intege(), nullable=True),
                     sa.Column('daily_energy', sa.Float(), nullable=True),
                     sa.Column('total_energy', sa.Intege(), nullable=True),
                     sa.PrimaryKeyConstraint('id')

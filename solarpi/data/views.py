@@ -31,7 +31,7 @@ def daily(date=datetime.now().strftime('%Y-%m-%d')):
                   for d in
                   data]
 
-    series = [(int(d.actual_energy or 0)) for d in data]
+    series = [(int(d.current_power or 0)) for d in data]
     data = [list(x) for x in zip(categories, series)]
 
     return render_template("data/daily.html", data=data, yesterday=yesterday, today=current_date, tomorrow=tomorrow,

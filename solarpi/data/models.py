@@ -28,7 +28,7 @@ class Data(SurrogatePK, Model):
     ac_3_i = Column(db.Float(), nullable=True)
     dc_3_u = Column(db.Integer(), nullable=True)
     dc_3_p = Column(db.Integer(), nullable=True)
-    actual_energy = Column(db.Integer(), nullable=True)
+    current_power = Column(db.Integer(), nullable=True)
     daily_energy = Column(db.Float(), nullable=True)
     total_energy = Column(db.Integer(), nullable=True)
 
