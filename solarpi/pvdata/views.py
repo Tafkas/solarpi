@@ -23,11 +23,13 @@ def daily(date=datetime.now().strftime('%Y-%m-%d')):
     data = PVData.query.filter(PVData.created_at > current_date.strftime('%Y-%m-%d')).filter(
         PVData.created_at < tomorrow.strftime('%Y-%m-%d')).filter(PVData.current_power > 0)
 
-    daily_energy = data[-1].daily_energy
+    try:
+        daily_energy = data[-1].daily_energy
+    except IndexError:
+        daily_energy = 0
 
     categories = [1000 * calendar.timegm(datetime.strptime(d.created_at.split(".")[0], "%Y-%m-%dT%H:%M:%S").timetuple())
-                  for d in
-                  data]
+                  for d in data]
 
     series = [(int(d.current_power or 0)) for d in data]
     data = [list(x) for x in zip(categories, series)]
@@ -42,7 +44,8 @@ def monthly(date=datetime.now().strftime('%Y-%m-%d')):
         current_date = datetime.strptime(date, "%Y-%m-%d")
     except ValueError, TypeError:
         current_date = datetime.strptime('2014-04-21', "%Y-%m-%d")
-    data = PVData.query.filter(extract('year', PVData.created_at) == 2014).filter(extract('month', Data.created_at) == 5)
+    data = PVData.query.filter(extract('year', PVData.created_at) == 2014).filter(
+        extract('month', PVData.created_at) == 5)
 
     categories = [1000 * calendar.timegm(datetime.strptime(d.created_at, "%Y-%m-%dT%H:%M:%S").timetuple()) for d in
                   data]

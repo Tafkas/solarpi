@@ -29,6 +29,7 @@ def upgrade():
                     sa.Column('wind_deg', sa.Integer(), nullable=True),
                     sa.Column('clouds', sa.Integer(), nullable=True),
                     sa.Column('rain', sa.Integer(), nullable=True),
+                    sa.Column('snow', sa.Integer(), nullable=True),
                     sa.Column('weather_id', sa.Integer(), nullable=True),
                     sa.PrimaryKeyConstraint('id')
     )

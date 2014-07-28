@@ -23,6 +23,7 @@ class Weather(SurrogatePK, Model):
     wind_deg = Column(db.Integer(), nullable=True)
     clouds = Column(db.Integer(), nullable=True)
     rain = Column(db.Integer(), nullable=True)
+    snow = Column(db.Integer(), nullable=True)
     weather_id = Column(db.Integer(), nullable=True)
 
 
