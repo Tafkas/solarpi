@@ -28,7 +28,7 @@ $(document).ready(function () {
                 column: {
                     pointPadding: 0.2,
                     borderWidth: 0,
-                    pointWidth: 5
+                    pointWidth: 3
                 }
             },
             series: [

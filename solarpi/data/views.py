@@ -23,7 +23,7 @@ def daily(date=datetime.now().strftime('%Y-%m-%d')):
     yesterday = current_date - timedelta(days=1)
     tomorrow = current_date + timedelta(days=1)
     data = Data.query.filter(Data.created_at > current_date.strftime('%Y-%m-%d')).filter(
-        Data.created_at < tomorrow.strftime('%Y-%m-%d'))
+        Data.created_at < tomorrow.strftime('%Y-%m-%d')).filter(Data.current_power > 0)
 
     daily_energy = data[-1].daily_energy
 
