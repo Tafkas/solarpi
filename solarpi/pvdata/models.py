@@ -9,9 +9,10 @@ from solarpi.database import (
 )
 
 
-class Data(SurrogatePK, Model):
+class PVData(SurrogatePK, Model):
     __tablename__ = 'pvdata'
 
+    id = Column(db.Integer(), nullable=False, primary_key=True)
     created_at = Column(db.Text(), nullable=False, default=dt.datetime.utcnow)
     ac_1_u = Column(db.Integer(), nullable=True)
     ac_1_i = Column(db.Float(), nullable=True)
@@ -30,5 +31,5 @@ class Data(SurrogatePK, Model):
     total_energy = Column(db.Integer(), nullable=True)
 
 
-def __init__(self, username, email, password=None, **kwargs):
-    db.Model.__init__(self, **kwargs)
+def __init__(self):
+    db.Model.__init__(self)

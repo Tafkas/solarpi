@@ -1,1 +1,3 @@
-__author__ = 'stade'
+'''The weather module.'''
+
+from . import views
