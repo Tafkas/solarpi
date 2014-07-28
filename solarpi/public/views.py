@@ -9,10 +9,11 @@ blueprint = Blueprint('public', __name__, static_folder="../static")
 
 @blueprint.route("/")
 def home():
-    data = PVData.query.filter(PVData.created_at > (datetime.now() - timedelta(days=1)))
-    current_power = data[-1].current_power
-    daily_energy = data[-1].daily_energy
-    total_energy = data[-1].total_energy
+    data = PVData.query.filter(PVData.created_at > (datetime.now() - timedelta(days=1))).order_by(PVData.id.desc())
+    current_power = data.first().current_power
+    daily_energy = data.first().daily_energy
+    total_energy = data.first().total_energy
+
     return render_template("public/home.html", current_power=current_power, daily_energy=daily_energy,
                            total_energy=total_energy, data=None)
 
