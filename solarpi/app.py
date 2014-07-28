@@ -5,14 +5,12 @@ from flask import Flask, render_template
 from solarpi.settings import ProdConfig
 from solarpi.assets import assets
 from solarpi.extensions import (
-    bcrypt,
     cache,
     db,
-    login_manager,
     migrate,
     debug_toolbar,
 )
-from solarpi import public, user, data
+from solarpi import public, pvdata, weather
 
 
 def create_app(config_object=ProdConfig):
@@ -31,10 +29,8 @@ def create_app(config_object=ProdConfig):
 
 def register_extensions(app):
     assets.init_app(app)
-    bcrypt.init_app(app)
     cache.init_app(app)
     db.init_app(app)
-    login_manager.init_app(app)
     debug_toolbar.init_app(app)
     migrate.init_app(app, db)
     return None
@@ -42,8 +38,8 @@ def register_extensions(app):
 
 def register_blueprints(app):
     app.register_blueprint(public.views.blueprint)
-    app.register_blueprint(user.views.blueprint)
-    app.register_blueprint(data.views.blueprint)
+    app.register_blueprint(pvdata.views.blueprint)
+    app.register_blueprint(weather.views.blueprint)
     return None
 
 

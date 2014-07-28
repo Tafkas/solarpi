@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 import datetime as dt
 
-from flask.ext.login import UserMixin
-
-from solarpi.extensions import bcrypt
 from solarpi.database import (
     Column,
     db,

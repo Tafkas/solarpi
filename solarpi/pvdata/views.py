@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from flask import Blueprint, render_template
 from sqlalchemy import extract
 
-from solarpi.data.models import Data
+from solarpi.pvdata.models import Data
 
 import helper
 
