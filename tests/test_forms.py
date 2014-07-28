@@ -5,12 +5,12 @@ from solarpi.public.forms import LoginForm
 from solarpi.user.forms import RegisterForm
 from .factories import UserFactory
 
-class TestRegisterForm:
 
+class TestRegisterForm:
     def test_validate_user_already_registered(self, user):
         # Enters username that is already registered
         form = RegisterForm(username=user.username, email='foo@bar.com',
-            password='example', confirm='example')
+                            password='example', confirm='example')
 
         assert form.validate() is False
         assert 'Username already registered' in form.username.errors
@@ -18,19 +18,18 @@ class TestRegisterForm:
     def test_validate_email_already_registered(self, user):
         # enters email that is already registered
         form = RegisterForm(username='unique', email=user.email,
-            password='example', confirm='example')
+                            password='example', confirm='example')
 
         assert form.validate() is False
         assert 'Email already registered' in form.email.errors
 
     def test_validate_success(self, db):
         form = RegisterForm(username='newusername', email='new@test.test',
-            password='example', confirm='example')
+                            password='example', confirm='example')
         assert form.validate() is True
 
 
 class TestLoginForm:
-
     def test_validate_success(self, user):
         user.set_password('example')
         user.save()

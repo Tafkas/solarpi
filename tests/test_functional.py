@@ -6,16 +6,16 @@ See: http://webtest.readthedocs.org/
 import pytest
 from flask import url_for
 
-
 from solarpi.user.models import User
 from .factories import UserFactory
+
 
 @pytest.fixture
 def user(db):
     return UserFactory(password='myprecious')
 
-class TestLoggingIn:
 
+class TestLoggingIn:
     def test_can_log_in_returns_200(self, user, testapp):
         # Goes to homepage
         res = testapp.get("/")
@@ -65,7 +65,6 @@ class TestLoggingIn:
 
 
 class TestRegistering:
-
     def test_can_register(self, user, testapp):
         old_count = len(User.query.all())
         # Goes to homepage
