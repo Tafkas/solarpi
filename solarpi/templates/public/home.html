@@ -1,140 +1,175 @@
 {% extends "layout.html" %}
 {% block content %}
     <div id="page-wrapper">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1 class="page-header">Dashboard</h1>
-            </div>
-            <!-- /.col-lg-12 -->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Dashboard</h1>
         </div>
-        <!-- /.row -->
-        <div class="row">
-            <div class="col-lg-3 col-md-6">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fa fa-flash fa-5x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div class="huge">{{ current_power }} Watt</div>
-                                <div>Current Power</div>
-                            </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-flash fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div class="huge">{{ current_power }} Watt</div>
+                            <div>Current Power</div>
                         </div>
                     </div>
-                    <a href="#">
-                        <div class="panel-footer">
-                            <span class="pull-left">View Details</span>
-                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-
-                            <div class="clearfix"></div>
-                        </div>
-                    </a>
                 </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fa fa-info fa-5x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div class="huge">{{ daily_energy }} kWh</div>
-                                <div>Daily energy</div>
-                            </div>
-                        </div>
+                <a href="#">
+                    <div class="panel-footer">
+                        <span class="pull-left">View Details</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+
+                        <div class="clearfix"></div>
                     </div>
-                    <a href="#">
-                        <div class="panel-footer">
-                            <span class="pull-left">View Details</span>
-                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-
-                            <div class="clearfix"></div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fa fa-thumbs-up fa-5x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div class="huge">{{ total_energy }} kWh</div>
-                                <div>Total energy</div>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="#">
-                        <div class="panel-footer">
-                            <span class="pull-left">View Details</span>
-                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-
-                            <div class="clearfix"></div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fa fa-fire fa-5x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div class="huge">23°C</div>
-                                <div>Actual temperature</div>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="#">
-                        <div class="panel-footer">
-                            <span class="pull-left">View Details</span>
-                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-
-                            <div class="clearfix"></div>
-                        </div>
-                    </a>
-                </div>
+                </a>
             </div>
         </div>
-        <!-- /.row -->
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <i class="fa fa-bar-chart-o fa-fw"></i> Monthly Overview
-                    </div>
-                    <!-- /.panel-heading -->
-                    <div class="panel-body">
-                        <div id="monthly-overview-chart"></div>
-                    </div>
-                    <!-- /.panel-body -->
-                </div>
-                <!-- /.panel -->
-
-            </div>
-            <!-- /.col-lg-8 -->
-            <div class="col-lg-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <i class="fa fa-cloud fa-fw"></i> Weather
-                    </div>
-                    <!-- /.panel-heading -->
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fa fa-sun-o fa-5x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div class="huge">Sunshine</div>
-                                <div>current weather</div>
-                            </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-info fa-5x"></i>
                         </div>
+                        <div class="col-xs-9 text-right">
+                            <div class="huge">{{ daily_energy }} kWh</div>
+                            <div>Daily energy</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <div class="panel-footer">
+                        <span class="pull-left">View Details</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-thumbs-up fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div class="huge">{{ total_energy }} kWh</div>
+                            <div>Total energy</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <div class="panel-footer">
+                        <span class="pull-left">View Details</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <i class="fa fa-fire fa-5x"></i>
+                        </div>
+                        <div class="col-xs-9 text-right">
+                            <div class="huge">{{ '%0.1f'| format(current_temp|float) }} °C</div>
+                            <div>Actual temperature</div>
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <div class="panel-footer">
+                        <span class="pull-left">View Details</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-bar-chart-o fa-fw"></i> Monthly Overview
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div id="monthly-overview-chart"></div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+
+        </div>
+        <!-- /.col-lg-8 -->
+        <div class="col-lg-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-check fa-fw"></i> Current Status
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="list-group">
+                        <div class="list-group-item" href="#">
+                            <i class="fa fa-comment fa-fw"></i>
+                            Efficiency
+                            <span class="pull-right text-muted small">
+                               <em> {{ '%0.2f'| format(efficiency|float) }} % </em>
+                            </span>
+                        </div>
+                        <div class="list-group-item" href="#">
+                            <i class="fa fa-comment fa-fw"></i>
+                            Efficiency
+                            <span class="pull-right text-muted small">
+                               <em> {{ '%0.2f'| format(efficiency|float) }} % </em>
+                            </span>
+                        </div>
+                        <div class="list-group-item" href="#">
+                            <i class="fa fa-comment fa-fw"></i>
+                            Efficiency
+                            <span class="pull-right text-muted small">
+                               <em> {{ '%0.2f'| format(efficiency|float) }} % </em>
+                            </span>
+                        </div>
+                        <div class="list-group-item" href="#">
+                            <i class="fa fa-comment fa-fw"></i>
+                            Efficiency
+                            <span class="pull-right text-muted small">
+                               <em> {{ '%0.2f'| format(efficiency|float) }} % </em>
+                            </span>
+                        </div>
+                        <div class="list-group-item" href="#">
+                            <i class="fa fa-comment fa-fw"></i>
+                            Efficiency
+                            <span class="pull-right text-muted small">
+                               <em> {{ '%0.2f'| format(efficiency|float) }} % </em>
+                            </span>
+                        </div>
+                        <div class="list-group-item" href="#">
+                            <i class="fa fa-comment fa-fw"></i>
+                            Efficiency
+                            <span class="pull-right text-muted small">
+                               <em> {{ '%0.2f'| format(efficiency|float) }} % </em>
+                            </span>
+                        </div>
+
                     </div>
                     <!-- /.panel-body -->
                 </div>

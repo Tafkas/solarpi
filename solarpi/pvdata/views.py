@@ -20,22 +20,21 @@ def daily(date=datetime.now().strftime('%Y-%m-%d')):
         current_date = datetime.strptime('2014-04-21', "%Y-%m-%d")
     yesterday = current_date - timedelta(days=1)
     tomorrow = current_date + timedelta(days=1)
-    data = PVData.query.filter(PVData.created_at > current_date.strftime('%Y-%m-%d')).filter(
-        PVData.created_at < tomorrow.strftime('%Y-%m-%d')).filter(PVData.current_power > 0)
+    pv = PVData.query.filter(PVData.created_at > current_date.strftime('%Y-%m-%d')).filter(
+        PVData.created_at < tomorrow.strftime('%Y-%m-%d')).filter(PVData.current_power > 0).all()
 
-    try:
-        daily_energy = data[-1].daily_energy
-    except IndexError:
+    if len(pv) > 0:
+        daily_energy = pv[-1].daily_energy
+    else:
         daily_energy = 0
 
-    categories = [1000 * calendar.timegm(datetime.strptime(d.created_at.split(".")[0], "%Y-%m-%dT%H:%M:%S").timetuple())
-                  for d in data]
+    timestamps = [1000 * calendar.timegm(datetime.strptime(d.created_at.split(".")[0], "%Y-%m-%dT%H:%M:%S").timetuple())
+                  for d in pv]
+    series = [(int(d.current_power or 0)) for d in pv]
+    daily_chart_data = [list(x) for x in zip(timestamps, series)]
 
-    series = [(int(d.current_power or 0)) for d in data]
-    data = [list(x) for x in zip(categories, series)]
-
-    return render_template("data/daily.html", data=data, yesterday=yesterday, today=current_date, tomorrow=tomorrow,
-                           daily_energy=daily_energy)
+    return render_template("data/daily.html", data=daily_chart_data, yesterday=yesterday, today=current_date, tomorrow=tomorrow,
+                           daily_energy=daily_energy, all_data=pv)
 
 
 @blueprint.route("/monthly")
