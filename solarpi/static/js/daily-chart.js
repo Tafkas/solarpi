@@ -7,8 +7,7 @@ $(document).ready(function () {
             title: {
                 text: 'Power generation'
             },
-           colors: ['#153E7E', '#B4C7DA', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4']
-            ,
+            colors: ['#153E7E', '#B4C7DA', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'],
             xAxis: {
                 type: 'datetime'
             },
