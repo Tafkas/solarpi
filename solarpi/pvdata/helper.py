@@ -19,3 +19,8 @@ def integrate(y_values, h):
             total += 4 * y
         i += 1
     return total * (h / 3.0)
+
+
+def get_sec(s):
+    l = map(int, s.split(':'))
+    return sum(n * sec for n, sec in zip(l[::-1], (1, 60, 3600)))

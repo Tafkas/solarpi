@@ -33,8 +33,12 @@ $(document).ready(function () {
             },
             series: [
                 {
-                    name: 'Power',
+                    name: 'Power Output',
                     data: data
+                },
+                {
+                    name: 'Max Power Output ± 3 Days',
+                    data: data_max
                 }
             ]
         });

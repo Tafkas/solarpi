@@ -2,6 +2,7 @@
 {% block content %}
     <script>
         var data = {{ data|safe }};
+        var data_max = {{ data2|safe }};
     </script>
     <div id="page-wrapper">
         <div class="row">
@@ -28,20 +29,7 @@
         </div>
         <div class="row">
             <div class="col-lg-12">
-                <table class="table table-condensed">
-                    <thead>
-                    <th>Time</th>
-                    <th>Power in Watt</th>
-                    </thead>
-                    <tbody>
-                    {% for row in all_data %}
-                        <tr>
-                            <td>{{ row.created_at }}</td>
-                            <td>{{ row.current_power }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                {{ current_date_midnight }}
             </div>
         </div>
     </div>
