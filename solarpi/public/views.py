@@ -3,19 +3,27 @@
 from datetime import datetime, timedelta
 from flask import (Blueprint, render_template)
 from solarpi.pvdata.models import PVData
+from solarpi.weather.models import Weather
 
 blueprint = Blueprint('public', __name__, static_folder="../static")
 
 
 @blueprint.route("/")
 def home():
-    data = PVData.query.filter(PVData.created_at > (datetime.now() - timedelta(days=1))).order_by(PVData.id.desc())
-    current_power = data.first().current_power
-    daily_energy = data.first().daily_energy
-    total_energy = data.first().total_energy
+    pv = PVData.query.filter(PVData.created_at >= (datetime.now())).order_by(
+        PVData.id.desc()).first()
+    current_power = pv.current_power
+    daily_energy = pv.daily_energy
+    total_energy = pv.total_energy
+    efficiency = (pv.ac_1_p + pv.ac_2_p + pv.ac_3_p) / (
+        pv.dc_1_u * pv.dc_1_i + pv.dc_2_u * pv.dc_2_i + pv.dc_3_u * pv.dc_3_i)
+
+    w = Weather.query.filter(Weather.created_at >= (datetime.now())).order_by(
+        Weather.id.desc()).first()
+    current_temp = w.temp
 
     return render_template("public/home.html", current_power=current_power, daily_energy=daily_energy,
-                           total_energy=total_energy, data=None)
+                           total_energy=total_energy, data=None, current_temp=current_temp, efficiency=efficiency)
 
 
 @blueprint.route("/about/")
