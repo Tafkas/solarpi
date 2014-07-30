@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 '''Public section, including homepage and signup.'''
+from cookielib import eff_request_host
 from datetime import datetime, timedelta
 from flask import (Blueprint, render_template)
 from solarpi.pvdata.models import PVData
@@ -15,8 +16,12 @@ def home():
     current_power = pv.current_power
     daily_energy = pv.daily_energy
     total_energy = pv.total_energy
-    efficiency = (pv.ac_1_p + pv.ac_2_p + pv.ac_3_p) / (
-        pv.dc_1_u * pv.dc_1_i + pv.dc_2_u * pv.dc_2_i + pv.dc_3_u * pv.dc_3_i)
+    pac = pv.ac_1_p + pv.ac_2_p + pv.ac_3_p
+    pdc = pv.dc_1_u * pv.dc_1_i + pv.dc_2_u * pv.dc_2_i + pv.dc_3_u * pv.dc_3_i
+    if pdc > 0:
+        efficiency = pac / pdc
+    else:
+        efficiency = 0
 
     w = Weather.query.filter(Weather.created_at >= (datetime.now())).order_by(
         Weather.id.desc()).first()
