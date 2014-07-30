@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block content %}
+    <script>
+        var data = {{ data|safe }};
+        var data_max = {{ data2|safe }};
+    </script>
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Daily Weather</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a href="{{ url_for('weather.daily', date=yesterday.strftime('%Y-%m-%d')) }}"
+                           class="btn btn-default"><i class="fa fa-angle-left"></i></a>
+                        <span>Solar Data for {{ today.strftime('%Y-%m-%d') }}</span>
+                        <a href="{{ url_for('weather.daily', date=tomorrow.strftime('%Y-%m-%d')) }}"
+                           class="btn btn-default"><i class="fa fa-angle-right"></i></a>
+                    </div>
+                    <div class="panel-body">
+                        <div id="daily-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
