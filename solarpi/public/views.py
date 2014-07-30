@@ -23,7 +23,7 @@ def home():
     else:
         efficiency = 0
 
-    w = Weather.query.filter(Weather.created_at >= (datetime.now())).order_by(
+    w = Weather.query.with_entities(Weather.temp).filter(Weather.created_at >= (datetime.now())).order_by(
         Weather.id.desc()).first()
     current_temp = w.temp
 
