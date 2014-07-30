@@ -61,11 +61,10 @@ def monthly(date=datetime.now().strftime('%Y-%m-%d')):
         current_date = datetime.strptime(date, "%Y-%m-%d")
     except ValueError, TypeError:
         current_date = datetime.strptime('2014-04-21', "%Y-%m-%d")
-    data = PVData.query.filter(extract('year', PVData.created_at) == 2014).filter(
-        extract('month', PVData.created_at) == 5)
+    #data = PVData.query.with_entities(func.strftime('%Y-%m-%d', PVData.created_at).label('pvdata_created_at')).join(PVData.query)
 
-    categories = [1000 * calendar.timegm(datetime.strptime(d.created_at, "%Y-%m-%dT%H:%M:%S").timetuple()) for d in
-                  data]
-    series = [(float(d.dc_1_p or 0) + float(d.dc_2_p or 0)) for d in data]
-    data = [list(x) for x in zip(categories, series)]
+    #data = PVData.query.with_entities(func.strftime('%Y-%m-%d', PVData.created_at).label('created_at')).join()
+    data = PVData.query.with_entities(func.max(PVData.id).label('max')).group_by(func.strftime('%Y-%m-%d', PVData.created_at))
+
+
     return render_template("data/monthly.html", data=data)
