@@ -27,8 +27,13 @@ def home():
         Weather.id.desc()).first()
     current_temp = w.temp
 
-    return render_template("public/home.html", current_power=current_power, daily_energy=daily_energy,
-                           total_energy=total_energy, data=None, current_temp=current_temp, efficiency=efficiency)
+    return render_template("public/home.html",
+                           current_power=current_power, daily_energy=daily_energy,
+                           total_energy=total_energy, data=None,
+                           current_temp=current_temp, efficiency=efficiency,
+                           ac_1p=pv.ac_1_p, ac_2p=pv.ac_2_p, ac_3p=pv.ac_3_p,
+                           dc_1_u=pv.dc_1_u, dc_2_u=pv.dc_2_u, dc_3_u=pv.dc_3_u,
+                           dc_1_i=pv.dc_1_i, dc_2_i=pv.dc_2_i, dc_3_i=pv.dc_3_i)
 
 
 @blueprint.route("/about/")
