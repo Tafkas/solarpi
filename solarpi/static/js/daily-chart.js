@@ -7,7 +7,7 @@ $(document).ready(function () {
             title: {
                 text: 'Power generation'
             },
-            colors: ['#153E7E', '#B4C7DA', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'],
+            colors: ['#B4C7DA', '#153E7E', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'],
             xAxis: {
                 type: 'datetime'
             },
@@ -28,18 +28,19 @@ $(document).ready(function () {
             plotOptions: {
                 column: {
                     pointPadding: 0.2,
+                    groupPadding: 0.5,
                     borderWidth: 0,
                     pointWidth: 3
                 }
             },
             series: [
                 {
-                    name: 'Power Output',
-                    data: data
-                },
-                {
                     name: 'Max Power Output ± 3 Days',
                     data: data_max
+                },
+                {
+                    name: 'Power Output',
+                    data: data
                 }
             ]
         });
