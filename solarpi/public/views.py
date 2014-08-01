@@ -11,7 +11,7 @@ blueprint = Blueprint('public', __name__, static_folder="../static")
 
 @blueprint.route("/")
 def home():
-    pv = PVData.query.filter(PVData.created_at >= (datetime.now())).order_by(
+    pv = PVData.query.filter(PVData.created_at >= (datetime.now()-timedelta(days=2))).order_by(
         PVData.id.desc()).first()
 
     current_power = pv.current_power
@@ -24,13 +24,13 @@ def home():
     else:
         efficiency = 0
 
-    w = Weather.query.with_entities(Weather.temp).filter(Weather.created_at >= (datetime.now())).order_by(
+    w = Weather.query.with_entities(Weather.temp).filter(Weather.created_at >= (datetime.now()-timedelta(days=2))).order_by(
         Weather.id.desc()).first()
     current_temp = w.temp
 
     return render_template("public/home.html",
                            current_power=current_power, daily_energy=daily_energy,
-                           total_energy=total_energy, data=None,
+                           total_energy=total_energy,
                            current_temp=current_temp, efficiency=efficiency,
                            ac_1_p=pv.ac_1_p, ac_2_p=pv.ac_2_p, ac_3_p=pv.ac_3_p,
                            ac_1_u=pv.ac_1_u, ac_2_u=pv.ac_2_u, ac_3_u=pv.ac_3_u,
