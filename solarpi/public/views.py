@@ -13,6 +13,7 @@ blueprint = Blueprint('public', __name__, static_folder="../static")
 def home():
     pv = PVData.query.filter(PVData.created_at >= (datetime.now())).order_by(
         PVData.id.desc()).first()
+
     current_power = pv.current_power
     daily_energy = pv.daily_energy
     total_energy = pv.total_energy

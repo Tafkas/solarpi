@@ -41,6 +41,11 @@ $(document).ready(function () {
                 {
                     name: 'Power Output',
                     data: data
+                },
+                {
+                    type: 'line',
+                    name: 'Power Output Solar',
+                    data: data3
                 }
             ]
         });
