@@ -27,8 +27,9 @@ def daily(date=datetime.now().strftime('%Y-%m-%d')):
 
     pv_max = PVData.query.with_entities(func.strftime('%H:%M:00', PVData.created_at).label('pvdata_created_at'),
                                         func.max(PVData.current_power).label('pv_max')).filter(
-        PVData.created_at >= (current_date - timedelta(days=3)).strftime('%Y-%m-%d')).filter(
-        PVData.created_at <= (current_date + timedelta(days=3)).strftime('%Y-%m-%d')).filter(PVData.current_power > 0).group_by(
+        PVData.created_at >= (current_date - timedelta(days=7)).strftime('%Y-%m-%d')).filter(
+        PVData.created_at <= (current_date + timedelta(days=7)).strftime('%Y-%m-%d')).filter(
+        PVData.current_power > 0).group_by(
         func.strftime('%H:%M:00', PVData.created_at)).all()
 
     current_date_midnight = calendar.timegm(datetime.strptime(date, "%Y-%m-%d").timetuple())
@@ -56,15 +57,21 @@ def daily(date=datetime.now().strftime('%Y-%m-%d')):
 
 
 @blueprint.route("/monthly")
-def monthly(date=datetime.now().strftime('%Y-%m-%d')):
+@blueprint.route("/monthly/<param>")
+def monthly(param=datetime.now().strftime('%Y-%m')):
     try:
-        current_date = datetime.strptime(date, "%Y-%m-%d")
+        month = datetime.strptime(param, "%Y-%m")
     except ValueError, TypeError:
-        current_date = datetime.strptime('2014-04-21', "%Y-%m-%d")
-    #data = PVData.query.with_entities(func.strftime('%Y-%m-%d', PVData.created_at).label('pvdata_created_at')).join(PVData.query)
+        month = datetime.strptime('2014-07-01', "%Y-%m")
 
-    #data = PVData.query.with_entities(func.strftime('%Y-%m-%d', PVData.created_at).label('created_at')).join()
-    data = PVData.query.with_entities(func.max(PVData.id).label('max')).group_by(func.strftime('%Y-%m-%d', PVData.created_at))
+    data = PVData.query.with_entities(
+        func.strftime('%Y-%m-%d', PVData.created_at).label('created_at'),
+        func.max(PVData.daily_energy).label('daily_energy')).group_by(func.strftime('%Y-%m-%d', PVData.created_at))
 
+    timestamps = [
+        1000 * calendar.timegm(datetime.strptime(d.created_at, "%Y-%m-%d").timetuple())
+        for d in data]
+    series = [(int(d.daily_energy or 0)) for d in data]
+    monthly_chart_data = [list(x) for x in zip(timestamps, series)]
 
-    return render_template("data/monthly.html", data=data)
+    return render_template("data/monthly.html", data=monthly_chart_data)

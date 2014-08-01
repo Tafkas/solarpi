@@ -5,7 +5,7 @@ $(document).ready(function () {
                 type: 'column'
             },
             title: {
-                text: 'Power generation'
+                text: 'Daily Energy Output'
             },
             xAxis: {
                 type: 'datetime'
@@ -18,7 +18,7 @@ $(document).ready(function () {
             },
             tooltip: {
                 headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}:&nbsp; </td>' +
                     '<td style="padding:0"><b>{point.y:.1f} Watt</b></td></tr>',
                 footerFormat: '</table>',
                 shared: true,
@@ -32,7 +32,7 @@ $(document).ready(function () {
             },
             series: [
                 {
-                    name: 'Power',
+                    name: 'Daily Energy Output',
                     data: data
                 }
             ]
