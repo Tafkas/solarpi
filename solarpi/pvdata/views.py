@@ -87,7 +87,7 @@ def monthly(param=datetime.now().strftime('%Y-%m')):
     timestamps = [
         1000 * calendar.timegm(datetime.strptime(d.created_at, "%Y-%m-%d").timetuple())
         for d in data]
-    series = [(int(d.daily_energy or 0)) for d in data]
+    series = [(float(d.daily_energy or 0)) for d in data]
     monthly_chart_data = [list(x) for x in zip(timestamps, series)]
 
     return render_template("data/monthly.html", data=monthly_chart_data)
