@@ -26,10 +26,11 @@ def home():
     else:
         efficiency = 0
 
-    w = Weather.query.with_entities(Weather.temp).filter(
+    w = Weather.query.with_entities(Weather.temp, Weather.weather_id).filter(
         Weather.created_at >= (datetime.now() - timedelta(days=2))).order_by(
         Weather.id.desc()).first()
     current_temp = w.temp
+    current_weather = w.weather_id
 
     data_2013 = PVData.query.with_entities(func.strftime('%m', PVData.created_at).label('created_at'),
                                            (func.max(PVData.total_energy) - func.min(PVData.total_energy)).label(
@@ -54,8 +55,8 @@ def home():
 
     return render_template("public/home.html",
                            current_power=current_power, daily_energy=daily_energy,
-                           total_energy=total_energy, current_temp=current_temp,
-                           efficiency=efficiency,
+                           total_energy=total_energy, efficiency=efficiency,
+                           current_temp=current_temp, current_weather=current_weather,
                            ac_1_p=pv.ac_1_p, ac_2_p=pv.ac_2_p, ac_3_p=pv.ac_3_p,
                            ac_1_u=pv.ac_1_u, ac_2_u=pv.ac_2_u, ac_3_u=pv.ac_3_u,
                            dc_1_u=pv.dc_1_u, dc_2_u=pv.dc_2_u, dc_3_u=pv.dc_3_u,
