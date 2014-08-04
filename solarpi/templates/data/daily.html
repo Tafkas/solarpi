@@ -1,10 +1,5 @@
 {% extends "layout.html" %}
 {% block content %}
-    <script>
-        var data = {{ data|safe }};
-        var data_max = {{ data2|safe }};
-        var data3 = {{ data3|safe }};
-    </script>
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
@@ -37,4 +32,9 @@
 {% endblock %}
 {% block scripts %}
     <script src="{{ url_for('static', filename='js/daily-chart.js') }}"></script>
+    <script>
+        var data = {{ data|safe }};
+        var data_max = {{ data2|safe }};
+        var data3 = {{ data3|safe }};
+    </script>
 {% endblock %}

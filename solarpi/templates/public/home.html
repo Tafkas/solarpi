@@ -86,8 +86,8 @@
                                 <i class="fa fa-fire fa-5x"></i>
                             </div>
                             <div class="col-xs-9 text-right">
-                                <div class="huge">{{ '%0.1f'| format(current_temp|float) }} °C</div>
-                                <div>Actual temperature</div>
+                                <div class="huge">{{ current_temp }} °C</div>
+                                <div>Current temperature</div>
                             </div>
                         </div>
                     </div>
@@ -205,4 +205,7 @@
 {% endblock %}
 {% block scripts %}
     <script src="{{ url_for('static', filename='js/monthly-overview-chart.js') }}"></script>
+    <script>
+        var series = {{ series|safe }};
+    </script>
 {% endblock %}
