@@ -6,6 +6,7 @@ $(function () {
         title: {
             text: 'Energy Production for 2014'
         },
+        colors: ['#428BCA', '#153E7E', '#B4C7DA', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'],
         xAxis: [
             {
                 type: 'datetime',
