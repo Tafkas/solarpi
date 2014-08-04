@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 '''Public section, including homepage and signup.'''
+import calendar
 from cookielib import eff_request_host
 from datetime import datetime, timedelta
 from flask import (Blueprint, render_template)
@@ -30,12 +31,26 @@ def home():
         Weather.id.desc()).first()
     current_temp = w.temp
 
-    monthly_data = PVData.query.with_entities(func.strftime('%Y-%m', PVData.created_at).label('pvdata_created_at'),
-                                              (func.max(PVData.total_energy) - func.min(PVData.total_energy)).label(
-                                                  'total_energy')).group_by(
+    data_2013 = PVData.query.with_entities(func.strftime('%m', PVData.created_at).label('created_at'),
+                                           (func.max(PVData.total_energy) - func.min(PVData.total_energy)).label(
+                                               'total_energy')).filter(
+        func.strftime('%Y', PVData.created_at) == '2013').group_by(
         func.strftime('%Y-%m', PVData.created_at)).all()
-    categories = [x[0] for x in monthly_data]
-    series = [int(x[1]) for x in monthly_data]
+
+    data_2014 = PVData.query.with_entities(func.strftime('%m', PVData.created_at).label('created_at'),
+                                           (func.max(PVData.total_energy) - func.min(PVData.total_energy)).label(
+                                               'total_energy')).filter(
+        func.strftime('%Y', PVData.created_at) == '2014').group_by(
+        func.strftime('%Y-%m', PVData.created_at)).all()
+
+    t_2013 = [1000 * calendar.timegm(datetime.strptime(d.created_at, "%m").timetuple())
+              for d in data_2013]
+
+    t_2014 = [1000 * calendar.timegm(datetime.strptime(d.created_at, "%m").timetuple())
+              for d in data_2014]
+
+    series_2013 = [list(x) for x in zip(t_2013, [int(x[1]) for x in data_2013])]
+    series_2014 = [list(x) for x in zip(t_2014, [int(x[1]) for x in data_2014])]
 
     return render_template("public/home.html",
                            current_power=current_power, daily_energy=daily_energy,
@@ -45,7 +60,7 @@ def home():
                            ac_1_u=pv.ac_1_u, ac_2_u=pv.ac_2_u, ac_3_u=pv.ac_3_u,
                            dc_1_u=pv.dc_1_u, dc_2_u=pv.dc_2_u, dc_3_u=pv.dc_3_u,
                            dc_1_i=pv.dc_1_i, dc_2_i=pv.dc_2_i, dc_3_i=pv.dc_3_i,
-                           categories=categories, series=series)
+                           series_2013=series_2013, series_2014=series_2014)
 
 
 @blueprint.route("/about/")

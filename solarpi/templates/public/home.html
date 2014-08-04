@@ -206,6 +206,7 @@
 {% block scripts %}
     <script src="{{ url_for('static', filename='js/monthly-overview-chart.js') }}"></script>
     <script>
-        var series = {{ series|safe }};
+        var series_2013 = {{ series_2013|safe }};
+        var series_2014 = {{ series_2014|safe }};
     </script>
 {% endblock %}

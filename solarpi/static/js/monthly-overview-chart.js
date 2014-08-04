@@ -8,7 +8,11 @@ $(function () {
         },
         xAxis: [
             {
-                categories: ['Apr', 'May', 'Jun', 'Jul', 'Aug']
+                type: 'datetime',
+                dateTimeLabelFormats: { // don't display the dummy year
+                    month: '%e. %b',
+                    year: '%b'
+                }
             }
         ],
         yAxis: [
@@ -25,25 +29,12 @@ $(function () {
                         color: Highcharts.getOptions().colors[1]
                     }
                 }
-            },
-            { // Secondary yAxis
-                title: {
-                    text: 'Power',
-                    style: {
-                        color: Highcharts.getOptions().colors[0]
-                    }
-                },
-                labels: {
-                    format: '{value} kW',
-                    style: {
-                        color: Highcharts.getOptions().colors[0]
-                    }
-                },
-                opposite: true
             }
         ],
         tooltip: {
-            shared: true
+            shared: true,
+            headerFormat: '<b>{series.name}</b><br>',
+            pointFormat: '{point.x: %b}: {point.y:.2f} kW'
         },
         legend: {
             layout: 'vertical',
@@ -58,12 +49,21 @@ $(function () {
             {
                 name: '2014',
                 type: 'column',
-                yAxis: 1,
-                data: series,
+                yAxis: 0,
+                data: series_2014,
                 tooltip: {
                     valueSuffix: ' kW'
                 }
 
+            },
+            {
+                name: '2013',
+                type: 'line',
+                yAxis: 0,
+                data: series_2013,
+                tooltip: {
+                    valueSuffix: ' kW'
+                }
             }
         ]
     });
