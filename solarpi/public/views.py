@@ -32,6 +32,18 @@ def home():
     current_temp = w.temp
     current_weather = w.weather_id
 
+    todays_max_power = PVData.query.with_entities(func.max(PVData.current_power).label('todays_max_power')).filter(
+        PVData.created_at >= datetime.now() - timedelta(days=1)).first().todays_max_power
+
+    max_daily_energy_last_seven_days = PVData.query.with_entities(
+        func.max(PVData.daily_energy).label('max_daily_energy')).filter(
+        PVData.created_at >= (datetime.now() - timedelta(days=7))).first().max_daily_energy
+
+    last_year_energy = PVData.query.with_entities(PVData.total_energy).filter(
+        func.strftime('%Y', PVData.created_at) == '2013').order_by(PVData.id.desc()).first()
+
+    current_year_energy = total_energy - last_year_energy.total_energy
+
     data_2013 = PVData.query.with_entities(func.strftime('%m', PVData.created_at).label('created_at'),
                                            (func.max(PVData.total_energy) - func.min(PVData.total_energy)).label(
                                                'total_energy')).filter(
@@ -61,7 +73,10 @@ def home():
                            ac_1_u=pv.ac_1_u, ac_2_u=pv.ac_2_u, ac_3_u=pv.ac_3_u,
                            dc_1_u=pv.dc_1_u, dc_2_u=pv.dc_2_u, dc_3_u=pv.dc_3_u,
                            dc_1_i=pv.dc_1_i, dc_2_i=pv.dc_2_i, dc_3_i=pv.dc_3_i,
-                           series_2013=series_2013, series_2014=series_2014)
+                           series_2013=series_2013, series_2014=series_2014,
+                           current_year_energy=current_year_energy,
+                           max_daily_energy_last_seven_days=max_daily_energy_last_seven_days,
+                           todays_max_power=todays_max_power)
 
 
 @blueprint.route("/about/")
