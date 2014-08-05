@@ -10,7 +10,7 @@ $(function () {
         xAxis: [
             {
                 type: 'datetime',
-                dateTimeLabelFormats: { // don't display the dummy year
+                dateTimeLabelFormats: {
                     month: '%b',
                     year: '%b'
                 }
@@ -34,8 +34,8 @@ $(function () {
         ],
         tooltip: {
             shared: true,
-            headerFormat: '<b>{series.name}</b><br>',
-            pointFormat: '{point.x: %b}: {point.y:.2f} kWh'
+            headerFormat: '<b>{point.x: %B}</b><br>',
+            pointFormat: '{series.name}: {point.y:.2f} kWh<br>'
         },
         legend: {
             layout: 'vertical',
