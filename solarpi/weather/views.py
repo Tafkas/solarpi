@@ -29,6 +29,4 @@ def daily(date=datetime.now().strftime('%Y-%m-%d')):
     daily_chart_data = [list(x) for x in zip(timestamps_w, series_w)]
 
     return render_template("weather/daily.html", data=daily_chart_data, yesterday=yesterday,
-                           today=current_date,
-                           tomorrow=tomorrow,
-                           all_data=w, data2=[])
+                           today=current_date, tomorrow=tomorrow, all_data=w)
