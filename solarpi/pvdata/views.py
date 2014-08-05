@@ -9,7 +9,7 @@ from solarpi.pvdata.helper import get_sec
 from solarpi.pvdata.models import PVData
 import Pysolar as solar
 
-blueprint = Blueprint("data", __name__, url_prefix='/pvdata',
+blueprint = Blueprint("pvdata", __name__, url_prefix='/pvdata',
                       static_folder="../static")
 
 
@@ -34,7 +34,6 @@ def daily(date=datetime.now().strftime('%Y-%m-%d')):
     series_pv = [(int(d.current_power or 0)) for d in pv]
     daily_chart_data = [list(x) for x in zip(timestamps_pv, series_pv)]
 
-
     # get maxium photovoltaic data for ± 3 days
     pv_max = PVData.query.with_entities(func.strftime('%H:%M:00', PVData.created_at).label('pvdata_created_at'),
                                         func.max(PVData.current_power).label('pv_max')).filter(
@@ -49,18 +48,6 @@ def daily(date=datetime.now().strftime('%Y-%m-%d')):
     series_pv_max = [(int(d.pv_max or 0)) for d in pv_max]
     daily_chart_max_data = [list(x) for x in zip(timestamps_pv_max, series_pv_max)]
 
-
-    # get clear sky radiation
-    latitude, longitude = 52.5075419, 13.4261419
-    clear_sky = []
-    for v in pv:
-        d = datetime.strptime(v.created_at.split(".")[0], "%Y-%m-%dT%H:%M:%S")-timedelta(hours=2)
-        altitude = solar.GetAltitude(latitude, longitude, d) - 10
-        azimuth = solar.GetAzimuth(latitude, longitude, d)
-        clear_sky.append(6.8 * solar.radiation.GetRadiationDirect(d, altitude))
-
-    daily_chart_cs_data = [list(x) for x in zip(timestamps_pv, clear_sky)]
-
     # additional data
     if len(pv) > 0:
         daily_energy = pv[-1].daily_energy
@@ -68,7 +55,7 @@ def daily(date=datetime.now().strftime('%Y-%m-%d')):
         daily_energy = 0
 
     return render_template("data/daily.html", data=daily_chart_data, data2=daily_chart_max_data,
-                           data3=daily_chart_cs_data, yesterday=yesterday, today=current_date,
+                           yesterday=yesterday, today=current_date,
                            tomorrow=tomorrow, daily_energy=daily_energy, all_data=pv)
 
 
@@ -91,3 +78,13 @@ def monthly(param=datetime.now().strftime('%Y-%m')):
     monthly_chart_data = [list(x) for x in zip(timestamps, series)]
 
     return render_template("data/monthly.html", data=monthly_chart_data)
+
+
+@blueprint.route("/tables")
+def tables():
+    data = PVData.query.with_entities(func.strftime('%Y-%m-%d', PVData.created_at).label('created_at'),
+                                      func.max(PVData.daily_energy).label('daily_energy'), func.max(PVData.total_energy).label('total_energy')).filter(
+        PVData.created_at > datetime.now() - timedelta(days=30)).group_by(
+        func.strftime('%Y-%m-%d', PVData.created_at)).all()
+
+    return render_template('data/tables.html', data=data)

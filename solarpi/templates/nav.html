@@ -21,16 +21,16 @@
                     <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
-                            <a href="{{ url_for('data.daily') }}">Daily Charts</a>
+                            <a href="{{ url_for('pvdata.daily') }}">Daily Charts</a>
                         </li>
                         <li>
-                            <a href="{{ url_for('data.monthly') }}">Monthly Charts</a>
+                            <a href="{{ url_for('pvdata.monthly') }}">Monthly Charts</a>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->
                 </li>
                 <li>
-                    <a href="tables.html"><i class="fa fa-table fa-fw"></i> Tables</a>
+                    <a href="{{ url_for('pvdata.tables') }}"><i class="fa fa-table fa-fw"></i> Tables</a>
                 </li>
             </ul>
         </div>
