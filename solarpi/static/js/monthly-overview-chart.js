@@ -19,13 +19,13 @@ $(function () {
         yAxis: [
             { // Primary yAxis
                 labels: {
-                    format: '{value} kW',
+                    format: '{value} kWh',
                     style: {
                         color: Highcharts.getOptions().colors[1]
                     }
                 },
                 title: {
-                    text: 'Power',
+                    text: 'Energy',
                     style: {
                         color: Highcharts.getOptions().colors[1]
                     }
@@ -35,7 +35,7 @@ $(function () {
         tooltip: {
             shared: true,
             headerFormat: '<b>{series.name}</b><br>',
-            pointFormat: '{point.x: %b}: {point.y:.2f} kW'
+            pointFormat: '{point.x: %b}: {point.y:.2f} kWh'
         },
         legend: {
             layout: 'vertical',
@@ -53,7 +53,7 @@ $(function () {
                 yAxis: 0,
                 data: series_2014,
                 tooltip: {
-                    valueSuffix: ' kW'
+                    valueSuffix: ' kWh'
                 }
 
             },
@@ -63,7 +63,7 @@ $(function () {
                 yAxis: 0,
                 data: series_2013,
                 tooltip: {
-                    valueSuffix: ' kW'
+                    valueSuffix: ' kWh'
                 }
             }
         ]
