@@ -69,7 +69,8 @@ def monthly(param=datetime.now().strftime('%Y-%m')):
 
     data = PVData.query.with_entities(
         func.strftime('%Y-%m-%d', PVData.created_at).label('created_at'),
-        func.max(PVData.daily_energy).label('daily_energy')).group_by(func.strftime('%Y-%m-%d', PVData.created_at))
+        func.max(PVData.daily_energy).label('daily_energy')).filter(
+        PVData.created_at > datetime.now() - timedelta(days=30)).group_by(func.strftime('%Y-%m-%d', PVData.created_at))
 
     timestamps = [
         1000 * calendar.timegm(datetime.strptime(d.created_at, "%Y-%m-%d").timetuple())
@@ -83,7 +84,8 @@ def monthly(param=datetime.now().strftime('%Y-%m')):
 @blueprint.route("/tables")
 def tables():
     data = PVData.query.with_entities(func.strftime('%Y-%m-%d', PVData.created_at).label('created_at'),
-                                      func.max(PVData.daily_energy).label('daily_energy'), func.max(PVData.total_energy).label('total_energy')).filter(
+                                      func.max(PVData.daily_energy).label('daily_energy'),
+                                      func.max(PVData.total_energy).label('total_energy')).filter(
         PVData.created_at > datetime.now() - timedelta(days=30)).group_by(
         func.strftime('%Y-%m-%d', PVData.created_at)).all()
 
