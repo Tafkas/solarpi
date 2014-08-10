@@ -44,26 +44,28 @@ def home():
 
     current_year_energy = total_energy - last_year_energy.total_energy
 
-    data_2013 = PVData.query.with_entities(func.strftime('%m', PVData.created_at).label('created_at'),
-                                           (func.max(PVData.total_energy) - func.min(PVData.total_energy)).label(
-                                               'total_energy')).filter(
-        func.strftime('%Y', PVData.created_at) == '2013').group_by(
+    last_year_data = PVData.query.with_entities(func.strftime('%m', PVData.created_at).label('created_at'),
+                                                (func.max(PVData.total_energy) - func.min(PVData.total_energy)).label(
+                                                    'total_energy')).filter(
+        func.strftime('%Y', PVData.created_at) == str(datetime.now().year - 1)).group_by(
         func.strftime('%Y-%m', PVData.created_at)).all()
 
-    data_2014 = PVData.query.with_entities(func.strftime('%m', PVData.created_at).label('created_at'),
-                                           (func.max(PVData.total_energy) - func.min(PVData.total_energy)).label(
-                                               'total_energy')).filter(
-        func.strftime('%Y', PVData.created_at) == '2014').group_by(
+    current_year_data = PVData.query.with_entities(func.strftime('%m', PVData.created_at).label('created_at'),
+                                                   (
+                                                       func.max(PVData.total_energy) - func.min(
+                                                           PVData.total_energy)).label(
+                                                       'total_energy')).filter(
+        func.strftime('%Y', PVData.created_at) == str(datetime.now().year)).group_by(
         func.strftime('%Y-%m', PVData.created_at)).all()
 
-    t_2013 = [1000 * calendar.timegm(datetime.strptime(d.created_at, "%m").timetuple())
-              for d in data_2013]
+    last_year_timestamps = [1000 * calendar.timegm(datetime.strptime(d.created_at, "%m").timetuple())
+                            for d in last_year_data]
 
-    t_2014 = [1000 * calendar.timegm(datetime.strptime(d.created_at, "%m").timetuple())
-              for d in data_2014]
+    current_year_timestamps = [1000 * calendar.timegm(datetime.strptime(d.created_at, "%m").timetuple())
+                               for d in current_year_data]
 
-    series_2013 = [list(x) for x in zip(t_2013, [int(x[1]) for x in data_2013])]
-    series_2014 = [list(x) for x in zip(t_2014, [int(x[1]) for x in data_2014])]
+    last_year_series = [list(x) for x in zip(last_year_timestamps, [int(x[1]) for x in last_year_data])]
+    current_year_series = [list(x) for x in zip(current_year_timestamps, [int(x[1]) for x in current_year_data])]
 
     return render_template("public/home.html",
                            current_power=current_power, daily_energy=daily_energy,
@@ -73,7 +75,7 @@ def home():
                            ac_1_u=pv.ac_1_u, ac_2_u=pv.ac_2_u, ac_3_u=pv.ac_3_u,
                            dc_1_u=pv.dc_1_u, dc_2_u=pv.dc_2_u, dc_3_u=pv.dc_3_u,
                            dc_1_i=pv.dc_1_i, dc_2_i=pv.dc_2_i, dc_3_i=pv.dc_3_i,
-                           series_2013=series_2013, series_2014=series_2014,
+                           series_2013=last_year_series, series_2014=current_year_series,
                            current_year_energy=current_year_energy,
                            max_daily_energy_last_seven_days=max_daily_energy_last_seven_days,
                            todays_max_power=todays_max_power)
