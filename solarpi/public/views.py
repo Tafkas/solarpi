@@ -33,7 +33,11 @@ def home():
     current_weather = w.weather_id
 
     todays_max_power = PVData.query.with_entities(func.max(PVData.current_power).label('todays_max_power')).filter(
-        PVData.created_at >= datetime.now() - timedelta(days=1)).first().todays_max_power
+        PVData.created_at >= datetime.now()).first().todays_max_power
+    if not todays_max_power:
+        todays_max_power = 0
+        daily_energy = 0
+        current_temp = None
 
     max_daily_energy_last_seven_days = PVData.query.with_entities(
         func.max(PVData.daily_energy).label('max_daily_energy')).filter(
