@@ -1,7 +1,7 @@
 $(function () {
     $('#monthly-overview-chart').highcharts({
         chart: {
-            zoomType: 'xy'
+
         },
         title: {
             text: 'Energy Production for 2014'
