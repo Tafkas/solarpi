@@ -89,4 +89,5 @@ def tables():
         PVData.created_at > datetime.now() - timedelta(days=30)).group_by(
         func.strftime('%Y-%m-%d', PVData.created_at)).all()
 
+    data = reversed(data)
     return render_template('data/tables.html', data=data)
