@@ -4,7 +4,7 @@ $(function () {
 
         },
         title: {
-            text: 'Energy Production for 2014'
+            text: 'Energy Output for 2014'
         },
         colors: ['#428BCA', '#153E7E', '#B4C7DA', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'],
         xAxis: [
@@ -35,7 +35,7 @@ $(function () {
         tooltip: {
             shared: true,
             headerFormat: '<b>{point.x: %B}</b><br>',
-            pointFormat: '{series.name}: {point.y:.2f} kWh<br>'
+            pointFormat: '{series.name}: {point.y} <br>'
         },
         legend: {
             layout: 'vertical',
