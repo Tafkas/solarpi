@@ -13,7 +13,7 @@ $(document).ready(function () {
             yAxis: {
                 min: 0,
                 title: {
-                    text: 'p in kWh'
+                    text: 'w in kWh'
                 }
             },
             tooltip: {
