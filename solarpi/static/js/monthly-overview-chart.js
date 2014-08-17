@@ -17,7 +17,7 @@ $(function () {
             }
         ],
         yAxis: [
-            { // Primary yAxis
+            {
                 labels: {
                     format: '{value} kWh',
                     style: {
