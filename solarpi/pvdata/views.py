@@ -7,7 +7,6 @@ from sqlalchemy import extract, func
 from solarpi.pvdata.helper import get_sec
 
 from solarpi.pvdata.models import PVData
-import Pysolar as solar
 
 blueprint = Blueprint("pvdata", __name__, url_prefix='/pvdata',
                       static_folder="../static")
