@@ -3,6 +3,7 @@ from flask.ext.assets import Bundle, Environment
 
 css = Bundle(
     "libs/bootstrap/dist/css/bootstrap.css",
+    "libs/weather-icons/css/weather-icons.css",
     "css/sb-admin-2.css",
     filters="cssmin",
     output="public/css/common.css"
