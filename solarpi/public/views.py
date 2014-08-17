@@ -82,7 +82,7 @@ def home():
                            series_2013=last_year_series, series_2014=current_year_series,
                            current_year_energy=current_year_energy,
                            max_daily_energy_last_seven_days=max_daily_energy_last_seven_days,
-                           todays_max_power=todays_max_power)
+                           todays_max_power=todays_max_power, last_updated=pv.created_at)
 
 
 @blueprint.route("/about/")
