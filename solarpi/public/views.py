@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from flask import (Blueprint, render_template)
 from sqlalchemy import func
 from solarpi.pvdata.models import PVData
+from solarpi.weather.helper import weather_icon
 from solarpi.weather.models import Weather
 
 blueprint = Blueprint('public', __name__, static_folder="../static")
@@ -30,7 +31,7 @@ def home():
         Weather.created_at >= (datetime.now() - timedelta(days=2))).order_by(
         Weather.id.desc()).first()
     current_temp = w.temp
-    current_weather = w.weather_id
+    current_weather = weather_icon(w.weather_id)
 
     todays_max_power = PVData.query.with_entities(func.max(PVData.current_power).label('todays_max_power')).filter(
         PVData.created_at >= datetime.now()).first().todays_max_power
