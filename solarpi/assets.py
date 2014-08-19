@@ -2,17 +2,17 @@
 from flask.ext.assets import Bundle, Environment
 
 css = Bundle(
-    "libs/bootstrap/dist/css/bootstrap.css",
-    "libs/weather-icons/css/weather-icons.css",
+    #"libs/bootstrap/dist/css/bootstrap.css",
+    #"libs/weather-icons/css/weather-icons.css",
     "css/sb-admin-2.css",
     filters="cssmin",
     output="public/css/common.css"
 )
 
 js = Bundle(
-    "libs/jQuery/dist/jquery.js",
-    "libs/bootstrap/dist/js/bootstrap.js",
-    "libs/highcharts/highcharts.js",
+    #"libs/jQuery/dist/jquery.js",
+    #"libs/bootstrap/dist/js/bootstrap.js",
+    #"libs/highcharts/highcharts.js",
     "libs/metisMenu/metisMenu.js",
     "js/plugins.js",
     "js/sb-admin-2.js",
