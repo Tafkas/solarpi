@@ -23,15 +23,30 @@ def daily(date=datetime.now().strftime('%Y-%m-%d')):
     tomorrow = current_date + timedelta(days=1)
 
     # get photovoltaic data for the day
-    pv = PVData.query.with_entities(PVData.created_at, PVData.current_power, PVData.daily_energy).filter(
+    pv = PVData.query.with_entities(PVData.created_at, PVData.current_power, PVData.daily_energy, PVData.dc_1_u,
+                                    PVData.dc_2_u, PVData.ac_1_u, PVData.ac_2_u, PVData.ac_3_u).filter(
         PVData.created_at > current_date.strftime('%Y-%m-%d')).filter(
         PVData.created_at < tomorrow.strftime('%Y-%m-%d')).filter(PVData.current_power > 0).all()
 
     timestamps_pv = [
         1000 * calendar.timegm(datetime.strptime(d.created_at.split(".")[0], "%Y-%m-%dT%H:%M:%S").timetuple())
         for d in pv]
-    series_pv = [(int(d.current_power or 0)) for d in pv]
-    daily_chart_data = [list(x) for x in zip(timestamps_pv, series_pv)]
+    power_series_pv = [(int(d.current_power or 0)) for d in pv]
+    daily_chart_data = [list(x) for x in zip(timestamps_pv, power_series_pv)]
+
+    # voltages
+    input_voltage_1_series_pv = [(int(d.dc_1_u or 0)) for d in pv]
+    input_voltage_1_chart_data = [list(x) for x in zip(timestamps_pv, input_voltage_1_series_pv)]
+    input_voltage_2_series_pv = [(int(d.dc_2_u or 0)) for d in pv]
+    input_voltage_2_chart_data = [list(x) for x in zip(timestamps_pv, input_voltage_2_series_pv)]
+
+    output_voltage_1_series_pv = [(int(d.ac_1_u or 0)) for d in pv]
+    output_voltage_1_chart_data = [list(x) for x in zip(timestamps_pv, output_voltage_1_series_pv)]
+    output_voltage_2_series_pv = [(int(d.ac_2_u or 0)) for d in pv]
+    output_voltage_2_chart_data = [list(x) for x in zip(timestamps_pv, output_voltage_2_series_pv)]
+    output_voltage_3_series_pv = [(int(d.ac_3_u or 0)) for d in pv]
+    output_voltage_3_chart_data = [list(x) for x in zip(timestamps_pv, output_voltage_3_series_pv)]
+
 
     # get maxium photovoltaic data for ± 3 days
     pv_max = PVData.query.with_entities(func.strftime('%H:%M:00', PVData.created_at).label('pvdata_created_at'),
@@ -55,7 +70,12 @@ def daily(date=datetime.now().strftime('%Y-%m-%d')):
 
     return render_template("data/daily.html", data=daily_chart_data, data2=daily_chart_max_data,
                            yesterday=yesterday, today=current_date,
-                           tomorrow=tomorrow, daily_energy=daily_energy, all_data=pv)
+                           tomorrow=tomorrow, daily_energy=daily_energy, all_data=pv,
+                           input_voltage_1_chart_data=input_voltage_1_chart_data,
+                           input_voltage_2_chart_data=input_voltage_2_chart_data,
+                           output_voltage_1_chart_data=output_voltage_1_chart_data,
+                           output_voltage_2_chart_data=output_voltage_2_chart_data,
+                           output_voltage_3_chart_data=output_voltage_3_chart_data)
 
 
 @blueprint.route("/monthly")

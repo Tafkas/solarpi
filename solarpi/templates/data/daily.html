@@ -24,16 +24,42 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-12">
-                {{ current_date_midnight }}
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <span>Input Voltage for {{ today.strftime('%Y-%m-%d') }}</span>
+                    </div>
+                    <div class="panel-body">
+                        <div id="daily-input-voltage-chart"
+                             style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <span>Output Voltage {{ today.strftime('%Y-%m-%d') }}</span>
+                    </div>
+                    <div class="panel-body">
+                        <div id="daily-output-voltage-chart"
+                             style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 {% endblock %}
 {% block scripts %}
     <script src="{{ url_for('static', filename='js/daily-chart.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/daily-input-voltage-chart.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/daily-output-voltage-chart.js') }}"></script>
     <script>
         var data = {{ data|safe }};
         var data_max = {{ data2|safe }};
+        var input_voltage_1 = {{ input_voltage_1_chart_data|safe }};
+        var input_voltage_2 = {{ input_voltage_2_chart_data|safe }};
+        var output_voltage_1 = {{ output_voltage_1_chart_data|safe }};
+        var output_voltage_2 = {{ output_voltage_2_chart_data|safe }};
+        var output_voltage_3 = {{ output_voltage_3_chart_data|safe }};
     </script>
 {% endblock %}
