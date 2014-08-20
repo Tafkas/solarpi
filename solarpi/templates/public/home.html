@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <div class="panel-footer">
-                    <a href="#">
+                    <a href="{{ url_for('pvdata.daily') }}">
                         <span class="pull-left">Max today</span>
                         <span class="pull-right">{{ todays_max_power }} Watt</span>
 
@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <div class="panel-footer">
-                    <a href="#">
+                    <a href="{{ url_for('pvdata.daily') }}">
                         <span class="pull-left">Max last 7 days</span>
                         <span class="pull-right">{{ max_daily_energy_last_seven_days }} kWh</span>
 
