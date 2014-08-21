@@ -2,7 +2,7 @@
 import calendar
 from datetime import datetime, timedelta
 
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, flash
 from sqlalchemy import extract, func
 from solarpi.pvdata.helper import get_sec
 
@@ -15,10 +15,12 @@ blueprint = Blueprint("pvdata", __name__, url_prefix='/pvdata',
 @blueprint.route("/daily")
 @blueprint.route("/daily/<date>")
 def daily(date=datetime.now().strftime('%Y-%m-%d')):
+    error = None
     try:
         current_date = datetime.strptime(date, "%Y-%m-%d")
     except ValueError, TypeError:
-        current_date = datetime.strptime('2014-04-21', "%Y-%m-%d")
+        error = "invalid date, displaying today's data instead"
+        current_date = datetime.now().date()
     yesterday = current_date - timedelta(days=1)
     tomorrow = current_date + timedelta(days=1)
 
@@ -56,7 +58,7 @@ def daily(date=datetime.now().strftime('%Y-%m-%d')):
         PVData.current_power > 0).group_by(
         func.strftime('%H:%M:00', PVData.created_at)).all()
 
-    current_date_midnight = calendar.timegm(datetime.strptime(date, "%Y-%m-%d").timetuple())
+    current_date_midnight = calendar.timegm(current_date.timetuple())
     timestamps_pv_max = [1000 * (get_sec(d.pvdata_created_at) + current_date_midnight)
                          for d in pv_max]
     series_pv_max = [(int(d.pv_max or 0)) for d in pv_max]
@@ -75,7 +77,8 @@ def daily(date=datetime.now().strftime('%Y-%m-%d')):
                            input_voltage_2_chart_data=input_voltage_2_chart_data,
                            output_voltage_1_chart_data=output_voltage_1_chart_data,
                            output_voltage_2_chart_data=output_voltage_2_chart_data,
-                           output_voltage_3_chart_data=output_voltage_3_chart_data)
+                           output_voltage_3_chart_data=output_voltage_3_chart_data,
+                           error=error)
 
 
 @blueprint.route("/monthly")
