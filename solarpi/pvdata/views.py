@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 
 from flask import Blueprint, render_template, flash
 from sqlalchemy import extract, func
+from solarpi.public import helper
 from solarpi.pvdata.helper import get_sec
 
 from solarpi.pvdata.models import PVData
@@ -13,11 +14,11 @@ blueprint = Blueprint("pvdata", __name__, url_prefix='/pvdata',
 
 
 @blueprint.route("/daily")
-@blueprint.route("/daily/<date>")
-def daily(date=datetime.now().strftime('%Y-%m-%d')):
+@blueprint.route("/daily/<param>")
+def daily(param=datetime.now().strftime('%Y-%m-%d')):
     error = None
     try:
-        current_date = datetime.strptime(date, "%Y-%m-%d")
+        current_date = datetime.strptime(param, "%Y-%m-%d")
     except ValueError, TypeError:
         error = "invalid date, displaying today's data instead"
         current_date = datetime.now().date()
