@@ -14,11 +14,11 @@ blueprint = Blueprint("pvdata", __name__, url_prefix='/pvdata',
 
 
 @blueprint.route("/daily")
-@blueprint.route("/daily/<param>")
-def daily(param=datetime.now().strftime('%Y-%m-%d')):
+@blueprint.route("/daily/<date>")
+def daily(date=datetime.now().strftime('%Y-%m-%d')):
     error = None
     try:
-        current_date = datetime.strptime(param, "%Y-%m-%d")
+        current_date = datetime.strptime(date, "%Y-%m-%d")
     except ValueError, TypeError:
         error = "invalid date, displaying today's data instead"
         current_date = datetime.now().date()
