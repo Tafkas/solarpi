@@ -5,6 +5,7 @@ from cookielib import eff_request_host
 from datetime import datetime, timedelta
 from flask import (Blueprint, render_template)
 from sqlalchemy import func
+from solarpi.public.helper import get_operating_hours
 from solarpi.pvdata.models import PVData
 from solarpi.weather.helper import weather_icon
 from solarpi.weather.models import Weather
@@ -14,7 +15,7 @@ blueprint = Blueprint('public', __name__, static_folder="../static")
 
 @blueprint.route("/")
 def home():
-    operating_hours = (calendar.timegm(datetime.now().timetuple()) - 1359613454) / 3600
+    operating_hours = int(get_operating_hours())
 
     pv = PVData.query.order_by(
         PVData.id.desc()).first()
