@@ -86,7 +86,7 @@
                             <i class="wi wi-thermometer fa-5x"></i>
                         </div>
                         <div class="col-xs-9 text-right">
-                            <div class="huge">{{ current_temp if current_temp != None }} °C</div>
+                            <div class="huge">{{ '%0.1f'| current_temp if current_temp != None }} °C</div>
                             <div>Current temperature</div>
                         </div>
                     </div>
@@ -140,7 +140,7 @@
                                     <td>Inverter Efficiency (Pac/Pdc)</td>
                                     <td></td>
                                     <td></td>
-                                    <td class="text-right">{{ '%0.2f'| format(efficiency|float) }} %</td>
+                                    <td class="text-right">{{ '%0.2f'| format(efficiency|float) }}</td>
                                 </tr>
                                 <tr>
                                     <td>Operating time</td>
