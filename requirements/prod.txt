@@ -35,4 +35,7 @@ Flask-Bcrypt==0.6.0
 Flask-Cache>=0.12
 
 # Pysolar
-Pysolar => 0.4.3
+Pysolar>=0.4.3
+
+#pytz
+pytz>=2014.4
