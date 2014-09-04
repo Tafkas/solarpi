@@ -114,3 +114,12 @@ def tables():
 
     data = reversed(data)
     return render_template('data/tables.html', data=data)
+
+@blueprint.route("/statistics")
+def statistics():
+    data = PVData.query.with_entities(func.strftime('%Y-%m', PVData.created_at).label('month'),
+                                      func.min(PVData.daily_energy).label('min_daily_energy'),
+                                      func.avg(PVData.daily_energy).label('avg_daily_energy'),
+                                      func.max(PVData.daily_energy).label('max_daily_energy')).all()
+
+    return render_template('data/statistics.html', data=data)
