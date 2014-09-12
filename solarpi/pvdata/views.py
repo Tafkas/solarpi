@@ -32,8 +32,9 @@ def daily(date=datetime.now().strftime('%Y-%m-%d')):
         PVData.created_at < tomorrow.strftime('%Y-%m-%d')).filter(PVData.current_power > 0).all()
 
     timestamps_pv = [
-        1000 * calendar.timegm(datetime.strptime(d.created_at.split(".")[0], "%Y-%m-%dT%H:%M:%S").timetuple())
-        for d in pv]
+        1000 * calendar.timegm(
+            datetime.strptime(d.created_at.split(".")[0], "%Y-%m-%dT%H:%M:%S")
+            .replace(second=0).timetuple()) for d in pv]
     power_series_pv = [(int(d.current_power or 0)) for d in pv]
     daily_chart_data = [list(x) for x in zip(timestamps_pv, power_series_pv)]
 
