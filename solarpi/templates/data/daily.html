@@ -61,6 +61,11 @@
     <script src="{{ url_for('static', filename='js/daily-input-voltage-chart.js') }}"></script>
     <script src="{{ url_for('static', filename='js/daily-output-voltage-chart.js') }}"></script>
     <script>
+        $('#chart_nav').addClass('collapse in');
+        $('#side-menu').find('a').each(function (i) {
+            $(this).removeClass('active');
+        });
+        $('#daily_data').addClass("active");
         var data = {{ data|safe }};
         var data_max = {{ data2|safe }};
         var input_voltage_1 = {{ input_voltage_1_chart_data|safe }};

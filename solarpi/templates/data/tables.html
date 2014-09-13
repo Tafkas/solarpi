@@ -44,3 +44,11 @@
         </div>
     </div>
 {% endblock %}
+{% block scripts %}
+    <script>
+        $('#side-menu').find('a').each(function (i) {
+            $(this).removeClass('active');
+        });
+        $('#tables').addClass("active");
+    </script>
+{% endblock %}

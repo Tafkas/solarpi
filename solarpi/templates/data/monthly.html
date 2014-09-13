@@ -19,5 +19,14 @@
     </div>
 {% endblock %}
 {% block scripts %}
+    <script>
+        $('#chart_nav').addClass('collapse in');
+        $('#side-menu').find('a').each(function (i) {
+            $(this).removeClass('active');
+        });
+        $('#monthly_data').addClass("active");
+    </script>
     <script src="{{ url_for('static', filename='js/monthly-chart.js') }}"></script>
 {% endblock %}
+
+
