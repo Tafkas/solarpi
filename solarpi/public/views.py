@@ -70,10 +70,10 @@ def home():
 
     last_year_series = [int(x[1]) for x in last_year_data]
     current_year_series = [int(x[1]) for x in current_year_data]
-    current_month = current_year_series[-1] * calendar.monthrange(now.year, now.month)[1]/(now.day+1)
-    current_month_series = ['null' for i in range(12)]
-    current_month_series[now.month-1] = current_month
-
+    current_month = int(
+        (current_year_series[-1] - daily_energy) * calendar.monthrange(now.year, now.month)[1] / (now.day - 1))
+    current_month_series = ['null'] * 12
+    current_month_series[now.month - 1] = current_month
 
     return render_template("public/home.html",
                            current_power=current_power, daily_energy=daily_energy,
