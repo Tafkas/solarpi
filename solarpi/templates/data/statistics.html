@@ -28,19 +28,13 @@
                             <tr>
                                 <td>Avg. energy</td>
                                 {% for d in data %}
-                                    <td>{{  '%0.2f'| format(d[2]|float) }}</td>
+                                    <td>{{ '%0.2f'| format(d[1]|float) }}</td>
                                 {% endfor %}
                             </tr>
                             <tr>
                                 <td>Max. energy</td>
                                 {% for d in data %}
-                                    <td>{{ '%0.2f'| format(d[3]|float) }}</td>
-                                {% endfor %}
-                            </tr>
-                            <tr>
-                                <td>Min. energy</td>
-                                {% for d in data %}
-                                    <td>{{ d[1] }}</td>
+                                    <td>{{ '%0.2f'| format(d[2]|float) }}</td>
                                 {% endfor %}
                             </tr>
                             </tbody>
