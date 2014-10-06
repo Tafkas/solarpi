@@ -108,6 +108,7 @@ def monthly(param=datetime.now().strftime('%Y-%m')):
 def tables():
     data = PVData.query.with_entities(func.strftime('%Y-%m-%d', PVData.created_at).label('created_at'),
                                       func.max(PVData.daily_energy).label('daily_energy'),
+                                      func.max(PVData.current_power).label('max_output'),
                                       func.max(PVData.total_energy).label('total_energy')).filter(
         PVData.created_at > datetime.now() - timedelta(days=30)).group_by(
         func.strftime('%Y-%m-%d', PVData.created_at)).all()
