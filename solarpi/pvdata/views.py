@@ -105,6 +105,20 @@ def monthly(param=datetime.now().strftime('%Y-%m')):
     return render_template("data/monthly.html", data=monthly_chart_data)
 
 
+@blueprint.route("/yearly")
+def yearly():
+    data = PVData.query.with_entities(
+        func.max(PVData.total_energy.label('total_energy'))).group_by(
+        func.strftime("%Y", PVData.created_at)).all()
+
+    data = [int(x[0]) for x in data]
+    diffs = [y - x for x, y in zip(data, data[1:])]
+    data = data[:1] + diffs
+    years = [x for x in range(2013, 2013 + len(data))]
+
+    return render_template("data/yearly.html", data=data, years=years)
+
+
 @blueprint.route("/tables")
 def tables():
     data = PVData.query.with_entities(func.strftime('%Y-%m-%d', PVData.created_at).label('created_at'),

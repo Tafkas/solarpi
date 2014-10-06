@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block content %}
+    <script>
+        var data = {{ data|safe }};
+        var years = {{ years|safe }};
+    </script>
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Yearly Chart
+                    </div>
+                    <div class="panel-body">
+                        <div id="yearly-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        $('#chart_nav').addClass('collapse in');
+        $('#side-menu').find('a').each(function (i) {
+            $(this).removeClass('active');
+        });
+        $('#yearly_data').addClass("active");
+    </script>
+    <script src="{{ url_for('static', filename='js/yearly-chart.js') }}"></script>
+{% endblock %}
+
+
