@@ -47,3 +47,11 @@
         </div>
     </div>
 {% endblock %}
+{% block scripts %}
+    <script>
+        $('#side-menu').find('a').each(function (i) {
+            $(this).removeClass('active');
+        });
+        $('#statistics').addClass("active");
+    </script>
+{% endblock %}
