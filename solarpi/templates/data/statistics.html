@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Statistics</h1>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Last year statistic
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                {% for d in data %}
+                                    <th>{{ d[0] }}</th>
+                                {% endfor %}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Avg. energy</td>
+                                {% for d in data %}
+                                    <td>{{ '%0.2f'| format(d[1]|float) }}</td>
+                                {% endfor %}
+                            </tr>
+                            <tr>
+                                <td>Max. energy</td>
+                                {% for d in data %}
+                                    <td>{{ '%0.2f'| format(d[2]|float) }}</td>
+                                {% endfor %}
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+        </div>
+    </div>
+{% endblock %}

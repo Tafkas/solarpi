@@ -3,7 +3,7 @@ import calendar
 from datetime import datetime, timedelta
 
 from flask import Blueprint, render_template, flash
-from sqlalchemy import extract, func
+from sqlalchemy import extract, func, desc
 from solarpi.public import helper
 from solarpi.pvdata.helper import get_sec
 
@@ -109,9 +109,20 @@ def monthly(param=datetime.now().strftime('%Y-%m')):
 def tables():
     data = PVData.query.with_entities(func.strftime('%Y-%m-%d', PVData.created_at).label('created_at'),
                                       func.max(PVData.daily_energy).label('daily_energy'),
+                                      func.max(PVData.current_power).label('max_output'),
                                       func.max(PVData.total_energy).label('total_energy')).filter(
         PVData.created_at > datetime.now() - timedelta(days=30)).group_by(
         func.strftime('%Y-%m-%d', PVData.created_at)).all()
 
     data = reversed(data)
     return render_template('data/tables.html', data=data)
+
+
+@blueprint.route("/statistics")
+def statistics():
+    data = PVData.query.with_entities(func.strftime('%Y-%m', PVData.created_at).label('month'),
+                                      func.avg(PVData.daily_energy).label('avg_daily_energy'),
+                                      func.max(PVData.daily_energy).label('max_daily_energy')).group_by(
+        func.strftime('%Y-%m', PVData.created_at)).order_by(desc(PVData.created_at)).limit(12).all()
+
+    return render_template('data/statistics.html', data=data)
