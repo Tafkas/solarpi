@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 WEATHER_ICONS = {211: 'wi-storm-showers',
+                 300: 'wi-showers',
+                 301: 'wi-showers',
                  310: 'wi-showers',
                  500: 'wi-showers',
                  501: 'wi-showers',
@@ -12,8 +14,9 @@ WEATHER_ICONS = {211: 'wi-storm-showers',
                  800: 'wi-day-sunny',
                  801: 'wi-day-sunny-overcast',
                  802: 'wi-day-cloudy',
-                 803: 'wi-cloudy'
-                 }
+                 803: 'wi-cloudy',
+                 804: 'wi-cloudy'
+                }
 
 
 def weather_icon(weather_id):
