@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 '''Public section, including homepage and signup.'''
 import calendar
+import dateutil.parser
 from cookielib import eff_request_host
 from datetime import datetime, timedelta
 from flask import (Blueprint, render_template)
@@ -20,6 +21,8 @@ def home():
 
     pv = PVData.query.order_by(
         PVData.id.desc()).first()
+        
+    last_updated = dateutil.parser.parse(pv.created_at).strftime('%Y-%m-%d %H:%M')
 
     current_power = pv.current_power
     daily_energy = pv.daily_energy
@@ -90,7 +93,7 @@ def home():
                            current_month_pred=current_month_series,
                            current_year_energy=current_year_energy,
                            max_daily_energy_last_seven_days=max_daily_energy_last_seven_days,
-                           todays_max_power=todays_max_power, last_updated=pv.created_at,
+                           todays_max_power=todays_max_power, last_updated=last_updated,
                            operating_hours=operating_hours)
 
 
