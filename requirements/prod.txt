@@ -39,3 +39,5 @@ Pysolar>=0.4.3
 
 #pytz
 pytz>=2014.4
+
+python-dateutil
