@@ -115,8 +115,9 @@ def yearly():
     diffs = [y - x for x, y in zip(data, data[1:])]
     data = data[:1] + diffs
     years = [x for x in range(2013, 2013 + len(data))]
+    yearly_data = [5741.82 for i in range(len(data))]
 
-    return render_template("data/yearly.html", data=data, years=years)
+    return render_template("data/yearly.html", data=data, years=years, yearlyData=yearly_data)
 
 
 @blueprint.route("/tables")
@@ -136,7 +137,8 @@ def tables():
 def statistics():
     data = PVData.query.with_entities(func.strftime('%Y-%m', PVData.created_at).label('month'),
                                       func.avg(PVData.daily_energy).label('avg_daily_energy'),
-                                      func.max(PVData.daily_energy).label('max_daily_energy')).group_by(
-        func.strftime('%Y-%m', PVData.created_at)).order_by(desc(PVData.created_at)).limit(12).all()
+                                      func.max(PVData.daily_energy).label('max_daily_energy')).filter(
+        PVData.current_power > 0).group_by(func.strftime('%Y-%m', PVData.created_at)).order_by(
+        desc(PVData.created_at)).limit(12).all()
 
     return render_template('data/statistics.html', data=data)
