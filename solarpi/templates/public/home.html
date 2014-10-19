@@ -131,24 +131,6 @@
                             <table class="table table-hover">
                                 <tbody>
                                 <tr>
-                                    <td>Inverter Efficiency (Pac/Pdc)</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="text-right">{{ '%0.2f'| format(efficiency|float) }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Operating time</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="text-right">{{ operating_hours }} hours</td>
-                                </tr>
-                                <tr>
-                                    <td>Last updated</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="text-right">{{ last_updated }}</td>
-                                </tr>
-                                <tr>
                                     <td><strong>String 1</strong></td>
                                     <td></td>
                                     <td><strong>L1</strong></td>
@@ -210,13 +192,74 @@
                 <!-- /.panel-body -->
             </div>
             <!-- /.panel -->
-
         </div>
         <!-- /.col-lg-3 -->
     </div>
-    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-line-chart fa-fw"></i> Yearly progress
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    Yearly output: <br/>
+
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                             aria-valuemax="100" style="width: {{ 100*5871/current_year_energy }}%;">
+                            {{ '%0.1f'| format(100*5871/current_year_energy|float) }}%
+                        </div>
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+        </div>
+        <!-- /.col-lg-9 -->
+        <div class="col-lg-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-check fa-fw"></i> Meta
+                </div>
+                <!-- /.panel-heading -->
+                <div class="panel-body">
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <table class="table table-hover">
+                                <tbody>
+                                <tr>
+                                    <td>Inverter Efficiency (Pac/Pdc)</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-right">{{ '%0.2f'| format(efficiency|float) }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Operating time</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-right">{{ operating_hours }} hours</td>
+                                </tr>
+                                <tr>
+                                    <td>Last updated</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-right">{{ last_updated }}</td>
+                                </tr>
+                                </
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
     </div>
-    <!-- /#page-wrapper -->
+    <!-- /.row -->
+
+    </div>
+    </div><!-- /#page-wrapper -->
 {% endblock %}
 {% block scripts %}
     <script src="{{ url_for('static', filename='js/monthly-overview-chart.js') }}"></script>
