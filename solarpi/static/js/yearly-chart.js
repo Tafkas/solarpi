@@ -7,8 +7,9 @@ $(document).ready(function () {
             title: {
                 text: 'Yearly Energy Output'
             },
+            colors: ['#428BCA', '#153E7E', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'],
             xAxis: {
-                categories : years
+                categories: years
             },
             yAxis: {
                 min: 0,
@@ -34,6 +35,11 @@ $(document).ready(function () {
                 {
                     name: 'Yearly Energy Output',
                     data: data
+                },
+                {
+                    type: 'line',
+                    name: 'Estimated Energy Output',
+                    data: yearlyData
                 }
             ]
         });
