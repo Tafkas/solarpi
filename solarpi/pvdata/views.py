@@ -100,9 +100,27 @@ def monthly(param=datetime.now().strftime('%Y-%m')):
         1000 * calendar.timegm(datetime.strptime(d.created_at, "%Y-%m-%d").timetuple())
         for d in data]
     series = [(float(d.daily_energy or 0)) for d in data]
+    monthly_energy = sum(series)
     monthly_chart_data = [list(x) for x in zip(timestamps, series)]
 
-    return render_template("data/monthly.html", data=monthly_chart_data)
+    return render_template("data/monthly.html", data=monthly_chart_data, monthly_energy=monthly_energy)
+
+
+@blueprint.route("/weekly")
+def weekly():
+    data = PVData.query.with_entities(
+        func.strftime('%Y-%m-%d', PVData.created_at).label('created_at'),
+        func.max(PVData.daily_energy).label('daily_energy')).filter(
+        PVData.created_at > datetime.now() - timedelta(days=7)).group_by(func.strftime('%Y-%m-%d', PVData.created_at))
+
+    timestamps = [
+        1000 * calendar.timegm(datetime.strptime(d.created_at, "%Y-%m-%d").timetuple())
+        for d in data]
+    series = [(float(d.daily_energy or 0)) for d in data]
+    seven_days_energy = sum(series)
+    weekly_chart_data = [list(x) for x in zip(timestamps, series)]
+
+    return render_template("data/weekly.html", data=weekly_chart_data, seven_days_energy=seven_days_energy)
 
 
 @blueprint.route("/yearly")
@@ -112,12 +130,14 @@ def yearly():
         func.strftime("%Y", PVData.created_at)).all()
 
     data = [int(x[0]) for x in data]
+    total_energy = sum(data[1:])
     diffs = [y - x for x, y in zip(data, data[1:])]
     data = data[:1] + diffs
     years = [x for x in range(2013, 2013 + len(data))]
     yearly_data = [5741.82 for i in range(len(data))]
 
-    return render_template("data/yearly.html", data=data, years=years, yearlyData=yearly_data)
+    return render_template("data/yearly.html", data=data, years=years, yearlyData=yearly_data,
+                           total_energy=total_energy)
 
 
 @blueprint.route("/tables")
