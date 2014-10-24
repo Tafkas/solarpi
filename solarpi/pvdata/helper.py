@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from datetime import datetime
 
 def integrate(y_values, h):
     """ Returns the area under a curve using Simpson's rule
@@ -24,3 +24,6 @@ def integrate(y_values, h):
 def get_sec(s):
     l = map(int, s.split(':'))
     return sum(n * sec for n, sec in zip(l[::-1], (1, 60, 3600)))
+    
+def get_todays_date():
+    return datetime.now().date()
