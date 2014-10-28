@@ -37,8 +37,10 @@ def home():
         func.strftime('%Y-%m-%d', Electricity.created_at) == datetime.now().strftime('%Y-%m-%d')).group_by(
         func.strftime('%Y-%m-%d', Electricity.created_at)).first()
 
-    todays_import = todays_electricity.todays_import
-    todays_export = todays_electricity.todays_export
+    todays_import, todays_export = 0.0, 0.0
+    if todays_electricity:
+        todays_import = todays_electricity.todays_import
+        todays_export = todays_electricity.todays_export
 
     current_power = pv.current_power
     daily_energy = pv.daily_energy
