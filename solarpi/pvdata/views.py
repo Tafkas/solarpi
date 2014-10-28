@@ -3,9 +3,9 @@ import calendar
 from datetime import datetime, timedelta
 
 from flask import Blueprint, render_template, flash
-from sqlalchemy import extract, func
+from sqlalchemy import extract, func, desc
 from solarpi.public import helper
-from solarpi.pvdata.helper import get_sec
+from solarpi.pvdata.helper import get_sec, get_todays_date
 
 from solarpi.pvdata.models import PVData
 
@@ -15,13 +15,13 @@ blueprint = Blueprint("pvdata", __name__, url_prefix='/pvdata',
 
 @blueprint.route("/daily")
 @blueprint.route("/daily/<date>")
-def daily(date=datetime.now().strftime('%Y-%m-%d')):
+def daily(date=get_todays_date().strftime('%Y-%m-%d')):
     error = None
     try:
         current_date = datetime.strptime(date, "%Y-%m-%d")
     except ValueError, TypeError:
         error = "invalid date, displaying today's data instead"
-        current_date = datetime.now().date()
+        current_date = get_todays_date()
     yesterday = current_date - timedelta(days=1)
     tomorrow = current_date + timedelta(days=1)
 
@@ -32,8 +32,9 @@ def daily(date=datetime.now().strftime('%Y-%m-%d')):
         PVData.created_at < tomorrow.strftime('%Y-%m-%d')).filter(PVData.current_power > 0).all()
 
     timestamps_pv = [
-        1000 * calendar.timegm(datetime.strptime(d.created_at.split(".")[0], "%Y-%m-%dT%H:%M:%S").timetuple())
-        for d in pv]
+        1000 * calendar.timegm(
+            datetime.strptime(d.created_at.split(".")[0], "%Y-%m-%dT%H:%M:%S")
+            .replace(second=0).timetuple()) for d in pv]
     power_series_pv = [(int(d.current_power or 0)) for d in pv]
     daily_chart_data = [list(x) for x in zip(timestamps_pv, power_series_pv)]
 
@@ -99,18 +100,65 @@ def monthly(param=datetime.now().strftime('%Y-%m')):
         1000 * calendar.timegm(datetime.strptime(d.created_at, "%Y-%m-%d").timetuple())
         for d in data]
     series = [(float(d.daily_energy or 0)) for d in data]
+    monthly_energy = sum(series)
     monthly_chart_data = [list(x) for x in zip(timestamps, series)]
 
-    return render_template("data/monthly.html", data=monthly_chart_data)
+    return render_template("data/monthly.html", data=monthly_chart_data, monthly_energy=monthly_energy)
+
+
+@blueprint.route("/weekly")
+def weekly():
+    data = PVData.query.with_entities(
+        func.strftime('%Y-%m-%d', PVData.created_at).label('created_at'),
+        func.max(PVData.daily_energy).label('daily_energy')).filter(
+        PVData.created_at > datetime.now() - timedelta(days=7)).group_by(func.strftime('%Y-%m-%d', PVData.created_at))
+
+    timestamps = [
+        1000 * calendar.timegm(datetime.strptime(d.created_at, "%Y-%m-%d").timetuple())
+        for d in data]
+    series = [(float(d.daily_energy or 0)) for d in data]
+    seven_days_energy = sum(series)
+    weekly_chart_data = [list(x) for x in zip(timestamps, series)]
+
+    return render_template("data/weekly.html", data=weekly_chart_data, seven_days_energy=seven_days_energy)
+
+
+@blueprint.route("/yearly")
+def yearly():
+    data = PVData.query.with_entities(
+        func.max(PVData.total_energy.label('total_energy'))).group_by(
+        func.strftime("%Y", PVData.created_at)).all()
+
+    data = [int(x[0]) for x in data]
+    total_energy = sum(data[1:])
+    diffs = [y - x for x, y in zip(data, data[1:])]
+    data = data[:1] + diffs
+    years = [x for x in range(2013, 2013 + len(data))]
+    yearly_data = [5741.82 for i in range(len(data))]
+
+    return render_template("data/yearly.html", data=data, years=years, yearlyData=yearly_data,
+                           total_energy=total_energy)
 
 
 @blueprint.route("/tables")
 def tables():
     data = PVData.query.with_entities(func.strftime('%Y-%m-%d', PVData.created_at).label('created_at'),
                                       func.max(PVData.daily_energy).label('daily_energy'),
+                                      func.max(PVData.current_power).label('max_output'),
                                       func.max(PVData.total_energy).label('total_energy')).filter(
         PVData.created_at > datetime.now() - timedelta(days=30)).group_by(
         func.strftime('%Y-%m-%d', PVData.created_at)).all()
 
     data = reversed(data)
     return render_template('data/tables.html', data=data)
+
+
+@blueprint.route("/statistics")
+def statistics():
+    data = PVData.query.with_entities(func.strftime('%Y-%m', PVData.created_at).label('month'),
+                                      func.avg(PVData.daily_energy).label('avg_daily_energy'),
+                                      func.max(PVData.daily_energy).label('max_daily_energy')).filter(
+        PVData.current_power > 0).group_by(func.strftime('%Y-%m', PVData.created_at)).order_by(
+        desc(PVData.created_at)).limit(12).all()
+
+    return render_template('data/statistics.html', data=data)

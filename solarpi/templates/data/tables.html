@@ -1,4 +1,9 @@
 {% extends "layout.html" %}
+{% block page_title %}
+
+    Tables - Solar Pi
+
+{% endblock %}
 {% block content %}
     <div id="page-wrapper">
         <div class="row">
@@ -16,12 +21,13 @@
                     <!-- /.panel-heading -->
                     <div class="panel-body">
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-striped">
                                 <thead>
                                 <tr>
                                     <th>Date</th>
-                                    <th>Daily Energy</th>
-                                    <th>Total Energy</th>
+                                    <th>Daily Energy im kWh</th>
+                                    <th>Max. Output in kW</th>
+                                    <th>Total Energy in kWh</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -29,6 +35,7 @@
                                     <tr>
                                         <td>{{ d.created_at }}</td>
                                         <td>{{ '%0.2f'| format(d.daily_energy|float) }}</td>
+                                        <td>{{ '%d'| format(d.max_output) }}</td>
                                         <td>{{ '%d'| format(d.total_energy) }}</td>
                                     </tr>
                                 {% endfor %}
@@ -43,4 +50,12 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        $('#side-menu').find('a').each(function (i) {
+            $(this).removeClass('active');
+        });
+        $('#tables').addClass("active");
+    </script>
 {% endblock %}

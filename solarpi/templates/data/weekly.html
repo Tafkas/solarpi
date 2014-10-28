@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block page_title %}
 
-    Last 30 Days Energy Output - Solar Pi
+    Last 7 Days Energy Output - Solar Pi
 
 {% endblock %}
 {% block content %}
@@ -9,9 +9,9 @@
         var data = {{ data|safe }};
     </script>
     <div id="page-wrapper">
-    <div class="row">
+        <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">Last 30 Days Energy: {{ monthly_energy }} kWh</h1>
+                <h1 class="page-header">Last 7 Days Energy: {{ seven_days_energy }} kWh</h1>
             </div>
             <!-- /.col-lg-12 -->
         </div>
@@ -22,7 +22,7 @@
                         Monthly Chart
                     </div>
                     <div class="panel-body">
-                        <div id="monthly-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                        <div id="weekly-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                     </div>
                 </div>
             </div>
@@ -35,9 +35,9 @@
         $('#side-menu').find('a').each(function (i) {
             $(this).removeClass('active');
         });
-        $('#monthly_data').addClass("active");
+        $('#weekly_data').addClass("active");
     </script>
-    <script src="{{ url_for('static', filename='js/monthly-chart.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/weekly-chart.js') }}"></script>
 {% endblock %}
 
 

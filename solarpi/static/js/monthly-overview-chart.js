@@ -6,14 +6,11 @@ $(function () {
         title: {
             text: 'Energy Output for 2014'
         },
-        colors: ['#428BCA', '#153E7E', '#B4C7DA', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'],
+        colors: ['#B4C7DA', '#428BCA', '#153E7E', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'],
         xAxis: [
             {
-                type: 'datetime',
-                dateTimeLabelFormats: {
-                    month: '%b',
-                    year: '%b'
-                }
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
             }
         ],
         yAxis: [
@@ -34,8 +31,16 @@ $(function () {
         ],
         tooltip: {
             shared: true,
-            headerFormat: '<b>{point.x: %B}</b><br>',
+            headerFormat: '<b>{point.x}</b><br>',
             pointFormat: '{series.name}: {point.y} <br>'
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.0,
+                groupPadding: 0.5,
+                borderWidth: 0,
+                pointWidth: 30
+            }
         },
         legend: {
             layout: 'vertical',
@@ -47,6 +52,20 @@ $(function () {
             backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
         },
         series: [
+            {
+                name: 'Prediction',
+                type: 'column',
+                data: current_month_pred,
+                tooltip: {
+                    valueSuffix: ' kWh',
+                    formatter: function () {
+                        if (this.y != null) {
+                            return this.y;
+                        }
+                        else return false;
+                    }
+                }
+            },
             {
                 name: '2014',
                 type: 'column',

@@ -2,40 +2,42 @@
 
 # Flask
 Flask==0.10.1
-MarkupSafe==0.21
+MarkupSafe==0.23
 Werkzeug==0.9.6
 Jinja2==2.7.3
 itsdangerous==0.24
 
 # Database
-Flask-SQLAlchemy==1.0
-SQLAlchemy==0.9.6
+Flask-SQLAlchemy==2.0
+SQLAlchemy==0.9.8
 
 # Migrations
 Flask-Migrate==1.2.0
 
 # Forms
-Flask-WTF==0.9.5
-WTForms==2.0
+Flask-WTF==0.10.2
+WTForms==2.0.1
 
 # Deployment
 gunicorn>=17.5
 wsgiref>=0.1.2
 
 # Assets
-Flask-Assets==0.9
-cssmin>=0.1.4
-jsmin>=2.0.4
+Flask-Assets==0.10
+cssmin>=0.2.0
+jsmin>=2.0.11
 
 # Auth
 Flask-Login==0.2.11
 Flask-Bcrypt==0.6.0
 
 # Caching
-Flask-Cache>=0.12
+Flask-Cache>=0.13.1
 
 # Pysolar
-Pysolar>=0.4.3
+Pysolar>=0.6
 
 #pytz
-pytz>=2014.4
+pytz>=2014.7
+
+python-dateutil>=2.2
