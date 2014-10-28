@@ -118,7 +118,7 @@
                             <i class="fa fa-upload fa-5x"></i>
                         </div>
                         <div class="col-xs-9 text-right">
-                            <div class="huge">0 kWh</div>
+                            <div class="huge">{{ '%0.2f'| format(todays_export|float) }} kWh</div>
                             <div>Today's export</div>
                         </div>
                     </div>
@@ -126,7 +126,7 @@
                 <div class="panel-footer">
                     <a href="{{ url_for('pvdata.daily') }}">
                         <span class="pull-left">Total export</span>
-                        <span class="pull-right">0 kWh</span>
+                        <span class="pull-right">{{ '%0.2f'| format(total_export|float) }} kWh</span>
 
                         <div class="clearfix"></div>
                     </a>
@@ -141,7 +141,7 @@
                             <i class="fa fa-download fa-5x"></i>
                         </div>
                         <div class="col-xs-9 text-right">
-                            <div class="huge">0 kWh</div>
+                            <div class="huge">{{ '%0.2f'| format(todays_import|float) }} kWh</div>
                             <div>Today's import</div>
                         </div>
                     </div>
@@ -149,7 +149,7 @@
                 <div class="panel-footer">
                     <a href="{{ url_for('pvdata.daily') }}">
                         <span class="pull-left">Total import</span>
-                        <span class="pull-right">0 kWh</span>
+                        <span class="pull-right">{{ '%0.2f'| format(total_import|float) }} kWh</span>
 
                         <div class="clearfix"></div>
                     </a>
@@ -164,7 +164,7 @@
                             <i class="fa fa-money fa-5x"></i>
                         </div>
                         <div class="col-xs-9 text-right">
-                            <div class="huge">0 €</div>
+                            <div class="huge">{{ '%0.2f'| format(total_export * 0.1702 |float) }} €</div>
                             <div>Total earnings</div>
                         </div>
                     </div>
@@ -231,12 +231,6 @@
                         <div class="list-group-item">
                             <table class="table table-hover">
                                 <tbody>
-                                <tr>
-                                    <td>Inverter Efficiency</td>
-                                    <td>(Pac/Pdc)</td>
-                                    <td></td>
-                                    <td class="text-right">{{ '%0.2f'| format(efficiency|float) }}</td>
-                                </tr>
                                 <tr>
                                     <td><strong>String 1</strong></td>
                                     <td></td>

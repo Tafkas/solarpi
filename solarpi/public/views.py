@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 '''Public section, including homepage and signup.'''
 import calendar
+from time import strftime
 import dateutil.parser
 from cookielib import eff_request_host
 from datetime import datetime, timedelta
@@ -8,6 +9,7 @@ from flask import (Blueprint, render_template)
 from sqlalchemy import func
 from solarpi.public.helper import get_operating_hours
 from solarpi.pvdata.models import PVData
+from solarpi.electricity.models import Electricity
 from solarpi.weather.helper import weather_icon
 from solarpi.weather.models import Weather
 
@@ -21,8 +23,22 @@ def home():
 
     pv = PVData.query.order_by(
         PVData.id.desc()).first()
-        
+
     last_updated = dateutil.parser.parse(pv.created_at).strftime('%Y-%m-%d %H:%M')
+
+    total_electricity = Electricity.query.order_by(Electricity.id.desc()).first()
+    total_import = total_electricity.meter_180
+    total_export = total_electricity.meter_280
+
+    todays_electricity = Electricity.query.with_entities(
+        (func.max(Electricity.meter_280) - func.min(Electricity.meter_280)).label(
+            'todays_export'), (func.max(Electricity.meter_180) - func.min(Electricity.meter_180)).label(
+            'todays_import')).filter(
+        func.strftime('%Y-%m-%d', Electricity.created_at) == datetime.now().strftime('%Y-%m-%d')).group_by(
+        func.strftime('%Y-%m-%d', Electricity.created_at)).first()
+
+    todays_import = todays_electricity.todays_import
+    todays_export = todays_electricity.todays_export
 
     current_power = pv.current_power
     daily_energy = pv.daily_energy
@@ -75,7 +91,7 @@ def home():
     current_year_series = [int(x[1]) for x in current_year_data]
     if now.day > 1:
         current_month = int(
-        (current_year_series[-1] - daily_energy) * calendar.monthrange(now.year, now.month)[1] / (now.day - 1))
+            (current_year_series[-1] - daily_energy) * calendar.monthrange(now.year, now.month)[1] / (now.day - 1))
     else:
         current_month = 0
     current_month_series = ['null'] * 12
@@ -94,7 +110,9 @@ def home():
                            current_year_energy=current_year_energy,
                            max_daily_energy_last_seven_days=max_daily_energy_last_seven_days,
                            todays_max_power=todays_max_power, last_updated=last_updated,
-                           operating_hours=operating_hours)
+                           operating_hours=operating_hours, total_export=total_export,
+                           total_import=total_import, todays_export=todays_export,
+                           todays_import=todays_import)
 
 
 @blueprint.route("/about/")
