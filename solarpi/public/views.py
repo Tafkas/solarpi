@@ -37,6 +37,10 @@ def home():
         func.strftime('%Y-%m-%d', Electricity.created_at) == datetime.now().strftime('%Y-%m-%d')).group_by(
         func.strftime('%Y-%m-%d', Electricity.created_at)).first()
 
+    last_year_export = Electricity.query.with_entities(Electricity.meter_280).filter(
+        func.strftime('%Y', Electricity.created_at) == '2013').order_by(Electricity.id.desc()).first()
+    current_year_export = total_export - last_year_export.meter_280
+
     todays_import, todays_export = 0.0, 0.0
     if todays_electricity:
         todays_import = todays_electricity.todays_import
@@ -114,7 +118,7 @@ def home():
                            todays_max_power=todays_max_power, last_updated=last_updated,
                            operating_hours=operating_hours, total_export=total_export,
                            total_import=total_import, todays_export=todays_export,
-                           todays_import=todays_import)
+                           todays_import=todays_import, current_year_export=current_year_export)
 
 
 @blueprint.route("/about/")

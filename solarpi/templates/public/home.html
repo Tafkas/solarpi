@@ -172,7 +172,7 @@
                 <div class="panel-footer">
                     <a href="#">
                         <span class="pull-left">Current year</span>
-                        <span class="pull-right">0 €</span>
+                        <span class="pull-right">{{ '%0.2f'| format(current_year_export * 0.1702 |float) }} €</span>
 
                         <div class="clearfix"></div>
                     </a>
