@@ -94,10 +94,12 @@ def home():
         func.strftime('%Y-%m', PVData.created_at)).all()
 
     last_year_series = [int(x[1]) for x in last_year_data]
+    last_year_current_month_avg = last_year_series[now.month - 1] / calendar.monthrange(now.year, now.month)[1]
     current_year_series = [int(x[1]) for x in current_year_data]
     if now.day > 1:
         current_month = int(
-            (current_year_series[-1] - daily_energy) * calendar.monthrange(now.year, now.month)[1] / (now.day - 1))
+            ((current_year_series[-1] - daily_energy) + last_year_current_month_avg) *
+            calendar.monthrange(now.year, now.month)[1] / (2 * (now.day - 1)))
     else:
         current_month = 0
     current_month_series = ['null'] * 12
