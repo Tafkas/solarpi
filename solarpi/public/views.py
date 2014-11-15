@@ -98,8 +98,7 @@ def home():
     current_year_series = [int(x[1]) for x in current_year_data]
     if now.day > 1:
         current_month = int(
-            ((current_year_series[-1] - daily_energy) + last_year_current_month_avg) *
-            calendar.monthrange(now.year, now.month)[1] / (2 * (now.day - 1)))
+            (current_year_series[-1]) + last_year_current_month_avg * (calendar.monthrange(now.year, now.month)[1] - now.day-1))
     else:
         current_month = 0
     current_month_series = ['null'] * 12
