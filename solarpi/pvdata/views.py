@@ -72,7 +72,7 @@ def daily(date=get_todays_date().strftime('%Y-%m-%d')):
     else:
         daily_energy = 0
 
-    return render_template("data/daily.html", data=daily_chart_data, data2=daily_chart_max_data,
+    return render_template("charts/daily.html", data=daily_chart_data, data2=daily_chart_max_data,
                            yesterday=yesterday, today=current_date,
                            tomorrow=tomorrow, daily_energy=daily_energy, all_data=pv,
                            input_voltage_1_chart_data=input_voltage_1_chart_data,
@@ -103,7 +103,7 @@ def monthly(param=datetime.now().strftime('%Y-%m')):
     monthly_energy = sum(series)
     monthly_chart_data = [list(x) for x in zip(timestamps, series)]
 
-    return render_template("data/monthly.html", data=monthly_chart_data, monthly_energy=monthly_energy)
+    return render_template("charts/monthly.html", data=monthly_chart_data, monthly_energy=monthly_energy)
 
 
 @blueprint.route("/weekly")
@@ -120,7 +120,7 @@ def weekly():
     seven_days_energy = sum(series)
     weekly_chart_data = [list(x) for x in zip(timestamps, series)]
 
-    return render_template("data/weekly.html", data=weekly_chart_data, seven_days_energy=seven_days_energy)
+    return render_template("charts/weekly.html", data=weekly_chart_data, seven_days_energy=seven_days_energy)
 
 
 @blueprint.route("/yearly")
@@ -136,7 +136,7 @@ def yearly():
     years = [x for x in range(2013, 2013 + len(data))]
     yearly_data = [5741.82 for i in range(len(data))]
 
-    return render_template("data/yearly.html", data=data, years=years, yearlyData=yearly_data,
+    return render_template("charts/yearly.html", data=data, years=years, yearlyData=yearly_data,
                            total_energy=total_energy)
 
 
@@ -150,7 +150,7 @@ def tables():
         func.strftime('%Y-%m-%d', PVData.created_at)).all()
 
     data = reversed(data)
-    return render_template('data/tables.html', data=data)
+    return render_template('charts/tables.html', data=data)
 
 
 @blueprint.route("/statistics")
@@ -161,4 +161,4 @@ def statistics():
         PVData.current_power > 0).group_by(func.strftime('%Y-%m', PVData.created_at)).order_by(
         desc(PVData.created_at)).limit(12).all()
 
-    return render_template('data/statistics.html', data=data)
+    return render_template('charts/statistics.html', data=data)
