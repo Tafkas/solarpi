@@ -10,7 +10,7 @@ from solarpi.extensions import (
     migrate,
     debug_toolbar,
 )
-from solarpi import public, weather, charts, statistics
+from solarpi import public, weather, charts, statistics, tables
 
 
 def create_app(config_object=ProdConfig):
@@ -40,6 +40,7 @@ def register_blueprints(app):
     app.register_blueprint(charts.views.blueprint)
     app.register_blueprint(public.views.blueprint)
     app.register_blueprint(statistics.views.blueprint)
+    app.register_blueprint(tables.views.blueprint)
     app.register_blueprint(weather.views.blueprint)
 
     return None
