@@ -1,8 +1,10 @@
 {% extends "layout.html" %}
 {% block page_title %}
-
     Last 30 Days Energy Output - Solar Pi
-
+{% endblock %}
+{% block meta_description %}
+    Photovoltaic chart for the last 30 days. Generated energy: {{ monthly_energy }}
+    kWh
 {% endblock %}
 {% block content %}
     <script>

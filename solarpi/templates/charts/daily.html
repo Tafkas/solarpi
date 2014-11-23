@@ -1,8 +1,10 @@
 {% extends "layout.html" %}
 {% block page_title %}
-
     Daily Energy Output for {{ today.strftime('%d.%m.%Y') }} - Solar Pi
-
+{% endblock %}
+{% block meta_description %}
+    Photovoltaic chart for {{ today.strftime('%d.%m.%Y') }}. Generated energy: {{ '%0.2f'| format(daily_energy|float) }}
+    kWh
 {% endblock %}
 {% block content %}
 

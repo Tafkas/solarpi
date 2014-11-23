@@ -1,8 +1,10 @@
 {% extends "layout.html" %}
 {% block page_title %}
-
     Yearly Energy Output - Solar Pi
-
+{% endblock %}
+{% block meta_description %}
+    Yearly photovoltaic chart. Total generated energy: {{ total_energy }}
+    kWh
 {% endblock %}
 {% block content %}
     <script>

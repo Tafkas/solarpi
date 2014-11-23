@@ -1,8 +1,10 @@
 {% extends "layout.html" %}
 {% block page_title %}
-
     Last 7 Days Energy Output - Solar Pi
-
+{% endblock %}
+{% block meta_description %}
+    Photovoltaic chart for the last 7 days. Generated energy: {{ seven_days_energy }}
+    kWh
 {% endblock %}
 {% block content %}
     <script>
