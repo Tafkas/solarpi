@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <div class="panel-footer">
-                    <a href="{{ url_for('pvdata.daily') }}">
+                    <a href="{{ url_for('charts.daily') }}">
                         <span class="pull-left">Max today</span>
                         <span class="pull-right">{{ todays_max_power }} Watt</span>
 
@@ -51,7 +51,7 @@
                     </div>
                 </div>
                 <div class="panel-footer">
-                    <a href="{{ url_for('pvdata.weekly') }}">
+                    <a href="{{ url_for('charts.weekly') }}">
                         <span class="pull-left">Max last 7 days</span>
                         <span class="pull-right">{{ max_daily_energy_last_seven_days }} kWh</span>
 
@@ -74,7 +74,7 @@
                     </div>
                 </div>
                 <div class="panel-footer">
-                    <a href="{{ url_for('pvdata.yearly') }}">
+                    <a href="{{ url_for('charts.yearly') }}">
                         <span class="pull-left">Current year</span>
                         <span class="pull-right">{{ current_year_energy }} kWh</span>
 
@@ -124,7 +124,7 @@
                     </div>
                 </div>
                 <div class="panel-footer">
-                    <a href="{{ url_for('pvdata.daily') }}">
+                    <a href="{{ url_for('charts.daily') }}">
                         <span class="pull-left">Total export</span>
                         <span class="pull-right">{{ '%0.2f'| format(total_export|float) }} kWh</span>
 
@@ -147,7 +147,7 @@
                     </div>
                 </div>
                 <div class="panel-footer">
-                    <a href="{{ url_for('pvdata.daily') }}">
+                    <a href="{{ url_for('charts.daily') }}">
                         <span class="pull-left">Total import</span>
                         <span class="pull-right">{{ '%0.2f'| format(total_import|float) }} kWh</span>
 

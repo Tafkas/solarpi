@@ -3,12 +3,9 @@ import calendar
 from datetime import datetime, timedelta
 
 from flask import Blueprint, render_template, flash
-from sqlalchemy import extract, func, desc
 from solarpi.charts.helper import get_timestamps
 from solarpi.pvdata.helper import get_sec, get_todays_date, get_daily_energy_series, get_7_day_max_energy_series, \
     get_weekly_series, get_monthly_series, get_yearly_series
-
-from solarpi.pvdata.models import PVData
 
 blueprint = Blueprint("charts", __name__, url_prefix='/charts',
                       static_folder="../static")

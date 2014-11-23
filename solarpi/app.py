@@ -10,15 +10,15 @@ from solarpi.extensions import (
     migrate,
     debug_toolbar,
 )
-from solarpi import public, pvdata, weather, electricity, charts
+from solarpi import public, weather, charts, statistics
 
 
 def create_app(config_object=ProdConfig):
-    '''An application factory, as explained here:
+    """An application factory, as explained here:
         http://flask.pocoo.org/docs/patterns/appfactories/
 
     :param config_object: The configuration object to use.
-    '''
+    """
     app = Flask(__name__)
     app.config.from_object(config_object)
     register_extensions(app)
@@ -39,7 +39,7 @@ def register_extensions(app):
 def register_blueprints(app):
     app.register_blueprint(charts.views.blueprint)
     app.register_blueprint(public.views.blueprint)
-    app.register_blueprint(pvdata.views.blueprint)
+    app.register_blueprint(statistics.views.blueprint)
     app.register_blueprint(weather.views.blueprint)
 
     return None
