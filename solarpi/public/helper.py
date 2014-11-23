@@ -19,4 +19,4 @@ def get_operating_hours():
         sun_rise_set = GetSunriseSunset(LAT, LON, day, 2)
         daily_operating_hours = sun_rise_set[1] - sun_rise_set[0]
         operating_hours += divmod(daily_operating_hours.total_seconds(), 3600)[0]
-    return 1.05 * operating_hours # adding 5% overhead
+    return 1.05 * operating_hours  # adding 5% overhead
