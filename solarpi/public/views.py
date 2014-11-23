@@ -39,6 +39,11 @@ def home():
     last_updated = dateutil.parser.parse(pv.created_at).strftime('%Y-%m-%d %H:%M')
 
     todays_max_power = get_todays_max_power()
+    if not todays_max_power:
+        todays_max_power = 0
+        daily_energy = 0
+        current_temp = None
+
     max_daily_energy_last_seven_days = get_max_daily_energy_last_seven_days()
 
     # electricity im- and export
