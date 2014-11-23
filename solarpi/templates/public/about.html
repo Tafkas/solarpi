@@ -2,12 +2,33 @@
 {% block page_title %}
     About - Solar Pi
 {% endblock %}
-
+{% block meta_description %}
+    Solar Pi - A RaspberryPi based, Flask powered photovoltaic monitor
+{% endblock %}
 {% block content %}
-    <div class="body-content">
+    <div id="page-wrapper">
         <div class="row">
-            <h1>About</h1>
-
+            <div class="col-lg-12">
+                <h1>About</h1>
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla nunc. Morbi mauris. Mauris ultrices
+                faucibus ligula. Vivamus magna nibh, pharetra nec, ultricies ac, auctor ac, velit. Donec sed neque
+                pharetra leo convallis vestibulum. Aliquam cursus nisl nec nulla. Vivamus ligula. Fusce lectus odio,
+                imperdiet eu, eleifend eu, interdum vitae, elit. Duis at nisi ac metus vehicula aliquam. Ut adipiscing,
+                mauris in sodales lobortis, nibh erat faucibus ante, in feugiat lacus urna at diam. Cum sociis natoque
+                penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam erat volutpat. Suspendisse
+                ante justo, ultricies vitae, tempor vitae, luctus eu, mi. Maecenas lobortis adipiscing dolor. Nulla
+                facilisi. Suspendisse placerat, ante vitae ultricies rhoncus, magna diam molestie urna, ut sagittis
+                magna nibh nec metus.
+            </div>
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $('#side-menu').find('a').each(function (i) {
+            $(this).removeClass('active');
+        });
+        $('#about').addClass("active");
+    </script>
 {% endblock %}
