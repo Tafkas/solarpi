@@ -34,7 +34,7 @@ def home():
     if pdc > 0:
         efficiency = pac / pdc
     else:
-        efficiency = 0
+        efficiency = 0.0
 
     last_updated = dateutil.parser.parse(pv.created_at).strftime('%Y-%m-%d %H:%M')
 
