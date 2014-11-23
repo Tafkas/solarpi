@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from solarpi.weather.models import Weather
+from datetime import datetime, timedelta
 
 WEATHER_ICONS = {211: 'wi-storm-showers',
                  300: 'wi-showers',
@@ -16,10 +18,19 @@ WEATHER_ICONS = {211: 'wi-storm-showers',
                  802: 'wi-day-cloudy',
                  803: 'wi-cloudy',
                  804: 'wi-cloudy'
-                }
+}
 
 
-def weather_icon(weather_id):
+def get_current_weather():
+    """
+    returns the lates entry from the weather table
+    """
+    return Weather.query.with_entities(Weather.temp, Weather.weather_id).filter(
+        Weather.created_at >= (datetime.now() - timedelta(days=2))).order_by(
+        Weather.id.desc()).first()
+
+
+def get_weather_icon(weather_id):
     """returns the corresponding weather icon for a given weather code from
         http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes"""
     if weather_id not in WEATHER_ICONS:

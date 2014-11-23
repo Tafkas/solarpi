@@ -10,8 +10,7 @@ from sqlalchemy import func
 from solarpi.public.helper import get_operating_hours
 from solarpi.pvdata.models import PVData
 from solarpi.electricity.models import Electricity
-from solarpi.weather.helper import weather_icon
-from solarpi.weather.models import Weather
+from solarpi.weather.helper import get_weather_icon, get_current_weather
 
 blueprint = Blueprint('public', __name__, static_folder="../static")
 
@@ -56,11 +55,9 @@ def home():
     else:
         efficiency = 0
 
-    w = Weather.query.with_entities(Weather.temp, Weather.weather_id).filter(
-        Weather.created_at >= (datetime.now() - timedelta(days=2))).order_by(
-        Weather.id.desc()).first()
+    w = get_current_weather()
     current_temp = w.temp
-    current_weather = weather_icon(w.weather_id)
+    current_weather = get_weather_icon(w.weather_id)
 
     todays_max_power = PVData.query.with_entities(func.max(PVData.current_power).label('todays_max_power')).filter(
         PVData.created_at >= datetime.now()).first().todays_max_power

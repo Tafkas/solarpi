@@ -9,10 +9,10 @@ from sqlalchemy import func
 from solarpi.public.helper import get_operating_hours
 from solarpi.pvdata.models import PVData
 from solarpi.electricity.models import Electricity
-from solarpi.weather.helper import weather_icon
-from solarpi.weather.models import Weather
+
 
 blueprint = Blueprint('electricity', __name__, static_folder="../static")
+
 
 @blueprint.route("/")
 def home():
