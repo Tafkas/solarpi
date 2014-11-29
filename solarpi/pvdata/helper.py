@@ -103,7 +103,7 @@ def get_current_month_prediction(current_month_energy, last_years_average):
     if now.day > 1:
         current_month = int(
             current_month_energy + last_years_average * (
-                calendar.monthrange(now.year, now.month)[1] - now.day))
+                calendar.monthrange(now.year, now.month)[1] - now.day + 1))
     else:
         current_month = 0
     current_month_series = ['null'] * 12
