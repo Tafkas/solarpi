@@ -97,18 +97,15 @@ def get_current_month_prediction(current_month_energy, last_years_average):
 
     :param current_month_energy: energy yieled so far this month
     :param last_years_average: daily average energy yield for the same month in the previous year
-    :return: predicted energy yield for the current month
+    :return: series with predicted energy yield for the current month
     """
     now = datetime.now()
-    if now.day > 1:
-        current_month = int(
-            current_month_energy + last_years_average * (
-                calendar.monthrange(now.year, now.month)[1] - now.day + 1))
-    else:
-        current_month = 0
-    current_month_series = ['null'] * 12
-    current_month_series[now.month - 1] = current_month
-    return current_month_series
+    current_month_prediction = current_month_energy + last_years_average * (
+        calendar.monthrange(now.year, now.month)[1] - now.day + 1)
+
+    current_month_prediction_series = ['null'] * 12
+    current_month_prediction_series[now.month - 1] = int(current_month_prediction)
+    return current_month_prediction_series
 
 
 def get_current_values():
