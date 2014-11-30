@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 from flask import Blueprint, render_template, flash
 from solarpi.charts.helper import get_timestamps
-from solarpi.electricity.helper import get_weekly_electricity_import
+from solarpi.electricity.helper import get_weekly_electricity_import, get_monthly_electricity_import
 from solarpi.pvdata.helper import get_sec, get_todays_date, get_daily_energy_series, get_7_day_max_energy_series, \
     get_weekly_series, get_monthly_series, get_yearly_series
 
@@ -81,12 +81,15 @@ def weekly():
 def monthly():
     pv = get_monthly_series()
     timestamps = get_timestamps(pv)
-
     series = [(float(d.daily_energy or 0)) for d in pv]
     monthly_energy = sum(series)
-    monthly_chart_data = [list(x) for x in zip(timestamps, series)]
+    monthly_pv_chart_data = [list(x) for x in zip(timestamps, series)]
 
-    return render_template("charts/monthly.html", data=monthly_chart_data, monthly_energy=monthly_energy)
+    electricity_import = [(float(d.electricity_import or 0)) for d in get_monthly_electricity_import()]
+    monthly_import_chart_data = [list(x) for x in zip(timestamps, electricity_import)]
+
+    return render_template("charts/monthly.html", pvdata=monthly_pv_chart_data,
+                           importData=monthly_import_chart_data, monthly_energy=monthly_energy)
 
 
 @blueprint.route("/yearly")

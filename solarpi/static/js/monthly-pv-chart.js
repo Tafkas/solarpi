@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $(function () {
-        $('#monthly-chart').highcharts({
+        $('#monthly-pv-chart').highcharts({
             chart: {
                 type: 'column'
             },
@@ -33,7 +33,7 @@ $(document).ready(function () {
             series: [
                 {
                     name: 'Daily Energy Output',
-                    data: data
+                    data: pvData
                 }
             ]
         });

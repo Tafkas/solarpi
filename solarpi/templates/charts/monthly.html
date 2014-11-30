@@ -8,10 +8,11 @@
 {% endblock %}
 {% block content %}
     <script>
-        var data = {{ data|safe }};
+        var pvData = {{ pvdata|safe }};
+        var importData = {{ importData|safe }};
     </script>
     <div id="page-wrapper">
-    <div class="row">
+        <div class="row">
             <div class="col-lg-12">
                 <h1 class="page-header">Last 30 Days Energy: {{ monthly_energy }} kWh</h1>
             </div>
@@ -24,7 +25,19 @@
                         Monthly Chart
                     </div>
                     <div class="panel-body">
-                        <div id="monthly-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                        <div id="monthly-pv-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Monthly Import Chart
+                    </div>
+                    <div class="panel-body">
+                        <div id="monthly-import-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                     </div>
                 </div>
             </div>
@@ -39,7 +52,8 @@
         });
         $('#monthly_data').addClass("active");
     </script>
-    <script src="{{ url_for('static', filename='js/monthly-chart.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/monthly-pv-chart.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/monthly-energy-import-chart.js') }}"></script>
 {% endblock %}
 
 
