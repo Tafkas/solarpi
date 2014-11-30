@@ -1,11 +1,11 @@
 $(document).ready(function () {
     $(function () {
-        $('#weekly-chart').highcharts({
+        $('#weekly-import-chart').highcharts({
             chart: {
                 type: 'column'
             },
             title: {
-                text: 'Last 7 Days Energy Output'
+                text: 'Last 7 Days Energy Import'
             },
             xAxis: {
                 type: 'datetime'
@@ -19,7 +19,7 @@ $(document).ready(function () {
             tooltip: {
                 headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
                 pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}:&nbsp; </td>' +
-                    '<td style="padding:0"><b>{point.y:.1f} kWh</b></td></tr>',
+                '<td style="padding:0"><b>{point.y:.1f} kWh</b></td></tr>',
                 footerFormat: '</table>',
                 shared: true,
                 useHTML: true
@@ -32,8 +32,8 @@ $(document).ready(function () {
             },
             series: [
                 {
-                    name: 'Daily Energy Output',
-                    data: data
+                    name: 'Daily Energy Import',
+                    data: importData
                 }
             ]
         });

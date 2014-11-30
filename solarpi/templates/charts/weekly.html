@@ -8,7 +8,8 @@
 {% endblock %}
 {% block content %}
     <script>
-        var data = {{ data|safe }};
+        var pvData = {{ pvdata|safe }};
+        var importData = {{ importData|safe }};
     </script>
     <div id="page-wrapper">
         <div class="row">
@@ -21,10 +22,22 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        Monthly Chart
+                        Last 7 days yield
                     </div>
                     <div class="panel-body">
-                        <div id="weekly-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                        <div id="weekly-pv-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Last 7 days import
+                    </div>
+                    <div class="panel-body">
+                        <div id="weekly-import-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
                     </div>
                 </div>
             </div>
@@ -39,7 +52,8 @@
         });
         $('#weekly_data').addClass("active");
     </script>
-    <script src="{{ url_for('static', filename='js/weekly-chart.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/weekly-pv-chart.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/weekly-energy-import-chart.js') }}"></script>
 {% endblock %}
 
 
