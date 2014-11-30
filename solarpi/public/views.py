@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-'''Public section, including homepage and signup.'''
+'''Public section, including homepage.'''
 import calendar
 import dateutil.parser
-from datetime import datetime
-from flask import (Blueprint, render_template)
+from datetime import datetime, timedelta
+from flask import (Blueprint, render_template, make_response, current_app, url_for)
 from solarpi.public.helper import get_operating_hours
 from solarpi.pvdata.helper import get_todays_max_power, get_max_daily_energy_last_seven_days, get_current_values, \
-    get_last_years_energy, get_yearly_data, get_current_month_prediction
+    get_last_years_energy, get_yearly_data, get_current_month_prediction, get_first_date
 from solarpi.electricity.models import Electricity
 from solarpi.electricity.helper import get_todays_electricity, get_last_year_export
 from solarpi.weather.helper import get_weather_icon, get_current_weather
@@ -90,3 +90,29 @@ def home():
 @blueprint.route("/about/")
 def about():
     return render_template("public/about.html")
+
+
+@blueprint.route("/sitemap.xml")
+def sitemap():
+    pages = []
+    today = datetime.now()
+    ten_days_ago = (today - timedelta(days=10)).date().isoformat()
+    # static pages
+    for rule in current_app.url_map.iter_rules():
+        if "GET" in rule.methods and len(rule.arguments) == 0:
+            pages.append([rule.rule, ten_days_ago])
+
+    # daily charts
+    start_date = dateutil.parser.parse(get_first_date())
+    total_days = (today - start_date).days + 1
+
+    for day_number in range(total_days):
+        current_date = (start_date + timedelta(days=day_number)).date()
+        url = url_for('charts.daily') + '/%s' % current_date
+        pages.append([url, current_date])
+
+    sitemap_xml = render_template("public/sitemap_template.xml", pages=pages)
+    response = make_response(sitemap_xml)
+    response.headers["Content-Type"] = "application/xml"
+
+    return response

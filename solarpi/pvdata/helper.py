@@ -115,6 +115,14 @@ def get_current_values():
     return PVData.query.order_by(PVData.id.desc()).first()
 
 
+def get_first_date():
+    """
+
+    :return: the date in the databse
+    """
+    return PVData.query.order_by(PVData.id.asc()).first().created_at
+
+
 def get_sec(s):
     l = map(int, s.split(':'))
     return sum(n * sec for n, sec in zip(l[::-1], (1, 60, 3600)))
