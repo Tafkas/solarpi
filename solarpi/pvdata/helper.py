@@ -76,8 +76,9 @@ def get_last_years_energy():
     """
     :return: total energy yielded in the previous year
     """
+    current_year = datetime.now().year
     return PVData.query.with_entities(PVData.total_energy).filter(
-        func.strftime('%Y', PVData.created_at) == '2013').order_by(PVData.id.desc()).first()
+        func.strftime('%Y', PVData.created_at) == str(current_year - 1)).order_by(PVData.id.desc()).first()
 
 
 def get_yearly_data(year):
@@ -85,11 +86,22 @@ def get_yearly_data(year):
     :param year: year of the data
     :return: returns an array of monthly energy for a given year
     """
-    return PVData.query.with_entities(func.strftime('%m', PVData.created_at).label('created_at'),
-                                      (func.max(PVData.total_energy) - func.min(PVData.total_energy)).label(
-                                          'total_energy')).filter(
+    return PVData.query.with_entities((func.max(PVData.total_energy) - func.min(PVData.total_energy)).label(
+        'total_energy')).filter(
         func.strftime('%Y', PVData.created_at) == str(year)).group_by(
         func.strftime('%Y-%m', PVData.created_at)).all()
+
+
+def get_yearly_average_data():
+    """
+    :return: returns an array of monthly averages for previous years
+    """
+    current_year = datetime.now().year
+    subq = PVData.query.with_entities(func.strftime('%Y-%m', PVData.created_at).label('month'), (func.max(PVData.total_energy) - func.min(PVData.total_energy)).label(
+        'total_energy')).filter(
+        func.strftime('%Y', PVData.created_at) < str(current_year)).group_by(
+        func.strftime('%Y-%m', PVData.created_at)).subquery()
+    return PVData.query.
 
 
 def get_current_month_prediction(current_month_energy, last_years_average):
