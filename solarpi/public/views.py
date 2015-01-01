@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from flask import (Blueprint, render_template, make_response, current_app, url_for, request)
 from solarpi.public.helper import get_operating_hours
 from solarpi.pvdata.helper import get_todays_max_power, get_max_daily_energy_last_seven_days, get_current_values, \
-    get_last_years_energy, get_yearly_data, get_current_month_prediction, get_first_date
+    get_last_years_energy, get_yearly_data, get_current_month_prediction, get_first_date, get_yearly_average_data
 from solarpi.electricity.models import Electricity
 from solarpi.electricity.helper import get_todays_electricity, get_last_year_export
 from solarpi.weather.helper import get_weather_icon, get_current_weather
@@ -63,8 +63,8 @@ def home():
     last_year_energy = get_last_years_energy()
     current_year_energy = total_energy - last_year_energy.total_energy
 
-    average_years_series = [int(x[1]) for x in get_yearly_data(datetime.now().year - 1)]
-    current_year_series = [int(x[1]) for x in get_yearly_data(datetime.now().year)]
+    average_years_series = [int(x[0]) for x in get_yearly_average_data()]
+    current_year_series = [int(x[0]) for x in get_yearly_data(datetime.now().year)]
 
     last_year_current_month_avg = average_years_series[now.month - 1] / calendar.monthrange(now.year, now.month)[1]
     current_month_prediction = get_current_month_prediction(current_year_series[-1], last_year_current_month_avg)
