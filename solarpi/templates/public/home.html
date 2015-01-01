@@ -7,358 +7,359 @@
 {% endblock %}
 {% block content %}
     <div id="page-wrapper">
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">Dashboard</h1>
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Dashboard</h1>
+            </div>
+            <!-- /.col-lg-12 -->
         </div>
-        <!-- /.col-lg-12 -->
-    </div>
-    <!-- /.row -->
-    <div class="row">
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <i class="wi wi-lightning fa-5x"></i>
-                        </div>
-                        <div class="col-xs-9 text-right">
-                            <div class="huge">{{ current_power }} Watt</div>
-                            <div>Current Power</div>
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="wi wi-lightning fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">{{ current_power }} Watt</div>
+                                <div>Current Power</div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="panel-footer">
-                    <a href="{{ url_for('charts.daily') }}">
-                        <span class="pull-left">Max today</span>
-                        <span class="pull-right">{{ todays_max_power }} Watt</span>
+                    <div class="panel-footer">
+                        <a href="{{ url_for('charts.daily') }}">
+                            <span class="pull-left">Max today</span>
+                            <span class="pull-right">{{ todays_max_power }} Watt</span>
 
-                        <div class="clearfix"></div>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <i class="fa fa-info fa-5x"></i>
-                        </div>
-                        <div class="col-xs-9 text-right">
-                            <div class="huge">{{ daily_energy }} kWh</div>
-                            <div>Daily yield</div>
-                        </div>
+                            <div class="clearfix"></div>
+                        </a>
                     </div>
                 </div>
-                <div class="panel-footer">
-                    <a href="{{ url_for('charts.weekly') }}">
-                        <span class="pull-left">Max last 7 days</span>
-                        <span class="pull-right">{{ max_daily_energy_last_seven_days }} kWh</span>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-info fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">{{ daily_energy }} kWh</div>
+                                <div>Daily yield</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <a href="{{ url_for('charts.weekly') }}">
+                            <span class="pull-left">Max last 7 days</span>
+                            <span class="pull-right">{{ max_daily_energy_last_seven_days }} kWh</span>
 
-                        <div class="clearfix"></div>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <i class="fa fa-lightbulb-o fa-5x"></i>
-                        </div>
-                        <div class="col-xs-9 text-right">
-                            <div class="huge">{{ total_energy }} kWh</div>
-                            <div>Total yield</div>
-                        </div>
+                            <div class="clearfix"></div>
+                        </a>
                     </div>
                 </div>
-                <div class="panel-footer">
-                    <a href="{{ url_for('charts.yearly') }}">
-                        <span class="pull-left">Current year</span>
-                        <span class="pull-right">{{ current_year_energy }} kWh</span>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-lightbulb-o fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">{{ total_energy }} kWh</div>
+                                <div>Total yield</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <a href="{{ url_for('charts.yearly') }}">
+                            <span class="pull-left">Current year</span>
+                            <span class="pull-right">{{ current_year_energy }} kWh</span>
 
-                        <div class="clearfix"></div>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <i class="wi wi-thermometer fa-5x"></i>
-                        </div>
-                        <div class="col-xs-9 text-right">
-                            <div class="huge">{{ '%0.1f'| format(current_temp|float) if current_temp != None }} °C</div>
-                            <div>Current temperature</div>
-                        </div>
+                            <div class="clearfix"></div>
+                        </a>
                     </div>
                 </div>
-                <div class="panel-footer">
-                    <a href="#">
-                        <span class="pull-left">Current weather</span>
-                        <span class="pull-right"><i class="wi {{ current_weather }} fa-2x"></i></span>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="wi wi-thermometer fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">{{ '%0.1f'| format(current_temp|float) if current_temp != None }} °C
+                                </div>
+                                <div>Current temperature</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <a href="#">
+                            <span class="pull-left">Current weather</span>
+                            <span class="pull-right"><i class="wi {{ current_weather }} fa-2x"></i></span>
 
-                        <div class="clearfix"></div>
-                    </a>
+                            <div class="clearfix"></div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- /.row -->
-    <!-- /.row -->
-    <div class="row">
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <i class="fa fa-upload fa-5x"></i>
-                        </div>
-                        <div class="col-xs-9 text-right">
-                            <div class="huge">{{ '%0.2f'| format(todays_export|float) }} kWh</div>
-                            <div>Today's export</div>
+        <!-- /.row -->
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-upload fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">{{ '%0.2f'| format(todays_export|float) }} kWh</div>
+                                <div>Today's export</div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="panel-footer">
-                    <a href="{{ url_for('charts.daily') }}">
-                        <span class="pull-left">Total export</span>
-                        <span class="pull-right">{{ '%0.2f'| format(total_export|float) }} kWh</span>
+                    <div class="panel-footer">
+                        <a href="{{ url_for('charts.daily') }}">
+                            <span class="pull-left">Total export</span>
+                            <span class="pull-right">{{ '%0.2f'| format(total_export|float) }} kWh</span>
 
-                        <div class="clearfix"></div>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <i class="fa fa-download fa-5x"></i>
-                        </div>
-                        <div class="col-xs-9 text-right">
-                            <div class="huge">{{ '%0.2f'| format(todays_import|float) }} kWh</div>
-                            <div>Today's import</div>
-                        </div>
+                            <div class="clearfix"></div>
+                        </a>
                     </div>
                 </div>
-                <div class="panel-footer">
-                    <a href="{{ url_for('charts.daily') }}">
-                        <span class="pull-left">Total import</span>
-                        <span class="pull-right">{{ '%0.2f'| format(total_import|float) }} kWh</span>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-download fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">{{ '%0.2f'| format(todays_import|float) }} kWh</div>
+                                <div>Today's import</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <a href="{{ url_for('charts.daily') }}">
+                            <span class="pull-left">Total import</span>
+                            <span class="pull-right">{{ '%0.2f'| format(total_import|float) }} kWh</span>
 
-                        <div class="clearfix"></div>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <i class="fa fa-money fa-5x"></i>
-                        </div>
-                        <div class="col-xs-9 text-right">
-                            <div class="huge">{{ '%0.2f'| format(total_export * 0.1702 |float) }} €</div>
-                            <div>Total earnings</div>
-                        </div>
+                            <div class="clearfix"></div>
+                        </a>
                     </div>
                 </div>
-                <div class="panel-footer">
-                    <a href="#">
-                        <span class="pull-left">Current year</span>
-                        <span class="pull-right">{{ '%0.2f'| format(current_year_export * 0.1702 |float) }} €</span>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-money fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">{{ '%0.2f'| format(total_export * 0.1702 |float) }} €</div>
+                                <div>Total earnings</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <a href="#">
+                            <span class="pull-left">Current year</span>
+                            <span class="pull-right">{{ '%0.2f'| format(current_year_export * 0.1702 |float) }} €</span>
 
-                        <div class="clearfix"></div>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <i class="fa fa-clock-o fa-5x"></i>
-                        </div>
-                        <div class="col-xs-9 text-right">
-                            <div class="huge">{{ operating_hours }} h</div>
-                            <div>Operating time</div>
-                        </div>
+                            <div class="clearfix"></div>
+                        </a>
                     </div>
                 </div>
-                <div class="panel-footer">
-                    <a href="#">
-                        <span class="pull-left">&nbsp;</span>
-                        <span class="pull-right"></span>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-clock-o fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">{{ operating_hours }} h</div>
+                                <div>Operating time</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        <a href="#">
+                            <span class="pull-left">&nbsp;</span>
+                            <span class="pull-right"></span>
 
-                        <div class="clearfix"></div>
-                    </a>
+                            <div class="clearfix"></div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- /.row -->
-    <div class="row">
-        <div class="col-lg-9">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-bar-chart-o fa-fw"></i> Monthly Overview
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-bar-chart-o fa-fw"></i> Monthly Overview
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div id="monthly-overview-chart"></div>
+                    </div>
+                    <!-- /.panel-body -->
                 </div>
-                <!-- /.panel-heading -->
-                <div class="panel-body">
-                    <div id="monthly-overview-chart"></div>
-                </div>
-                <!-- /.panel-body -->
-            </div>
-            <!-- /.panel -->
+                <!-- /.panel -->
 
-        </div>
-        <!-- /.col-lg-9 -->
-        <div class="col-lg-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-check fa-fw"></i> Current Status
-                </div>
-                <!-- /.panel-heading -->
-                <div class="panel-body">
-                    <div class="list-group">
-                        <div class="list-group-item">
-                            <table class="table table-hover">
-                                <tbody>
-                                <tr>
-                                    <td><strong>String 1</strong></td>
-                                    <td></td>
-                                    <td><strong>L1</strong></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>Voltage</td>
-                                    <td class="text-right">{{ dc_1_u }} V</td>
-                                    <td>Voltage</td>
-                                    <td class="text-right">{{ ac_1_u }} V</td>
-                                </tr>
-                                <tr>
-                                    <td>Current</td>
-                                    <td class="text-right">{{ dc_1_i }} A</td>
-                                    <td>Power</td>
-                                    <td class="text-right">{{ ac_1_p }} W</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>String 2</strong></td>
-                                    <td></td>
-                                    <td><strong>L2</strong></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>Voltage</td>
-                                    <td class="text-right">{{ dc_2_u }} V</td>
-                                    <td>Voltage</td>
-                                    <td class="text-right">{{ ac_2_u }} V</td>
-                                </tr>
-                                <tr>
-                                    <td>Current</td>
-                                    <td class="text-right">{{ dc_2_i }} A</td>
-                                    <td>Power</td>
-                                    <td class="text-right">{{ ac_2_p }} W</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>String 3</strong></td>
-                                    <td></td>
-                                    <td><strong>L3</strong></td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td>Voltage</td>
-                                    <td class="text-right">{{ dc_3_u }} V</td>
-                                    <td>Voltage</td>
-                                    <td class="text-right">{{ ac_3_u }} V</td>
-                                </tr>
-                                <tr>
-                                    <td>Current</td>
-                                    <td class="text-right">{{ dc_3_i }} A</td>
-                                    <td>Power</td>
-                                    <td class="text-right">{{ ac_3_p }} W</td>
-                                </tr>
-                                </tbody>
-                            </table>
+            </div>
+            <!-- /.col-lg-9 -->
+            <div class="col-lg-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-check fa-fw"></i> Current Status
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="list-group">
+                            <div class="list-group-item">
+                                <table class="table table-hover">
+                                    <tbody>
+                                    <tr>
+                                        <td><strong>String 1</strong></td>
+                                        <td></td>
+                                        <td><strong>L1</strong></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Voltage</td>
+                                        <td class="text-right">{{ dc_1_u }} V</td>
+                                        <td>Voltage</td>
+                                        <td class="text-right">{{ ac_1_u }} V</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Current</td>
+                                        <td class="text-right">{{ dc_1_i }} A</td>
+                                        <td>Power</td>
+                                        <td class="text-right">{{ ac_1_p }} W</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>String 2</strong></td>
+                                        <td></td>
+                                        <td><strong>L2</strong></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Voltage</td>
+                                        <td class="text-right">{{ dc_2_u }} V</td>
+                                        <td>Voltage</td>
+                                        <td class="text-right">{{ ac_2_u }} V</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Current</td>
+                                        <td class="text-right">{{ dc_2_i }} A</td>
+                                        <td>Power</td>
+                                        <td class="text-right">{{ ac_2_p }} W</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>String 3</strong></td>
+                                        <td></td>
+                                        <td><strong>L3</strong></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Voltage</td>
+                                        <td class="text-right">{{ dc_3_u }} V</td>
+                                        <td>Voltage</td>
+                                        <td class="text-right">{{ ac_3_u }} V</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Current</td>
+                                        <td class="text-right">{{ dc_3_i }} A</td>
+                                        <td>Power</td>
+                                        <td class="text-right">{{ ac_3_p }} W</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
+                    <!-- /.panel-body -->
                 </div>
-                <!-- /.panel-body -->
+                <!-- /.panel -->
             </div>
-            <!-- /.panel -->
+            <!-- /.col-lg-3 -->
         </div>
-        <!-- /.col-lg-3 -->
-    </div>
-    <div class="row">
-        <div class="col-lg-9">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-line-chart fa-fw"></i> Yearly progress
-                </div>
-                <!-- /.panel-heading -->
-                <div class="panel-body">
-                    Yearly output relative to Estimation: <br/>
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-line-chart fa-fw"></i> Yearly progress
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        Yearly output relative to Estimation: <br/>
 
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
-                             aria-valuemax="100" style="width: {{ 100*current_year_energy/5741.0 }}%;">
-                            {{ '%0.1f'| format(100*current_year_energy/5741.82|float) }}%
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0"
+                                 aria-valuemax="100" style="width: {{ 100*current_year_energy/5741.0 }}%;">
+                                {{ '%0.1f'| format(100*current_year_energy/5741.82|float) }}%
+                            </div>
                         </div>
                     </div>
+                    <!-- /.panel-body -->
                 </div>
-                <!-- /.panel-body -->
             </div>
-        </div>
-        <!-- /.col-lg-9 -->
-        <div class="col-lg-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <i class="fa fa-check fa-fw"></i> Meta
-                </div>
-                <!-- /.panel-heading -->
-                <div class="panel-body">
-                    <div class="list-group">
-                        <div class="list-group-item">
-                            <table class="table table-hover">
-                                <tbody>
-                                <tr>
-                                    <td>Inverter Efficiency (Pac/Pdc)</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="text-right">{{ '%0.2f'| format(efficiency|float) }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Operating time</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="text-right">{{ operating_hours }} hours</td>
-                                </tr>
-                                <tr>
-                                    <td>Last updated</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="text-right">{{ last_updated }}</td>
-                                </tr>
-                                </
-                                </tbody>
-                            </table>
+            <!-- /.col-lg-9 -->
+            <div class="col-lg-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-check fa-fw"></i> Meta
+                    </div>
+                    <!-- /.panel-heading -->
+                    <div class="panel-body">
+                        <div class="list-group">
+                            <div class="list-group-item">
+                                <table class="table table-hover">
+                                    <tbody>
+                                    <tr>
+                                        <td>Inverter Efficiency (Pac/Pdc)</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right">{{ '%0.2f'| format(efficiency|float) }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Operating time</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right">{{ operating_hours }} hours</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Last updated</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-right">{{ last_updated }}</td>
+                                    </tr>
+                                    </
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
+                    <!-- /.panel-body -->
                 </div>
-                <!-- /.panel-body -->
+                <!-- /.panel -->
             </div>
-            <!-- /.panel -->
         </div>
-    </div>
-    <!-- /.row -->
+        <!-- /.row -->
 
     </div>
     </div><!-- /#page-wrapper -->
