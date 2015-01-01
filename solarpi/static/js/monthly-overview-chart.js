@@ -4,7 +4,7 @@ $(function () {
 
         },
         title: {
-            text: 'Energy Output for 2014'
+            text: 'Energy Output for 2015'
         },
         colors: ['#B4C7DA', '#428BCA', '#153E7E', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'],
         xAxis: [
@@ -67,20 +67,20 @@ $(function () {
                 }
             },
             {
-                name: '2014',
+                name: '2015',
                 type: 'column',
                 yAxis: 0,
-                data: series_2014,
+                data: current_year_series,
                 tooltip: {
                     valueSuffix: ' kWh'
                 }
 
             },
             {
-                name: '2013',
+                name: 'Last years average',
                 type: 'line',
                 yAxis: 0,
-                data: series_2013,
+                data: average_years_series,
                 tooltip: {
                     valueSuffix: ' kWh'
                 }

@@ -63,10 +63,10 @@ def home():
     last_year_energy = get_last_years_energy()
     current_year_energy = total_energy - last_year_energy.total_energy
 
-    last_year_series = [int(x[1]) for x in get_yearly_data(datetime.now().year - 1)]
+    average_years_series = [int(x[1]) for x in get_yearly_data(datetime.now().year - 1)]
     current_year_series = [int(x[1]) for x in get_yearly_data(datetime.now().year)]
 
-    last_year_current_month_avg = last_year_series[now.month - 1] / calendar.monthrange(now.year, now.month)[1]
+    last_year_current_month_avg = average_years_series[now.month - 1] / calendar.monthrange(now.year, now.month)[1]
     current_month_prediction = get_current_month_prediction(current_year_series[-1], last_year_current_month_avg)
 
     return render_template("public/home.html",
@@ -77,7 +77,7 @@ def home():
                            ac_1_u=pv.ac_1_u, ac_2_u=pv.ac_2_u, ac_3_u=pv.ac_3_u,
                            dc_1_u=pv.dc_1_u, dc_2_u=pv.dc_2_u, dc_3_u=pv.dc_3_u,
                            dc_1_i=pv.dc_1_i, dc_2_i=pv.dc_2_i, dc_3_i=pv.dc_3_i,
-                           series_2013=last_year_series, series_2014=current_year_series,
+                           average_years_series=average_years_series, current_year_series=current_year_series,
                            current_month_pred=current_month_prediction,
                            current_year_energy=current_year_energy,
                            max_daily_energy_last_seven_days=max_daily_energy_last_seven_days,
