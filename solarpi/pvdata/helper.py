@@ -2,6 +2,7 @@
 import calendar
 from datetime import datetime, timedelta
 from sqlalchemy import func
+from solarpi.extensions import db
 from solarpi.pvdata.models import PVData
 
 
@@ -96,12 +97,9 @@ def get_yearly_average_data():
     """
     :return: returns an array of monthly averages for previous years
     """
-    current_year = datetime.now().year
-    subq = PVData.query.with_entities(func.strftime('%Y-%m', PVData.created_at).label('month'), (func.max(PVData.total_energy) - func.min(PVData.total_energy)).label(
-        'total_energy')).filter(
-        func.strftime('%Y', PVData.created_at) < str(current_year)).group_by(
-        func.strftime('%Y-%m', PVData.created_at)).subquery()
-    return PVData.query.
+    current_year = str(datetime.now().year)
+    query = "SELECT avg(monthly_yield) FROM ( SELECT strftime('%m', created_at) as month, max(total_energy) - min(total_energy) as monthly_yield FROM pvdata WHERE strftime('%Y', created_at) < ? GROUP BY strftime('%Y-%m', created_at) ) subq GROUP BY month "
+    return db.engine.execute(query, current_year)
 
 
 def get_current_month_prediction(current_month_energy, last_years_average):
