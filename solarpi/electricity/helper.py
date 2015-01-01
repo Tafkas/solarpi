@@ -32,5 +32,6 @@ def get_monthly_electricity_import():
 
 
 def get_last_year_export():
+    current_year = datetime.now().year
     return Electricity.query.with_entities(Electricity.meter_280).filter(
-        func.strftime('%Y', Electricity.created_at) == '2013').order_by(Electricity.id.desc()).first()
+        func.strftime('%Y', Electricity.created_at) == str(current_year-1)).order_by(Electricity.id.desc()).first()
