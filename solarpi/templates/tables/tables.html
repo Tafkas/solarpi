@@ -27,7 +27,9 @@
                                     <th>Date</th>
                                     <th>Daily Energy im kWh</th>
                                     <th>Max. Output in kW</th>
-                                    <th>Total Energy in kWh</th>
+                                    <th>Total Energy yielded in kWh</th>
+                                    <th>Total Energy imported in kWh</th>
+                                    <th>Total Energy exported in kWh</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -37,6 +39,8 @@
                                         <td>{{ '%0.2f'| format(d.daily_energy|float) }}</td>
                                         <td>{{ '%d'| format(d.max_output) }}</td>
                                         <td>{{ '%d'| format(d.total_energy) }}</td>
+                                        <td>{{ '%0.2f'| format(d.daily_import) }}</td>
+                                        <td>{{ '%0.2f'| format(d.daily_export) }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
