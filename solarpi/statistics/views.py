@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template
 from sqlalchemy import desc, func
+from solarpi.extensions import db
 from solarpi.pvdata.models import PVData
 
 blueprint = Blueprint("statistics", __name__, url_prefix='/statistics',
@@ -8,10 +9,6 @@ blueprint = Blueprint("statistics", __name__, url_prefix='/statistics',
 
 @blueprint.route("/")
 def statistics():
-    data = PVData.query.with_entities(func.strftime('%Y-%m', PVData.created_at).label('month'),
-                                      func.avg(PVData.daily_energy).label('avg_daily_energy'),
-                                      func.max(PVData.daily_energy).label('max_daily_energy')).filter(
-        PVData.current_power > 0).group_by(func.strftime('%Y-%m', PVData.created_at)).order_by(
-        desc(PVData.created_at)).limit(12).all()
-
+    data = list(db.engine.execute(
+        "SELECT Strftime('%Y-%m', created_at) AS month, Min(daily_yield) AS min_yield, Max(daily_yield) AS max_yield, Avg(daily_yield) AS avg_yield FROM (SELECT Strftime('%Y-%m-%d', created_at) AS created_at, Max(total_energy) - Min(total_energy) AS daily_yield FROM pvdata GROUP BY Strftime('%Y-%m-%d', created_at)) GROUP BY Strftime('%Y-%m', created_at) ORDER BY month DESC LIMIT 12 "))
     return render_template('statistics/statistics.html', data=data)
