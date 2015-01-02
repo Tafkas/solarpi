@@ -94,12 +94,11 @@ def monthly():
 
 @blueprint.route("/yearly")
 def yearly():
-    data = [int(x[0]) for x in get_yearly_series()]
-    total_energy = sum(data[1:])
-    diffs = [y - x for x, y in zip(data, data[1:])]
-    data = data[:1] + diffs
-    years = [x for x in range(2013, 2013 + len(data))]
+    data = list(get_yearly_series())
+    total_energy = sum([x[1] for x in data])
+    years = [int(x[0]) for x in data]
+    data = [x[1] for x in data]
     yearly_data = [5741.82 for i in range(len(data))]
 
-    return render_template("charts/yearly.html", data=data, years=years, yearlyData=yearly_data,
-                           total_energy=total_energy)
+    return render_template("charts/yearly.html", data=data, yearlyData=yearly_data,
+                           total_energy=total_energy, years=years)

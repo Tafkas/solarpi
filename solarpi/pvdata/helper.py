@@ -59,9 +59,7 @@ def get_monthly_series():
 
 
 def get_yearly_series():
-    return PVData.query.with_entities(
-        func.max(PVData.total_energy.label('total_energy'))).group_by(
-        func.strftime("%Y", PVData.created_at)).all()
+    return db.engine.execute("SELECT Strftime('%Y', created_at) as year, max(total_energy) - min(total_energy) as yearly_output FROM pvdata GROUP BY Strftime('%Y', created_at)")
 
 
 def get_max_daily_energy_last_seven_days():
