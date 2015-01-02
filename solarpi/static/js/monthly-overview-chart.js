@@ -1,10 +1,8 @@
 $(function () {
     $('#monthly-overview-chart').highcharts({
-        chart: {
-
-        },
+        chart: {},
         title: {
-            text: 'Energy Output for 2015'
+            text: 'Energy Output for ' + new Date().getFullYear()
         },
         colors: ['#B4C7DA', '#428BCA', '#153E7E', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'],
         xAxis: [
@@ -67,7 +65,7 @@ $(function () {
                 }
             },
             {
-                name: '2015',
+                name: new Date().getFullYear(),
                 type: 'column',
                 yAxis: 0,
                 data: current_year_series,
