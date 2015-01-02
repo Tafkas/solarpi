@@ -24,23 +24,25 @@
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
-                                    <th>Date</th>
-                                    <th>Daily Energy im kWh</th>
-                                    <th>Max. Output in kW</th>
-                                    <th>Total Energy yielded in kWh</th>
-                                    <th>Total Energy imported in kWh</th>
-                                    <th>Total Energy exported in kWh</th>
+                                    <th class="text-right">Date</th>
+                                    <th class="text-right">Daily kWh yielded</th>
+                                    <th class="text-right">Imported kWh</th>
+                                    <th class="text-right">Exported kWh</th>
+                                    <th class="text-right">Consumed kWh</th>
+                                    <th class="text-right">Total kWh yielded</th>
+                                    <th class="text-right">Max. Output in kW</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for d in data %}
                                     <tr>
-                                        <td>{{ d.created_at }}</td>
-                                        <td>{{ '%0.2f'| format(d.daily_energy|float) }}</td>
-                                        <td>{{ '%d'| format(d.max_output) }}</td>
-                                        <td>{{ '%d'| format(d.total_energy) }}</td>
-                                        <td>{{ '%0.2f'| format(d.daily_import) }}</td>
-                                        <td>{{ '%0.2f'| format(d.daily_export) }}</td>
+                                        <td class="text-right">{{ d.created_at }}</td>
+                                        <td class="text-right">{{ '%0.2f'| format(d.daily_energy|float) }}</td>
+                                        <td class="text-right">{{ '%0.2f'| format(d.daily_import) }}</td>
+                                        <td class="text-right">{{ '%0.2f'| format(d.daily_export) }}</td>
+                                        <td class="text-right">{{ '%0.2f'| format(d.daily_energy + d.daily_import - d.daily_export) }}</td>
+                                        <td class="text-right">{{ '%d'| format(d.total_energy) }}</td>
+                                        <td class="text-right">{{ '%d'| format(d.max_output) }}</td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
