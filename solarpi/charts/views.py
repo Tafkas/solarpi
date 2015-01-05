@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 from flask import Blueprint, render_template, flash
 from solarpi.charts.helper import get_timestamps
-from solarpi.electricity.helper import get_weekly_electricity_import, get_monthly_electricity_import
+from solarpi.electricity.helper import get_last_n_days_import
 from solarpi.pvdata.helper import get_sec, get_todays_date, get_daily_energy_series, get_7_day_max_energy_series, \
     get_yearly_series, get_last_n_days
 
@@ -70,7 +70,7 @@ def weekly():
     seven_days_energy = sum(series)
     weekly_pv_chart_data = [list(x) for x in zip(timestamps, series)]
 
-    electricity_import = [(float(d.electricity_import or 0)) for d in get_weekly_electricity_import()]
+    electricity_import = [(float(d.electricity_import or 0)) for d in list(get_last_n_days_import(7))]
     weekly_import_chart_data = [list(x) for x in zip(timestamps, electricity_import)]
 
     return render_template("charts/weekly.html", pvdata=weekly_pv_chart_data, importData=weekly_import_chart_data,
@@ -85,7 +85,7 @@ def monthly():
     monthly_energy = sum(series)
     monthly_pv_chart_data = [list(x) for x in zip(timestamps, series)]
 
-    electricity_import = [(float(d.electricity_import or 0)) for d in get_monthly_electricity_import()]
+    electricity_import = [(float(d.electricity_import or 0)) for d in list(get_last_n_days_import(30))]
     monthly_import_chart_data = [list(x) for x in zip(timestamps, electricity_import)]
 
     return render_template("charts/monthly.html", pvdata=monthly_pv_chart_data,

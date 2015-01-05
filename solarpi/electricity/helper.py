@@ -2,6 +2,7 @@
 from datetime import datetime, timedelta
 from sqlalchemy import func
 from solarpi.electricity.models import Electricity
+from solarpi.extensions import db
 
 
 def get_todays_electricity():
@@ -13,25 +14,12 @@ def get_todays_electricity():
         func.strftime('%Y-%m-%d', Electricity.created_at)).first()
 
 
-def get_weekly_electricity_import():
-    return Electricity.query.with_entities(
-        func.strftime('%Y-%m-%dT00:00:00', Electricity.created_at).label('created_at'),
-        (func.max(Electricity.meter_180) - func.min(Electricity.meter_180)).label(
-            'electricity_import')).filter(
-        Electricity.created_at > datetime.now() - timedelta(days=7)).group_by(
-        func.strftime('%Y-%m-%d', Electricity.created_at))
-
-
-def get_monthly_electricity_import():
-    return Electricity.query.with_entities(
-        func.strftime('%Y-%m-%dT00:00:00', Electricity.created_at).label('created_at'),
-        (func.max(Electricity.meter_180) - func.min(Electricity.meter_180)).label(
-            'electricity_import')).filter(
-        Electricity.created_at > datetime.now() - timedelta(days=30)).group_by(
-        func.strftime('%Y-%m-%d', Electricity.created_at))
+def get_last_n_days_import(n):
+    query = "SELECT strftime('%Y-%m-%dT00:00:00', created_at) as created_at, max(meter_180) - min(meter_180) as electricity_import FROM electricity_data WHERE created_at > ? GROUP BY strftime('%Y-%m-%d', created_at)"
+    return db.engine.execute(query, (datetime.now() - timedelta(days=n)))
 
 
 def get_last_year_export():
     current_year = datetime.now().year
     return Electricity.query.with_entities(Electricity.meter_280).filter(
-        func.strftime('%Y', Electricity.created_at) == str(current_year-1)).order_by(Electricity.id.desc()).first()
+        func.strftime('%Y', Electricity.created_at) == str(current_year - 1)).order_by(Electricity.id.desc()).first()
