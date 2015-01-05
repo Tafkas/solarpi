@@ -44,22 +44,14 @@ def get_7_day_max_energy_series(current_date):
         func.strftime('%H:%M:00', PVData.created_at)).all()
 
 
-def get_weekly_series():
-    return PVData.query.with_entities(
-        func.strftime('%Y-%m-%dT00:00:00', PVData.created_at).label('created_at'),
-        func.max(PVData.daily_energy).label('daily_energy')).filter(
-        PVData.created_at > datetime.now() - timedelta(days=7)).group_by(func.strftime('%Y-%m-%d', PVData.created_at))
-
-
-def get_monthly_series():
-    return PVData.query.with_entities(
-        func.strftime('%Y-%m-%dT00:00:00', PVData.created_at).label('created_at'),
-        func.max(PVData.daily_energy).label('daily_energy')).filter(
-        PVData.created_at > datetime.now() - timedelta(days=30)).group_by(func.strftime('%Y-%m-%d', PVData.created_at))
+def get_last_n_days(n):
+    query = "SELECT strftime('%Y-%m-%dT00:00:00', created_at) as created_at, max(daily_energy) as daily_energy FROM pvdata WHERE created_at > ? GROUP BY strftime('%Y-%m-%d', created_at)"
+    return db.engine.execute(query, (datetime.now() - timedelta(days=n)))
 
 
 def get_yearly_series():
-    return db.engine.execute("SELECT Strftime('%Y', created_at) as year, max(total_energy) - min(total_energy) as yearly_output FROM pvdata GROUP BY Strftime('%Y', created_at)")
+    return db.engine.execute(
+        "SELECT Strftime('%Y', created_at) as year, max(total_energy) - min(total_energy) as yearly_output FROM pvdata GROUP BY Strftime('%Y', created_at)")
 
 
 def get_max_daily_energy_last_seven_days():
