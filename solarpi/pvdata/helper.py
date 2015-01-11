@@ -88,7 +88,7 @@ def get_yearly_average_data():
     :return: returns an array of monthly averages for previous years
     """
     current_year = str(datetime.now().year)
-    query = "SELECT avg(monthly_yield) FROM ( SELECT strftime('%m', created_at) as month, max(total_energy) - min(total_energy) as monthly_yield FROM pvdata WHERE strftime('%Y', created_at) < ? GROUP BY strftime('%Y-%m', created_at) ) subq GROUP BY month "
+    query = "SELECT avg(monthly_yield) FROM ( SELECT strftime('%m', created_at) as month, max(total_energy) - min(total_energy) as monthly_yield FROM pvdata WHERE strftime('%Y', created_at) < ? GROUP BY strftime('%Y-%m', created_at) ) subq WHERE monthly_yield > 0 GROUP BY month;"
     return db.engine.execute(query, current_year)
 
 
