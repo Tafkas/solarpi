@@ -17,12 +17,3 @@ class BaseFactory(SQLAlchemyModelFactory):
         session.add(obj)
         session.commit()
         return obj
-
-
-class UserFactory(BaseFactory):
-    FACTORY_FOR = User
-
-    username = Sequence(lambda n: "user{0}".format(n))
-    email = Sequence(lambda n: "user{0}@example.com".format(n))
-    password = PostGenerationMethodCall('set_password', 'example')
-    active = True
