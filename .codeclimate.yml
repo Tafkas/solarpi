@@ -3,4 +3,4 @@ languages:
   JavaScript: true
   Python: true
 exclude_paths:
-  - "solarpi/static/libs"
+  - "solarpi/static/libs/*"
