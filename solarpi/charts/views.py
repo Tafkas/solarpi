@@ -14,10 +14,12 @@ blueprint = Blueprint("charts", __name__, url_prefix='/charts',
 
 @blueprint.route("/daily")
 @blueprint.route("/daily/<date>")
-def daily(date=get_todays_date().strftime('%Y-%m-%d')):
+def daily(date=None):
     error = None
+    current_date = get_todays_date()
     try:
-        current_date = datetime.strptime(date, "%Y-%m-%d")
+        if date:
+            current_date = datetime.strptime(date, "%Y-%m-%d")
     except ValueError, TypeError:
         error = "invalid date, displaying today's data instead"
         current_date = get_todays_date()
