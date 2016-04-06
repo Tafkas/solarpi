@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-'''Public section, including homepage.'''
+"""Public section, including homepage."""
 import calendar
 import dateutil.parser
 from datetime import datetime, timedelta
 from flask import (Blueprint, render_template, make_response, current_app, url_for, request)
 from solarpi.public.helper import get_operating_hours
-from solarpi.pvdata.helper import get_todays_max_power, get_max_daily_energy_last_seven_days, get_current_values, \
-    get_last_years_energy, get_yearly_data, get_current_month_prediction, get_first_date, get_yearly_average_data
+from solarpi.pvdata.helper import (get_todays_max_power, get_max_daily_energy_last_seven_days, get_current_values,
+                                   get_last_years_energy, get_yearly_data, get_current_month_prediction, get_first_date,
+                                   get_yearly_average_data)
 from solarpi.electricity.models import Electricity
 from solarpi.electricity.helper import get_todays_electricity, get_last_year_export
 from solarpi.weather.helper import get_weather_icon, get_current_weather
@@ -21,8 +22,11 @@ def home():
 
     # weather
     w = get_current_weather()
-    current_temp = w.temp
-    current_weather = get_weather_icon(w.weather_id)
+    if w:
+        current_temp = w.temp
+        current_weather = get_weather_icon(w.weather_id)
+    else:
+        current_temp, current_weather = None, None
 
     # photovoltaic data
     pv = get_current_values()
