@@ -15,6 +15,10 @@ blueprint = Blueprint("charts", __name__, url_prefix='/charts',
 @blueprint.route("/daily")
 @blueprint.route("/daily/<date>")
 def daily(date=None):
+    """Renders a page with charts for a given date
+    :param date: a date in the format %Y-%m-%d
+    :return: page with charts for a given date
+    """
     error = None
     current_date = get_todays_date()
     try:
@@ -47,7 +51,7 @@ def daily(date=None):
     daily_chart_max_data = [list(x) for x in zip(timestamps_pv_max, [(int(d.pv_max or 0)) for d in pv_max])]
 
     # additional data
-    if len(pv) > 0:
+    if pv:
         daily_energy = pv[-1].daily_energy
     else:
         daily_energy = 0.0
@@ -65,6 +69,9 @@ def daily(date=None):
 
 @blueprint.route("/weekly")
 def weekly():
+    """Renders a page with charts for the last seven days
+    :return: a page with charts for the last seven days
+    """
     # solar data
     pv = list(get_last_n_days(7))
     timestamps = get_timestamps(pv)
@@ -75,12 +82,17 @@ def weekly():
     electricity_import = [(float(d.electricity_import or 0)) for d in list(get_last_n_days_import(7))]
     weekly_import_chart_data = [list(x) for x in zip(timestamps, electricity_import)]
 
-    return render_template("charts/weekly.html", pvdata=weekly_pv_chart_data, importData=weekly_import_chart_data,
+    return render_template("charts/weekly.html",
+                           pvdata=weekly_pv_chart_data,
+                           importData=weekly_import_chart_data,
                            seven_days_energy=seven_days_energy)
 
 
 @blueprint.route("/monthly")
 def monthly():
+    """Renders a page with charts for the last 30 days
+    :return: a page with charts for the last 30 days
+    """
     pv = list(get_last_n_days(30))
     timestamps = get_timestamps(pv)
     series = [(float(d.daily_energy or 0)) for d in pv]
@@ -90,17 +102,25 @@ def monthly():
     electricity_import = [(float(d.electricity_import or 0)) for d in list(get_last_n_days_import(30))]
     monthly_import_chart_data = [list(x) for x in zip(timestamps, electricity_import)]
 
-    return render_template("charts/monthly.html", pvdata=monthly_pv_chart_data,
-                           importData=monthly_import_chart_data, monthly_energy=monthly_energy)
+    return render_template("charts/monthly.html",
+                           pvdata=monthly_pv_chart_data,
+                           importData=monthly_import_chart_data,
+                           monthly_energy=monthly_energy)
 
 
 @blueprint.route("/yearly")
 def yearly():
+    """Renders a page with charts for the last years
+    :return: a page with charts for the last years
+    """
     data = list(get_yearly_series())
     total_energy = sum([x[1] for x in data])
     years = [int(x[0]) for x in data]
     data = [x[1] for x in data]
     yearly_data = [5741.82 for i in range(len(data))]
 
-    return render_template("charts/yearly.html", data=data, yearlyData=yearly_data,
-                           total_energy=total_energy, years=years)
+    return render_template("charts/yearly.html",
+                           data=data,
+                           yearlyData=yearly_data,
+                           total_energy=total_energy,
+                           years=years)

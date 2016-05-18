@@ -19,6 +19,9 @@ blueprint = Blueprint('public', __name__, static_folder="../static")
 
 @blueprint.route("/")
 def home():
+    """Renders the dashboard
+    :return: the dashboard page
+    """
     operating_days = get_operating_days()
     now = datetime.now()
 
@@ -95,11 +98,17 @@ def home():
 
 @blueprint.route("/about/")
 def about():
+    """Renders the about page
+    :return: the about page
+    """
     return render_template("public/about.html")
 
 
 @blueprint.route("/sitemap.xml")
 def sitemap():
+    """Renders a sitemap.xml for search engines
+    :return: an xml sitemap
+    """
     url_root = request.url_root[:-1]
     pages = []
     today = datetime.now()
