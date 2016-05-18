@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 import time
 from pysolar.util import get_sunrise_sunset
 
-
 START_DATE = datetime.strptime('2013-01-31', "%Y-%m-%d")
 LAT, LON = 52.518611111111, 13.408055555556
 
@@ -21,3 +20,9 @@ def get_operating_hours():
         daily_operating_hours = sun_rise_set[1] - sun_rise_set[0]
         operating_hours += divmod(daily_operating_hours.total_seconds(), 3600)[0]
     return 1.05 * operating_hours  # adding 5% overhead
+
+
+def get_operating_days():
+    today = datetime.now()
+    delta = today - START_DATE
+    return delta.days

@@ -65,15 +65,15 @@
                                 <i class="fa fa-lightbulb-o fa-5x"></i>
                             </div>
                             <div class="col-xs-9 text-right">
-                                <div class="huge">{{ total_energy }} kWh</div>
-                                <div>Total yield</div>
+                                <div class="huge">{{ current_year_energy }} kWh</div>
+                                <div>Current year yield</div>
                             </div>
                         </div>
                     </div>
                     <div class="panel-footer">
                         <a href="{{ url_for('charts.yearly') }}">
-                            <span class="pull-left">Current year</span>
-                            <span class="pull-right">{{ current_year_energy }} kWh</span>
+                            <span class="pull-left">Total yield</span>
+                            <span class="pull-right">{{ total_energy }} kWh</span>
 
                             <div class="clearfix"></div>
                         </a>
@@ -162,15 +162,15 @@
                                 <i class="fa fa-usd fa-5x"></i>
                             </div>
                             <div class="col-xs-9 text-right">
-                                <div class="huge">{{ '%d'| format(total_export * 0.1702 |float) }} €</div>
-                                <div>Total earnings</div>
+                                <div class="huge">{{ '%d'| format(current_year_export * 0.1702 |float) }} €</div>
+                                <div>Current year</div>
                             </div>
                         </div>
                     </div>
                     <div class="panel-footer">
                         <a href="#">
-                            <span class="pull-left">Current year</span>
-                            <span class="pull-right">{{ '%0.2f'| format(current_year_export * 0.1702 |float) }} €</span>
+                            <span class="pull-left">Total earnings</span>
+                            <span class="pull-right">{{ '%0.2f'| format(total_export * 0.1702 |float) }} €</span>
 
                             <div class="clearfix"></div>
                         </a>
@@ -185,7 +185,7 @@
                                 <i class="fa fa-clock-o fa-5x"></i>
                             </div>
                             <div class="col-xs-9 text-right">
-                                <div class="huge">{{ operating_hours }} h</div>
+                                <div class="huge">{{ operating_days }} d</div>
                                 <div>Operating time</div>
                             </div>
                         </div>
@@ -336,7 +336,7 @@
                                         <td>Operating time</td>
                                         <td></td>
                                         <td></td>
-                                        <td class="text-right">{{ operating_hours }} hours</td>
+                                        <td class="text-right">{{ operating_days }} days</td>
                                     </tr>
                                     <tr>
                                         <td>Last updated</td>

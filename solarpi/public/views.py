@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 """Public section, including homepage."""
 import calendar
-import dateutil.parser
 from datetime import datetime, timedelta
+
+import dateutil.parser
 from flask import (Blueprint, render_template, make_response, current_app, url_for, request)
-from solarpi.public.helper import get_operating_hours
+
+from solarpi.electricity.helper import get_todays_electricity, get_last_year_export
+from solarpi.electricity.models import Electricity
+from solarpi.public.helper import get_operating_days
 from solarpi.pvdata.helper import (get_todays_max_power, get_max_daily_energy_last_seven_days, get_current_values,
                                    get_last_years_energy, get_yearly_data, get_current_month_prediction, get_first_date,
                                    get_yearly_average_data)
-from solarpi.electricity.models import Electricity
-from solarpi.electricity.helper import get_todays_electricity, get_last_year_export
 from solarpi.weather.helper import get_weather_icon, get_current_weather
 
 blueprint = Blueprint('public', __name__, static_folder="../static")
@@ -17,7 +19,7 @@ blueprint = Blueprint('public', __name__, static_folder="../static")
 
 @blueprint.route("/")
 def home():
-    operating_hours = int(get_operating_hours())
+    operating_days = get_operating_days()
     now = datetime.now()
 
     # weather
@@ -86,7 +88,7 @@ def home():
                            current_year_energy=current_year_energy,
                            max_daily_energy_last_seven_days=max_daily_energy_last_seven_days,
                            todays_max_power=todays_max_power, last_updated=last_updated,
-                           operating_hours=operating_hours, total_export=total_export,
+                           operating_days=operating_days, total_export=total_export,
                            total_import=total_import, todays_export=todays_export,
                            todays_import=todays_import, current_year_export=current_year_export)
 
