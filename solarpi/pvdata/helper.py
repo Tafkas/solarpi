@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import calendar
 from datetime import datetime, timedelta
+
 from sqlalchemy import func
+
 from solarpi.extensions import db
 from solarpi.pvdata.models import PVData
 
@@ -62,9 +64,9 @@ def get_yearly_series():
     """Returns a list of yearly generated energy for past years
     :return: list of yearly generated energy for past years
     """
-    query = """"SELECT
-                    Strftime('%Y', created_at) as year,
-                    max(total_energy) - min(total_energy) as yearly_output
+    query = """SELECT
+                    Strftime('%Y', created_at) AS year,
+                    max(total_energy) - min(total_energy) AS yearly_output
                 FROM pvdata
                 GROUP BY Strftime('%Y', created_at)"""
     return db.engine.execute(query)
