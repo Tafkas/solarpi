@@ -38,12 +38,14 @@ def home():
     current_power = pv.current_power
     daily_energy = pv.daily_energy
     total_energy = pv.total_energy
-    pac = pv.ac_1_p + pv.ac_2_p + pv.ac_3_p
-    pdc = pv.dc_1_u * pv.dc_1_i + pv.dc_2_u * pv.dc_2_i + pv.dc_3_u * pv.dc_3_i
-    if pdc > 0:
-        efficiency = pac / pdc
-    else:
-        efficiency = 0.0
+    if not (pv.ac_1_p is None and pv.ac_2_p is None and pv.ac_3_p is None):
+        pac = pv.ac_1_p + pv.ac_2_p + pv.ac_3_p
+
+    efficiency = 0.0
+    if not (pv.dc_1_u is None and pv.dc_2_u is None and pv.dc_3_u is None):
+        pdc = pv.dc_1_u * pv.dc_1_i + pv.dc_2_u * pv.dc_2_i + pv.dc_3_u * pv.dc_3_i
+        if pdc > 0:
+            efficiency = pac / pdc
 
     last_updated = dateutil.parser.parse(pv.created_at).strftime('%Y-%m-%d %H:%M')
 
