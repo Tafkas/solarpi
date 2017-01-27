@@ -26,23 +26,22 @@ def home():
     now = datetime.now()
 
     # weather
-    w = get_current_weather()
-    if w:
-        current_temp = w.temp
-        current_weather = get_weather_icon(w.weather_id)
-    else:
-        current_temp, current_weather = None, None
+    current_temp, current_weather = None, None
+    current_weather = get_current_weather()
+    if current_weather:
+        current_temp = current_weather.temp
+        current_weather = get_weather_icon(current_weather.weather_id)
 
     # photovoltaic data
     pv = get_current_values()
     current_power = pv.current_power
     daily_energy = pv.daily_energy
     total_energy = pv.total_energy
-    if not (pv.ac_1_p is None and pv.ac_2_p is None and pv.ac_3_p is None):
+    if all([pv.ac_1_p, pv.ac_2_p, pv.ac_3_p]):
         pac = pv.ac_1_p + pv.ac_2_p + pv.ac_3_p
 
     efficiency = 0.0
-    if not (pv.dc_1_u is None and pv.dc_2_u is None and pv.dc_3_u is None):
+    if all([pv.dc_1_u, pv.dc_2_u, pv.dc_3_u]):
         pdc = pv.dc_1_u * pv.dc_1_i + pv.dc_2_u * pv.dc_2_i + pv.dc_3_u * pv.dc_3_i
         if pdc > 0:
             efficiency = pac / pdc

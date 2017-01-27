@@ -27,10 +27,13 @@ def get_daily_energy_series(current_date):
     :return: energy series
     """
     tomorrow = current_date + timedelta(days=1)
-    return PVData.query.with_entities(PVData.created_at, PVData.current_power, PVData.daily_energy, PVData.dc_1_u,
-                                      PVData.dc_2_u, PVData.ac_1_u, PVData.ac_2_u, PVData.ac_3_u).filter(
-        PVData.created_at > current_date.strftime('%Y-%m-%d')).filter(
-        PVData.created_at < tomorrow.strftime('%Y-%m-%d')).filter(PVData.current_power > 0).all()
+    return (PVData.query
+            .with_entities(PVData.created_at, PVData.current_power, PVData.daily_energy, PVData.dc_1_u,
+                           PVData.dc_2_u, PVData.ac_1_u, PVData.ac_2_u, PVData.ac_3_u)
+            .filter(PVData.created_at > current_date.strftime('%Y-%m-%d'))
+            .filter(PVData.created_at < tomorrow.strftime('%Y-%m-%d'))
+            .filter(PVData.current_power > 0)
+            .all())
 
 
 def get_7_day_max_energy_series(current_date):
@@ -38,12 +41,14 @@ def get_7_day_max_energy_series(current_date):
     :param current_date: pivot date of the energy series
     :return: theoretical maximum energy series ± 3 days around current date
     """
-    return PVData.query.with_entities(func.strftime('%H:%M:00', PVData.created_at).label('pvdata_created_at'),
-                                      func.max(PVData.current_power).label('pv_max')).filter(
-        PVData.created_at >= (current_date - timedelta(days=3)).strftime('%Y-%m-%d')).filter(
-        PVData.created_at <= (current_date + timedelta(days=3)).strftime('%Y-%m-%d')).filter(
-        PVData.current_power > 0).group_by(
-        func.strftime('%H:%M:00', PVData.created_at)).all()
+    return (PVData.query
+            .with_entities(func.strftime('%H:%M:00', PVData.created_at).label('pvdata_created_at'),
+                           func.max(PVData.current_power).label('pv_max'))
+            .filter(PVData.created_at >= (current_date - timedelta(days=3)).strftime('%Y-%m-%d'))
+            .filter(PVData.created_at <= (current_date + timedelta(days=3)).strftime('%Y-%m-%d'))
+            .filter(PVData.current_power > 0)
+            .group_by(func.strftime('%H:%M:00', PVData.created_at))
+            .all())
 
 
 def get_last_n_days(n):
@@ -51,34 +56,33 @@ def get_last_n_days(n):
     :param n: number of last days
     :return: list of daily yields
     """
-    query = """SELECT
-                  strftime('%Y-%m-%dT00:00:00', created_at) AS created_at,
-                  max(daily_energy) AS daily_energy
-                FROM pvdata
-                WHERE created_at > ?
-                GROUP BY strftime('%Y-%m-%d', created_at)"""
-    return db.engine.execute(query, (datetime.now() - timedelta(days=n)))
+    return (PVData.query.with_entities(func.strftime('%Y-%m-%dT00:00:00', PVData.created_at).label('created_at'),
+                                       func.max(PVData.daily_energy).label('daily_energy'))
+            .filter(PVData.created_at > (datetime.now() - timedelta(days=n)))
+            .group_by(func.strftime('%Y-%m-%d', PVData.created_at))
+            .all())
+    # return db.engine.execute(query, (datetime.now() - timedelta(days=n)))
 
 
 def get_yearly_series():
     """Returns a list of yearly generated energy for past years
     :return: list of yearly generated energy for past years
     """
-    query = """SELECT
-                    Strftime('%Y', created_at) AS year,
-                    max(total_energy) - min(total_energy) AS yearly_output
-                FROM pvdata
-                GROUP BY Strftime('%Y', created_at)"""
-    return db.engine.execute(query)
+    return (PVData.query
+            .with_entities(func.strftime('%Y', PVData.created_at).label('year'),
+                           (func.max(PVData.total_energy) - func.min(PVData.total_energy)).label('yearly_output'))
+            .group_by(func.strftime('%Y', PVData.created_at))
+            .all())
 
 
 def get_max_daily_energy_last_seven_days():
     """Returns the maximum daily yield within the last 7 days
     :return: returns the maximum energy yielded in the last 7 days
     """
-    return PVData.query.with_entities(
-        func.max(PVData.daily_energy).label('max_daily_energy')).filter(
-        PVData.created_at >= (datetime.now() - timedelta(days=7))).first().max_daily_energy
+    return (PVData.query
+            .with_entities(func.max(PVData.daily_energy).label('max_daily_energy'))
+            .filter(PVData.created_at >= (datetime.now() - timedelta(days=7)))
+            .first().max_daily_energy)
 
 
 def get_last_years_energy():
@@ -86,8 +90,11 @@ def get_last_years_energy():
     :return: total energy yielded in the previous year
     """
     current_year = datetime.now().year
-    return PVData.query.with_entities(PVData.total_energy).filter(
-        func.strftime('%Y', PVData.created_at) == str(current_year - 1)).order_by(PVData.id.desc()).first()
+    return (PVData.query
+            .with_entities(PVData.total_energy)
+            .filter(func.strftime('%Y', PVData.created_at) == str(current_year - 1))
+            .order_by(PVData.id.desc())
+            .first())
 
 
 def get_yearly_data(year):
@@ -95,10 +102,11 @@ def get_yearly_data(year):
     :param year: year of the data
     :return: returns an array of monthly energy for a given year
     """
-    return PVData.query.with_entities((func.max(PVData.total_energy) - func.min(PVData.total_energy)).label(
-        'total_energy')).filter(
-        func.strftime('%Y', PVData.created_at) == str(year)).group_by(
-        func.strftime('%Y-%m', PVData.created_at)).all()
+    return (PVData.query
+            .with_entities((func.max(PVData.total_energy) - func.min(PVData.total_energy)).label('total_energy'))
+            .filter(func.strftime('%Y', PVData.created_at) == str(year))
+            .group_by(func.strftime('%Y-%m', PVData.created_at))
+            .all())
 
 
 def get_yearly_average_data():
