@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template
-from sqlalchemy import desc, func
+
 from solarpi.extensions import db
-from solarpi.pvdata.models import PVData
 
 blueprint = Blueprint("statistics", __name__, url_prefix='/statistics',
                       static_folder="../static")

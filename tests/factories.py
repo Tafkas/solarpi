@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-from factory import Sequence, PostGenerationMethodCall
 from factory.alchemy import SQLAlchemyModelFactory
 
-from solarpi.user.models import User
 from solarpi.database import db
 
 

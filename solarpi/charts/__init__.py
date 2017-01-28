@@ -1,3 +1,3 @@
-'''The data module.'''
+"""The data module."""
 
 from . import views

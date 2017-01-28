@@ -19,7 +19,12 @@ def get_todays_electricity():
 
 
 def get_last_n_days_import(n):
-    query = "SELECT strftime('%Y-%m-%dT00:00:00', created_at) AS created_at, max(meter_180) - min(meter_180) AS electricity_import FROM electricity_data WHERE created_at > ? GROUP BY strftime('%Y-%m-%d', created_at)"
+    query = """SELECT
+                  strftime('%Y-%m-%dT00:00:00', created_at) AS created_at,
+                  max(meter_180) - min(meter_180) AS electricity_import
+               FROM electricity_data
+               WHERE created_at > ?
+               GROUP BY strftime('%Y-%m-%d', created_at)"""
     return db.engine.execute(query, (datetime.now() - timedelta(days=n)))
 
 

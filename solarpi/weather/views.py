@@ -1,7 +1,7 @@
 import calendar
 from datetime import datetime, timedelta
+
 from flask import Blueprint, render_template
-from sqlalchemy import extract
 
 from solarpi.weather.models import Weather
 
@@ -14,7 +14,7 @@ blueprint = Blueprint("weather", __name__, url_prefix='/weather',
 def daily(date=datetime.now().strftime('%Y-%m-%d')):
     try:
         current_date = datetime.strptime(date, "%Y-%m-%d")
-    except ValueError, TypeError:
+    except ValueError:
         current_date = datetime.strptime('2014-04-21', "%Y-%m-%d")
     yesterday = current_date - timedelta(days=1)
     tomorrow = current_date + timedelta(days=1)

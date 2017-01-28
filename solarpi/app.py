@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-'''The app module, containing the app factory function.'''
+"""The app module, containing the app factory function."""
 from flask import Flask, render_template
 
-from solarpi.settings import ProdConfig
+from solarpi import public, weather, charts, statistics, tables
 from solarpi.assets import assets
 from solarpi.extensions import (
     cache,
@@ -10,7 +10,7 @@ from solarpi.extensions import (
     migrate,
     debug_toolbar,
 )
-from solarpi import public, weather, charts, statistics, tables
+from solarpi.settings import ProdConfig
 
 
 def create_app(config_object=ProdConfig):

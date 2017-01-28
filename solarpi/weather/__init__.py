@@ -1,3 +1,3 @@
-'''The weather module.'''
+"""The weather module."""
 
 from . import views

@@ -29,4 +29,3 @@ class Weather(SurrogatePK, Model):
 
 def __init__(self):
     db.Model.__init__(self)
-

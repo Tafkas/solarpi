@@ -6,8 +6,8 @@ from flask import Blueprint, render_template
 
 from solarpi.charts.helper import get_timestamps, get_daily_pv_chart_data
 from solarpi.electricity.helper import get_last_n_days_import
-from solarpi.pvdata.helper import get_sec, get_todays_date, get_daily_energy_series, get_7_day_max_energy_series, \
-    get_yearly_series, get_last_n_days
+from solarpi.pvdata.helper import (get_sec, get_todays_date, get_daily_energy_series, get_7_day_max_energy_series,
+                                   get_yearly_series, get_last_n_days)
 
 blueprint = Blueprint("charts", __name__, url_prefix='/charts',
                       static_folder="../static")
@@ -25,7 +25,7 @@ def daily(date=None):
     try:
         if date:
             current_date = datetime.strptime(date, "%Y-%m-%d")
-    except ValueError, TypeError:
+    except ValueError:
         error = "invalid date, displaying today's data instead"
         current_date = get_todays_date()
     yesterday = current_date - timedelta(days=1)
@@ -109,7 +109,7 @@ def yearly():
     total_energy = sum([x[1] for x in data])
     years = [int(x[0]) for x in data]
     data = [x[1] for x in data]
-    yearly_data = [5741.82 for i in range(len(data))]  # predicted by supplier
+    yearly_data = len(data) * [5741.82]
 
     return render_template("charts/yearly.html",
                            data=data,

@@ -1,10 +1,8 @@
 from datetime import timedelta, datetime
-from itertools import chain
+
 from flask import Blueprint, render_template
-from sqlalchemy import func
+
 from solarpi.extensions import db
-from solarpi.pvdata.models import PVData
-from solarpi.electricity.models import Electricity
 
 blueprint = Blueprint("tables", __name__, url_prefix='/tables',
                       static_folder="../static")

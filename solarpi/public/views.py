@@ -7,7 +7,6 @@ import dateutil.parser
 from flask import (Blueprint, render_template, make_response, current_app, url_for, request)
 
 from solarpi.electricity.helper import get_todays_electricity, get_last_year_export, get_total_electricity
-from solarpi.electricity.models import Electricity
 from solarpi.public.helper import get_operating_days
 from solarpi.pvdata.helper import (get_todays_max_power, get_max_daily_energy_last_seven_days, get_current_values,
                                    get_last_years_energy, get_yearly_data, get_current_month_prediction, get_first_date,

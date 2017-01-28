@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from solarpi.weather.models import Weather
 from datetime import datetime, timedelta
+
+from solarpi.weather.models import Weather
 
 WEATHER_ICONS = {211: 'wi-storm-showers',
                  300: 'wi-showers',
@@ -18,7 +19,7 @@ WEATHER_ICONS = {211: 'wi-storm-showers',
                  802: 'wi-day-cloudy',
                  803: 'wi-cloudy',
                  804: 'wi-cloudy'
-}
+                 }
 
 
 def get_current_weather():

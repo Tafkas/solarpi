@@ -11,7 +11,6 @@ from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 from boto.exception import S3ResponseError
 
-
 NEED_TO_UPLOAD_MARKER = '.need-to-upload'
 BYTES_PER_MB = 1024 * 1024
 try:

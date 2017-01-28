@@ -10,6 +10,7 @@ from .extensions import db
 Column = db.Column
 relationship = relationship
 
+
 class CRUDMixin(object):
     """Mixin that adds convenience methods for CRUD (create, read, update, delete)
     operations.
@@ -39,9 +40,11 @@ class CRUDMixin(object):
         db.session.delete(self)
         return commit and db.session.commit()
 
+
 class Model(CRUDMixin, db.Model):
     """Base model class that includes CRUD convenience methods."""
     __abstract__ = True
+
 
 # From Mike Bayer's "Building the app" talk
 # https://speakerdeck.com/zzzeek/building-the-app
@@ -54,12 +57,12 @@ class SurrogatePK(object):
     id = db.Column(db.Integer, primary_key=True)
 
     @classmethod
-    def get_by_id(cls, id):
+    def get_by_id(cls, _id):
         if any(
-            (isinstance(id, basestring) and id.isdigit(),
-             isinstance(id, (int, float))),
+                (isinstance(_id, basestring) and _id.isdigit(),
+                 isinstance(_id, (int, float))),
         ):
-            return cls.query.get(int(id))
+            return cls.query.get(int(_id))
         return None
 
 

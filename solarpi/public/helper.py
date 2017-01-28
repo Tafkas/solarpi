@@ -1,5 +1,6 @@
-from datetime import datetime, timedelta
 import time
+from datetime import datetime, timedelta
+
 from pysolar.util import get_sunrise_sunset
 
 START_DATE = datetime.strptime('2013-01-31', "%Y-%m-%d")

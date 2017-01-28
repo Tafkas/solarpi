@@ -12,10 +12,13 @@ def get_todays_max_power():
     """
     :return: the maximum enegy yieled today
     """
-    todays_max_power = PVData.query.with_entities(func.max(PVData.current_power).label('todays_max_power')).filter(
-        PVData.created_at >= datetime.now()).first().todays_max_power
+    todays_max_power = (PVData.query
+                        .with_entities(func.max(PVData.current_power).label('todays_max_power'))
+                        .filter(PVData.created_at >= datetime.now())
+                        .first()
+                        .todays_max_power)
 
-    if not todays_max_power:
+    if todays_max_power is None:
         todays_max_power = 0
 
     return todays_max_power
@@ -56,8 +59,9 @@ def get_last_n_days(n):
     :param n: number of last days
     :return: list of daily yields
     """
-    return (PVData.query.with_entities(func.strftime('%Y-%m-%dT00:00:00', PVData.created_at).label('created_at'),
-                                       func.max(PVData.daily_energy).label('daily_energy'))
+    return (PVData.query.
+            with_entities(func.strftime('%Y-%m-%dT00:00:00', PVData.created_at).label('created_at'),
+                          func.max(PVData.daily_energy).label('daily_energy'))
             .filter(PVData.created_at > (datetime.now() - timedelta(days=n)))
             .group_by(func.strftime('%Y-%m-%d', PVData.created_at))
             .all())
@@ -137,11 +141,13 @@ def get_current_month_prediction(current_month_energy, last_years_average):
     :return: series with predicted energy yield for the current month
     """
     now = datetime.now()
-    current_month_prediction = current_month_energy + last_years_average * (
-        calendar.monthrange(now.year, now.month)[1] - now.day + 1)
+    current_month_prediction = int(current_month_energy
+                                   + last_years_average * (calendar.monthrange(now.year, now.month)[1] - now.day + 1))
 
-    current_month_prediction_series = ['null'] * 12
-    current_month_prediction_series[now.month - 1] = int(current_month_prediction)
+    current_month_prediction_series = [current_month_prediction
+                                       if i == (now.month - 1)
+                                       else 'null'
+                                       for i in xrange(12)]
     return current_month_prediction_series
 
 
@@ -159,7 +165,7 @@ def get_efficiency(pv):
             pv_ac = [pv.ac_1_p, pv.ac_2_p, pv.ac_3_p]
             if all(pv_ac):
                 pac = sum(pv_ac)
-            efficiency = 1.0 * pac / pdc
+                efficiency = 1.0 * pac / pdc
     return efficiency
 
 
@@ -172,7 +178,6 @@ def get_current_values():
 
 def get_first_date():
     """
-
     :return: the date in the databse
     """
     return PVData.query.order_by(PVData.id.asc()).first().created_at
