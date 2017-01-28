@@ -47,15 +47,13 @@ def daily(date=None):
     # get maxium photovoltaic data for ± 3 days
     pv_max = get_7_day_max_energy_series(current_date)
     current_date_midnight = calendar.timegm(current_date.timetuple())
-    timestamps_pv_max = [1000 * (get_sec(d.pvdata_created_at) + current_date_midnight)
-                         for d in pv_max]
+    timestamps_pv_max = [1000 * (get_sec(d.pvdata_created_at) + current_date_midnight) for d in pv_max]
     daily_chart_max_data = [list(x) for x in zip(timestamps_pv_max, [(int(d.pv_max or 0)) for d in pv_max])]
 
     # additional data
+    daily_energy = 0.0
     if pv:
         daily_energy = pv[-1].daily_energy
-    else:
-        daily_energy = 0.0
 
     return render_template("charts/daily.html", data=daily_chart_data, data2=daily_chart_max_data,
                            yesterday=yesterday, today=current_date,
