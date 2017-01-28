@@ -6,12 +6,12 @@ from datetime import datetime, timedelta
 import dateutil.parser
 from flask import (Blueprint, render_template, make_response, current_app, url_for, request)
 
-from solarpi.electricity.helper import get_todays_electricity, get_last_year_export
+from solarpi.electricity.helper import get_todays_electricity, get_last_year_export, get_total_electricity
 from solarpi.electricity.models import Electricity
 from solarpi.public.helper import get_operating_days
 from solarpi.pvdata.helper import (get_todays_max_power, get_max_daily_energy_last_seven_days, get_current_values,
                                    get_last_years_energy, get_yearly_data, get_current_month_prediction, get_first_date,
-                                   get_yearly_average_data)
+                                   get_yearly_average_data, get_efficiency)
 from solarpi.weather.helper import get_weather_icon, get_current_weather
 
 blueprint = Blueprint('public', __name__, static_folder="../static")
@@ -37,14 +37,9 @@ def home():
     current_power = pv.current_power
     daily_energy = pv.daily_energy
     total_energy = pv.total_energy
-    if all([pv.ac_1_p, pv.ac_2_p, pv.ac_3_p]):
-        pac = pv.ac_1_p + pv.ac_2_p + pv.ac_3_p
 
-    efficiency = 0.0
-    if all([pv.dc_1_u, pv.dc_2_u, pv.dc_3_u]):
-        pdc = pv.dc_1_u * pv.dc_1_i + pv.dc_2_u * pv.dc_2_i + pv.dc_3_u * pv.dc_3_i
-        if pdc > 0:
-            efficiency = pac / pdc
+    # efficiency
+    efficiency = get_efficiency(pv)
 
     last_updated = dateutil.parser.parse(pv.created_at).strftime('%Y-%m-%d %H:%M')
 
@@ -57,15 +52,15 @@ def home():
     max_daily_energy_last_seven_days = get_max_daily_energy_last_seven_days()
 
     # electricity im- and export
-    todays_import, todays_export = 0.0, 0.0
-    total_electricity = Electricity.query.order_by(Electricity.id.desc()).first()
+
+    total_electricity = get_total_electricity()
     total_import = total_electricity.meter_180
     total_export = total_electricity.meter_280
     last_year_export = get_last_year_export()
     current_year_export = total_export - last_year_export.meter_280
 
+    todays_import, todays_export = 0.0, 0.0
     todays_electricity = get_todays_electricity()
-
     if todays_electricity:
         todays_import = todays_electricity.todays_import
         todays_export = todays_electricity.todays_export

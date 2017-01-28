@@ -145,6 +145,24 @@ def get_current_month_prediction(current_month_energy, last_years_average):
     return current_month_prediction_series
 
 
+def get_efficiency(pv):
+    """
+    :param pv: current photo voltaic values from the inverter
+    :return: efficiency of the inverter between 0 and 1
+    """
+    efficiency = 0.0
+    pv_dc_u = [pv.dc_1_u, pv.dc_2_u, pv.dc_3_u]
+    pv_dc_i = [pv.dc_1_i, pv.dc_2_i, pv.dc_3_i]
+    if all(pv_dc_u):
+        pdc = sum([u * i for u, i in zip(pv_dc_u, pv_dc_i)])
+        if pdc > 0:
+            pv_ac = [pv.ac_1_p, pv.ac_2_p, pv.ac_3_p]
+            if all(pv_ac):
+                pac = sum(pv_ac)
+            efficiency = 1.0 * pac / pdc
+    return efficiency
+
+
 def get_current_values():
     """
     :return: the current photovoltaic values from the system
