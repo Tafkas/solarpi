@@ -14,6 +14,7 @@ class Config(object):
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     CACHE_TYPE = 'simple'  # Can be "memcached", "redis", etc.
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SENTRY_DNS = os_env['SENTRY_DNS']
 
 
 class ProdConfig(Config):

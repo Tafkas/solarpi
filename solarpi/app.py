@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 """The app module, containing the app factory function."""
+import logging
+
 from flask import Flask, render_template
 
 from solarpi import public, weather, charts, statistics, tables
 from solarpi.assets import assets
-from solarpi.extensions import (
-    cache,
-    db,
-    migrate,
-    debug_toolbar,
-)
+from solarpi.extensions import cache, db, migrate, debug_toolbar, sentry
 from solarpi.settings import ProdConfig
 
 
@@ -33,6 +30,7 @@ def register_extensions(app):
     db.init_app(app)
     debug_toolbar.init_app(app)
     migrate.init_app(app, db)
+    sentry.init_app(app, dsn=ProdConfig.SENTRY_DNS, logging=True, level=logging.ERROR)
     return None
 
 
