@@ -7,7 +7,7 @@ webtest==2.0.25
 factory-boy>=2.2.1
 
 # Management script
-Flask-Script
+Flask-Script==2.0.5
 
 # Debug toolbar
 Flask-DebugToolbar==0.10.0
