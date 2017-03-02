@@ -8,7 +8,7 @@ Jinja2==2.9.5
 itsdangerous==0.24
 
 # Database
-Flask-SQLAlchemy==2.1
+Flask-SQLAlchemy==2.2
 SQLAlchemy==1.0.13
 
 # Migrations
