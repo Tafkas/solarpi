@@ -9,7 +9,7 @@ itsdangerous==0.24
 
 # Database
 Flask-SQLAlchemy==2.2
-SQLAlchemy==1.0.13
+SQLAlchemy==1.1.6
 
 # Migrations
 Flask-Migrate==1.8.0
