@@ -2,7 +2,7 @@
 -r prod.txt
 
 # Testing
-pytest
+pytest==3.0.6
 webtest
 factory-boy>=2.2.1
 
