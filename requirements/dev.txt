@@ -3,7 +3,7 @@
 
 # Testing
 pytest==3.0.6
-webtest
+webtest==2.0.25
 factory-boy>=2.2.1
 
 # Management script
