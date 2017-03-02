@@ -23,7 +23,7 @@ gunicorn>=19.5
 wsgiref>=0.1.2
 
 # Assets
-Flask-Assets==0.11
+Flask-Assets==0.12
 cssmin>=0.2.0
 jsmin>=2.2.1
 
