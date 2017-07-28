@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime, timedelta
 
+from solarpi.extensions import cache
 from solarpi.weather.models import Weather
 
 WEATHER_ICONS = {211: 'wi-storm-showers',
@@ -22,6 +23,7 @@ WEATHER_ICONS = {211: 'wi-storm-showers',
                  }
 
 
+@cache.cached(timeout=300, key_prefix='current_weather')
 def get_current_weather():
     """
     returns the lates entry from the weather table

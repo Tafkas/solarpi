@@ -364,6 +364,7 @@
     <script src="{{ url_for('static', filename='js/monthly-overview-chart.js') }}"></script>
     <script>
         var average_years_series = {{ average_years_series|safe }};
+        var min_max_years_series = {{ min_max_years_series|safe }};
         var current_year_series = {{ current_year_series|safe }};
         var current_month_pred = {{ current_month_pred|safe }};
     </script>

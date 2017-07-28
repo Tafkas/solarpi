@@ -4,10 +4,11 @@ from datetime import datetime, timedelta
 
 from sqlalchemy import func
 
-from solarpi.extensions import db
+from solarpi.extensions import db, cache
 from solarpi.pvdata.models import PVData
 
 
+@cache.cached(timeout=300, key_prefix='todays_max_power')
 def get_todays_max_power():
     """
     :return: the maximum enegy yieled today
@@ -54,6 +55,7 @@ def get_7_day_max_energy_series(current_date):
             .all())
 
 
+@cache.cached(timeout=300, key_prefix='last_n_days')
 def get_last_n_days(n):
     """Returns a list of daily yields
     :param n: number of last days
@@ -68,6 +70,7 @@ def get_last_n_days(n):
     # return db.engine.execute(query, (datetime.now() - timedelta(days=n)))
 
 
+@cache.cached(timeout=3600, key_prefix='yearly_series')
 def get_yearly_series():
     """Returns a list of yearly generated energy for past years
     :return: list of yearly generated energy for past years
@@ -79,6 +82,7 @@ def get_yearly_series():
             .all())
 
 
+@cache.cached(timeout=3600, key_prefix='max_daily_energy_last_seven_days')
 def get_max_daily_energy_last_seven_days():
     """Returns the maximum daily yield within the last 7 days
     :return: returns the maximum energy yielded in the last 7 days
@@ -89,6 +93,7 @@ def get_max_daily_energy_last_seven_days():
             .first().max_daily_energy)
 
 
+@cache.cached(timeout=3600, key_prefix='last_years_energy')
 def get_last_years_energy():
     """Returns the total yielded energy for the previous year
     :return: total energy yielded in the previous year
@@ -101,6 +106,7 @@ def get_last_years_energy():
             .first())
 
 
+@cache.cached(timeout=3600, key_prefix='get_yearly_data')
 def get_yearly_data(year):
     """Returns the yielded energy for the current year
     :param year: year of the data
@@ -114,23 +120,32 @@ def get_yearly_data(year):
 
 
 def get_yearly_average_data():
-    """Reatuns the monthly averages for the previous year
+    """Returns the monthly averages for the previous year
     :return: returns an array of monthly averages for previous years
     """
     current_year = str(datetime.now().year)
-    query = """SELECT
-                  avg(monthly_yield)
-                FROM (
-                  SELECT
-                    strftime('%m', created_at) AS month,
-                    max(total_energy) - min(total_energy) AS monthly_yield
-                  FROM pvdata
-                  WHERE strftime('%Y', created_at) < ?
-                  GROUP BY strftime('%Y-%m', created_at)
-                  ) subq
-                WHERE monthly_yield > 0
-                GROUP BY month;"""
-    return db.engine.execute(query, current_year)
+    query = """SELECT 
+                   avg(monthly_yield),
+                   min(monthly_yield),
+                   max(monthly_yield) 
+               FROM 
+                   (
+                       SELECT 
+                           strftime('%m', created_at) AS month, 
+                           max(total_energy) - min(total_energy) AS monthly_yield 
+                       FROM 
+                           pvdata 
+                       WHERE 
+                           strftime('%Y', created_at) < ?
+                       GROUP BY 
+                           strftime('%Y-%m', created_at)
+                   ) subq 
+               WHERE 
+                   monthly_yield > 0 
+               GROUP BY 
+                   month;"""
+    result = db.engine.execute(query, current_year)
+    return result
 
 
 def get_current_month_prediction(current_month_energy, last_years_average):

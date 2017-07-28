@@ -82,6 +82,14 @@ $(function () {
                 tooltip: {
                     valueSuffix: ' kWh'
                 }
+            },
+            {
+                name: 'Last years min max',
+                type: 'errorbar',
+                data: min_max_years_series,
+                tooltip: {
+                    pointFormat: '(Previous years\' range: {point.low}-{point.high} kWh)<br/>'
+                }
             }
         ]
     });

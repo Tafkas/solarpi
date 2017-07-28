@@ -7,6 +7,7 @@ import dateutil.parser
 from flask import (Blueprint, render_template, make_response, current_app, url_for, request)
 
 from solarpi.electricity.helper import get_todays_electricity, get_last_year_export, get_total_electricity
+from solarpi.extensions import cache
 from solarpi.public.helper import get_operating_days
 from solarpi.pvdata.helper import (get_todays_max_power, get_max_daily_energy_last_seven_days, get_current_values,
                                    get_last_years_energy, get_yearly_data, get_current_month_prediction, get_first_date,
@@ -16,6 +17,7 @@ from solarpi.weather.helper import get_weather_icon, get_current_weather
 blueprint = Blueprint('public', __name__, static_folder="../static")
 
 
+@cache.cached(timeout=60)
 @blueprint.route("/")
 def home():
     """Renders the dashboard
@@ -67,7 +69,9 @@ def home():
     last_year_energy = get_last_years_energy()
     current_year_energy = total_energy - last_year_energy.total_energy
 
-    average_years_series = [int(x[0]) for x in get_yearly_average_data()]
+    tmp_yearly_average_data = list(get_yearly_average_data())
+    average_years_series = [int(x[0]) for x in tmp_yearly_average_data]
+    min_max_years_series = [[int(x[1]), int(x[2])] for x in tmp_yearly_average_data]
     current_year_series = [int(x[0]) for x in get_yearly_data(datetime.now().year)]
 
     last_year_current_month_avg = average_years_series[now.month - 1] / calendar.monthrange(now.year, now.month)[1]
@@ -82,7 +86,7 @@ def home():
                            dc_1_u=pv.dc_1_u, dc_2_u=pv.dc_2_u, dc_3_u=pv.dc_3_u,
                            dc_1_i=pv.dc_1_i, dc_2_i=pv.dc_2_i, dc_3_i=pv.dc_3_i,
                            average_years_series=average_years_series, current_year_series=current_year_series,
-                           current_month_pred=current_month_prediction,
+                           min_max_years_series=min_max_years_series, current_month_pred=current_month_prediction,
                            current_year_energy=current_year_energy,
                            max_daily_energy_last_seven_days=max_daily_energy_last_seven_days,
                            todays_max_power=todays_max_power, last_updated=last_updated,
