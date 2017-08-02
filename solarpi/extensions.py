@@ -3,16 +3,12 @@
 in app.py
 """
 
-from flask.ext.bcrypt import Bcrypt
-from flask.ext.cache import Cache
-from flask.ext.debugtoolbar import DebugToolbarExtension
-from flask.ext.login import LoginManager
-from flask.ext.migrate import Migrate
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from flask_caching import Cache
+from flask_debugtoolbar import DebugToolbarExtension
+from flask_sqlalchemy import SQLAlchemy
 from raven.contrib.flask import Sentry
 
-login_manager = LoginManager()
-bcrypt = Bcrypt()
 db = SQLAlchemy()
 migrate = Migrate()
 cache = Cache()
