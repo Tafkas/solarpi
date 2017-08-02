@@ -56,6 +56,7 @@
 <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highcharts/5.0.14/highcharts.js"></script>
 <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highcharts/5.0.14/highcharts-more.js"></script>
 <script type="application/javascript" src="//cdnjs.cloudflare.com/ajax/libs/metisMenu/2.7.0/metisMenu.min.js"></script>
+<script type="application/javascript" src="{{ url_for('static', filename='js/sb-admin-2.js') }}"></script>
 <script>
     (function (i, s, o, g, r, a, m) {
         i['GoogleAnalyticsObject'] = r;
@@ -71,9 +72,6 @@
     ga('create', 'UA-708317-16', 'auto');
     ga('send', 'pageview');
 </script>
-{% assets "js_all" %}
-    <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-{% endassets %}
 {% block scripts %}{% endblock %}
 </body>
 </html>
