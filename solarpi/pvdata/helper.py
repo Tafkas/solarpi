@@ -25,6 +25,7 @@ def get_todays_max_power():
     return todays_max_power
 
 
+@cache.memoize(timeout=300)
 def get_daily_energy_series(current_date):
     """
     :param current_date: date of the energy series
@@ -55,7 +56,7 @@ def get_7_day_max_energy_series(current_date):
             .all())
 
 
-@cache.cached(timeout=300, key_prefix='last_n_days')
+@cache.memoize(timeout=300)
 def get_last_n_days(n):
     """Returns a list of daily yields
     :param n: number of last days
@@ -67,7 +68,6 @@ def get_last_n_days(n):
             .filter(PVData.created_at > (datetime.now() - timedelta(days=n)))
             .group_by(func.strftime('%Y-%m-%d', PVData.created_at))
             .all())
-    # return db.engine.execute(query, (datetime.now() - timedelta(days=n)))
 
 
 @cache.cached(timeout=3600, key_prefix='yearly_series')

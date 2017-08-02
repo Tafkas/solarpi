@@ -1,12 +1,13 @@
 from flask import Blueprint, render_template
 
-from solarpi.extensions import db
+from solarpi.extensions import db, cache
 
 blueprint = Blueprint("statistics", __name__, url_prefix='/statistics',
                       static_folder="../static")
 
 
 @blueprint.route("/")
+@cache.cached(timeout=3600, key_prefix='statistics')
 def statistics():
     """Renders a page with statistics for the last 12 months
     :return: a page with statistics for the last 12 months

@@ -2,13 +2,14 @@ from datetime import timedelta, datetime
 
 from flask import Blueprint, render_template
 
-from solarpi.extensions import db
+from solarpi.extensions import db, cache
 
 blueprint = Blueprint("tables", __name__, url_prefix='/tables',
                       static_folder="../static")
 
 
 @blueprint.route("/")
+@cache.cached(timeout=3600, key_prefix='tables')
 def tables():
     """Renders a page with tabulated data for the last 30 days
     :return: a page with tabulated data

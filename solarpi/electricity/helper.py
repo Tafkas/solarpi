@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from sqlalchemy import func
 
 from solarpi.electricity.models import Electricity
-from solarpi.extensions import db, cache
+from solarpi.extensions import cache
 
 
 @cache.cached(timeout=300, key_prefix='todays_electricity')
@@ -17,14 +17,15 @@ def get_todays_electricity():
             .first())
 
 
+@cache.memoize(timeout=300)
 def get_last_n_days_import(n):
-    query = """SELECT
-                  strftime('%Y-%m-%dT00:00:00', created_at) AS created_at,
-                  max(meter_180) - min(meter_180) AS electricity_import
-               FROM electricity_data
-               WHERE created_at > ?
-               GROUP BY strftime('%Y-%m-%d', created_at)"""
-    return db.engine.execute(query, (datetime.now() - timedelta(days=n)))
+    return (Electricity.query.
+            with_entities(func.strftime('%Y-%m-%dT00:00:00', Electricity.created_at).label('created_at'),
+                          (func.max(Electricity.meter_180) - func.min(Electricity.meter_180))
+                          .label('electricity_import'))
+            .filter(Electricity.created_at > (datetime.now() - timedelta(days=n)))
+            .group_by(func.strftime('%Y-%m-%d', Electricity.created_at))
+            .all())
 
 
 @cache.cached(timeout=3600, key_prefix='last_year_export')
