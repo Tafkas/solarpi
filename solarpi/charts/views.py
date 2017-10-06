@@ -7,7 +7,7 @@ from flask import Blueprint, render_template
 from solarpi.charts.helper import get_timestamps, get_daily_pv_chart_data
 from solarpi.electricity.helper import get_last_n_days_import
 from solarpi.pvdata.helper import (get_sec, get_todays_date, get_daily_energy_series, get_7_day_max_energy_series,
-                                   get_yearly_series, get_last_n_days)
+                                   get_yearly_series, get_last_n_days, get_current_year_prediction)
 
 blueprint = Blueprint("charts", __name__, url_prefix='/charts',
                       static_folder="../static")
@@ -108,9 +108,12 @@ def yearly():
     years = [int(x[0]) for x in data]
     data = [x[1] for x in data]
     yearly_data = len(data) * [5741.82]
+    prediction = (len(data)-1) * ['null']
+    prediction.extend([int(x[0]) for x in list(get_current_year_prediction())])
 
     return render_template("charts/yearly.html",
                            data=data,
                            yearlyData=yearly_data,
                            total_energy=total_energy,
+                           prediction=prediction,
                            years=years)

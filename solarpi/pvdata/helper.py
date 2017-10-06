@@ -166,6 +166,29 @@ def get_current_month_prediction(current_month_energy, last_years_average):
     return current_month_prediction_series
 
 
+def get_current_year_prediction():
+    """Computes the prediction of kWh for the remaining days of the current year
+
+    :return: the number of kWh for the remaining year
+    """
+    query = """SELECT
+                    AVG(max_rest_year - min_rest_year) AS rest_year
+                FROM (
+                    SELECT
+                        min(total_energy) min_rest_year,
+                        max(total_energy)	 max_rest_year
+                    FROM 
+                        pvdata 
+                    WHERE 
+                        strftime('%j', created_at) > strftime('%j', 'now') 
+                        AND strftime('%Y', created_at) < strftime('%Y', 'now') 
+                    GROUP BY 
+                        strftime('%Y', created_at)
+                      )q;"""
+    result = db.engine.execute(query)
+    return result
+
+
 def get_efficiency(pv):
     """
     :param pv: current photo voltaic values from the inverter
