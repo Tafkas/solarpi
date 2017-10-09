@@ -30,7 +30,7 @@ $(document).ready(function () {
                     pointPadding: 0.0,
                     groupPadding: 0.5,
                     borderWidth: 0,
-                    pointWidth: 30
+                    pointWidth: 50
                 }
             },
             series: [
