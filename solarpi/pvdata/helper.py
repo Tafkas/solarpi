@@ -171,20 +171,32 @@ def get_current_year_prediction():
 
     :return: the number of kWh for the remaining year
     """
-    query = """SELECT
-                    AVG(max_rest_year - min_rest_year) AS rest_year
+    query = """SELECT 
+                    SUM(energy) AS prediction 
                 FROM (
-                    SELECT
-                        min(total_energy) min_rest_year,
-                        max(total_energy)	 max_rest_year
+                    SELECT 
+                        max(total_energy) - min(total_energy) AS energy 
                     FROM 
                         pvdata 
                     WHERE 
-                        strftime('%j', created_at) > strftime('%j', 'now') 
-                        AND strftime('%Y', created_at) < strftime('%Y', 'now') 
-                    GROUP BY 
-                        strftime('%Y', created_at)
-                      )q;"""
+                        strftime('%Y', created_at) = strftime('%Y', 'now') 
+                    UNION 
+                    SELECT 
+                        AVG(max_rest_year - min_rest_year) AS energy 
+                    FROM 
+                        (
+                            SELECT 
+                                min(total_energy) min_rest_year, 
+                                max(total_energy) max_rest_year 
+                            FROM 
+                                pvdata 
+                            WHERE 
+                                strftime('%j', created_at) > strftime('%j', 'now') 
+                                AND strftime('%Y', created_at) < strftime('%Y', 'now') 
+                            GROUP BY 
+                                strftime('%Y', created_at)
+                        ) q
+                );"""
     result = db.engine.execute(query)
     return result
 

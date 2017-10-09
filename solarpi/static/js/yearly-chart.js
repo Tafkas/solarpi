@@ -30,8 +30,7 @@ $(document).ready(function () {
                     pointPadding: 0.0,
                     groupPadding: 0.5,
                     borderWidth: 0,
-                    pointWidth: 30,
-                    stacking: 'normal'
+                    pointWidth: 30
                 }
             },
             series: [
