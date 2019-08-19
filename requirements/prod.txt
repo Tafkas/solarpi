@@ -2,17 +2,17 @@
 
 # Flask
 Flask==0.12.2
-MarkupSafe==1.0
+MarkupSafe==1.1.1
 Werkzeug==0.12.2
-Jinja2==2.9.6
+Jinja2==2.10.1
 itsdangerous==0.24
 
 # Database
-Flask-SQLAlchemy==2.2
-SQLAlchemy==1.2.0b2
+Flask-SQLAlchemy==2.4.0
+SQLAlchemy==1.3.7
 
 # Migrations
-Flask-Migrate==2.1.0
+Flask-Migrate==2.5.0
 
 # Forms
 Flask-WTF==0.14.2
@@ -31,9 +31,12 @@ jsmin==2.2.2
 Flask-Caching>=1.0.0
 
 # Pysolar
-Pysolar>=0.7
+Pysolar==0.6
 
 #pytz
 pytz>=2017.2
 
 python-dateutil>=2.6.1
+
+#Sentry
+sentry-sdk==0.11.1
