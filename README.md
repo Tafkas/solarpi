@@ -21,7 +21,7 @@ To run the Solar Pi you need
 
 - Clone the repostory
 
-        $ git clone git@github.com:Tafkas/solarpi.git solarpi
+        $ git clone https://github.com/Tafkas/solarpi.git
 
 - create a virtual enviroment and activate it
 
