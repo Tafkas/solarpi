@@ -6,7 +6,8 @@ from datetime import datetime, timedelta
 import dateutil.parser
 from flask import (Blueprint, render_template, make_response, current_app, url_for, request)
 
-from solarpi.electricity.helper import get_todays_electricity, get_last_year_export, get_total_electricity
+from solarpi.electricity.helper import get_todays_electricity, get_last_year_export, get_total_electricity, \
+    get_total_earnings, get_current_year_earnings
 from solarpi.extensions import cache
 from solarpi.public.helper import get_operating_days
 from solarpi.pvdata.helper import (get_todays_max_power, get_max_daily_energy_last_seven_days, get_current_values,
@@ -60,6 +61,11 @@ def home():
     last_year_export = get_last_year_export()
     current_year_export = total_export - last_year_export.meter_280
 
+    # earnings
+    current_year_earnings = get_current_year_earnings()
+    total_earnings = get_total_earnings()
+
+
     todays_import, todays_export = 0.0, 0.0
     todays_electricity = get_todays_electricity()
     if todays_electricity:
@@ -92,7 +98,8 @@ def home():
                            todays_max_power=todays_max_power, last_updated=last_updated,
                            operating_days=operating_days, total_export=total_export,
                            total_import=total_import, todays_export=todays_export,
-                           todays_import=todays_import, current_year_export=current_year_export)
+                           todays_import=todays_import, current_year_export=current_year_export,
+                           current_year_earnings=current_year_earnings, total_earnings=total_earnings)
 
 
 @blueprint.route("/about/")

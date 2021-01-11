@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from sqlalchemy import func
 
 from solarpi.electricity.models import Electricity
-from solarpi.extensions import cache
+from solarpi.extensions import cache, db
 
 
 @cache.cached(timeout=300, key_prefix='todays_electricity')
@@ -38,3 +38,39 @@ def get_last_year_export():
 @cache.cached(timeout=3600, key_prefix='total_electricity')
 def get_total_electricity():
     return Electricity.query.order_by(Electricity.id.desc()).first()
+
+
+@cache.cached(timeout=3600, key_prefix='current_year_earnings')
+def get_current_year_earnings():
+    query = """SELECT
+                    sum( delta_280 ) * 0.1702 AS total_earnings -- EUR per kWh
+                FROM
+                    (
+                    SELECT
+                        max( meter_280 ) - min( meter_280 ) AS delta_280 
+                    FROM
+                        electricity_data 
+                    WHERE
+                        strftime( '%Y', created_at ) = strftime('%Y', 'now')
+                    GROUP BY
+                    strftime( '%Y-%m-%d', created_at ) 
+                    ) q;"""
+    result = db.engine.execute(query).first()[0]
+    return result
+
+
+@cache.cached(timeout=3600, key_prefix='total_earnings')
+def get_total_earnings():
+    query = """SELECT
+                    sum( delta_280 ) * 0.1702 as total_earnings -- EUR per kWh
+                FROM
+                    (
+                    SELECT
+                        max( meter_280 ) - min( meter_280 ) AS delta_280 
+                    FROM
+                        electricity_data 
+                    GROUP BY
+                    strftime( '%Y-%m-%d', created_at ) 
+                    ) q;"""
+    result = db.engine.execute(query).first()[0]
+    return result
