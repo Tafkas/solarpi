@@ -10,7 +10,7 @@ from solarpi.database import (
 
 
 class Electricity(SurrogatePK, Model):
-    __tablename__ = 'electricity_data'
+    __tablename__ = "electricity_data"
     id = Column(db.Integer(), nullable=False, primary_key=True)
     created_at = Column(db.Text(), nullable=False, default=dt.datetime.utcnow)
     meter_180 = Column(db.Float(), nullable=True)

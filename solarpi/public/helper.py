@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 from pysolar.util import get_sunrise_sunset
 
-START_DATE = datetime.strptime('2013-01-31', "%Y-%m-%d")
+START_DATE = datetime.strptime("2013-01-31", "%Y-%m-%d")
 LAT, LON = 52.518611111111, 13.408055555556
 
 

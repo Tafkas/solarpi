@@ -43,6 +43,7 @@ class CRUDMixin(object):
 
 class Model(CRUDMixin, db.Model):
     """Base model class that includes CRUD convenience methods."""
+
     __abstract__ = True
 
 
@@ -52,21 +53,21 @@ class SurrogatePK(object):
     """A mixin that adds a surrogate integer 'primary key' column named
     ``id`` to any declarative-mapped class.
     """
-    __table_args__ = {'extend_existing': True}
+
+    __table_args__ = {"extend_existing": True}
 
     id = db.Column(db.Integer, primary_key=True)
 
     @classmethod
     def get_by_id(cls, _id):
         if any(
-                (isinstance(_id, basestring) and _id.isdigit(),
-                 isinstance(_id, (int, float))),
+            (isinstance(_id, basestring) and _id.isdigit(), isinstance(_id, (int, float))),
         ):
             return cls.query.get(int(_id))
         return None
 
 
-def ReferenceCol(tablename, nullable=False, pk_name='id', **kwargs):
+def ReferenceCol(tablename, nullable=False, pk_name="id", **kwargs):
     """Column that adds primary key foreign key reference.
 
     Usage: ::
@@ -74,6 +75,4 @@ def ReferenceCol(tablename, nullable=False, pk_name='id', **kwargs):
         category_id = ReferenceCol('category')
         category = relationship('Category', backref='categories')
     """
-    return db.Column(
-        db.ForeignKey("{0}.{1}".format(tablename, pk_name)),
-        nullable=nullable, **kwargs)
+    return db.Column(db.ForeignKey("{0}.{1}".format(tablename, pk_name)), nullable=nullable, **kwargs)

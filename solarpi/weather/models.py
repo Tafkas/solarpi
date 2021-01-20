@@ -9,7 +9,7 @@ from solarpi.database import (
 
 
 class Weather(SurrogatePK, Model):
-    __tablename__ = 'weather_data'
+    __tablename__ = "weather_data"
 
     id = Column(db.Integer(), nullable=False, primary_key=True)
     created_at = Column(db.Text(), nullable=False, default=dt.datetime.utcnow)

@@ -6,11 +6,17 @@ from flask import Blueprint, render_template
 
 from solarpi.charts.helper import get_timestamps, get_daily_pv_chart_data
 from solarpi.electricity.helper import get_last_n_days_import
-from solarpi.pvdata.helper import (get_sec, get_todays_date, get_daily_energy_series, get_7_day_max_energy_series,
-                                   get_yearly_series, get_last_n_days, get_current_year_prediction)
+from solarpi.pvdata.helper import (
+    get_sec,
+    get_todays_date,
+    get_daily_energy_series,
+    get_7_day_max_energy_series,
+    get_yearly_series,
+    get_last_n_days,
+    get_current_year_prediction,
+)
 
-blueprint = Blueprint("charts", __name__, url_prefix='/charts',
-                      static_folder="../static")
+blueprint = Blueprint("charts", __name__, url_prefix="/charts", static_folder="../static")
 
 
 @blueprint.route("/daily")
@@ -55,15 +61,22 @@ def daily(date=None):
     if pv:
         daily_energy = pv[-1].daily_energy
 
-    return render_template("charts/daily.html", data=daily_chart_data, data2=daily_chart_max_data,
-                           yesterday=yesterday, today=current_date,
-                           tomorrow=tomorrow, daily_energy=daily_energy, all_data=pv,
-                           input_voltage_1_chart_data=input_voltage_1_chart_data,
-                           input_voltage_2_chart_data=input_voltage_2_chart_data,
-                           output_voltage_1_chart_data=output_voltage_1_chart_data,
-                           output_voltage_2_chart_data=output_voltage_2_chart_data,
-                           output_voltage_3_chart_data=output_voltage_3_chart_data,
-                           error=error)
+    return render_template(
+        "charts/daily.html",
+        data=daily_chart_data,
+        data2=daily_chart_max_data,
+        yesterday=yesterday,
+        today=current_date,
+        tomorrow=tomorrow,
+        daily_energy=daily_energy,
+        all_data=pv,
+        input_voltage_1_chart_data=input_voltage_1_chart_data,
+        input_voltage_2_chart_data=input_voltage_2_chart_data,
+        output_voltage_1_chart_data=output_voltage_1_chart_data,
+        output_voltage_2_chart_data=output_voltage_2_chart_data,
+        output_voltage_3_chart_data=output_voltage_3_chart_data,
+        error=error,
+    )
 
 
 @blueprint.route("/weekly")
@@ -91,11 +104,13 @@ def get_last_days_chart(number_of_days=7):
 
     electricity_import = [(float(d.electricity_import or 0)) for d in list(get_last_n_days_import(number_of_days))]
     chart_data = [list(x) for x in zip(timestamps, electricity_import)]
-    return render_template("charts/last_days.html",
-                           number_of_days=number_of_days,
-                           pvdata=pv_chart_data,
-                           importData=chart_data,
-                           total_energy=total_energy)
+    return render_template(
+        "charts/last_days.html",
+        number_of_days=number_of_days,
+        pvdata=pv_chart_data,
+        importData=chart_data,
+        total_energy=total_energy,
+    )
 
 
 @blueprint.route("/yearly")
@@ -108,12 +123,14 @@ def yearly():
     years = [int(x[0]) for x in data]
     data = [x[1] for x in data]
     yearly_data = len(data) * [5741.82]
-    prediction = (len(data)-1) * ['null']
+    prediction = (len(data) - 1) * ["null"]
     prediction.extend([int(x[0]) for x in list(get_current_year_prediction())])
 
-    return render_template("charts/yearly.html",
-                           data=data,
-                           yearlyData=yearly_data,
-                           total_energy=total_energy,
-                           prediction=prediction,
-                           years=years)
+    return render_template(
+        "charts/yearly.html",
+        data=data,
+        yearlyData=yearly_data,
+        total_energy=total_energy,
+        prediction=prediction,
+        years=years,
+    )

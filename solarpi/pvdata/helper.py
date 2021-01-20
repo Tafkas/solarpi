@@ -8,16 +8,17 @@ from solarpi.extensions import db, cache
 from solarpi.pvdata.models import PVData
 
 
-@cache.cached(timeout=300, key_prefix='todays_max_power')
+@cache.cached(timeout=300, key_prefix="todays_max_power")
 def get_todays_max_power():
     """
     :return: the maximum enegy yieled today
     """
-    todays_max_power = (PVData.query
-                        .with_entities(func.max(PVData.current_power).label('todays_max_power'))
-                        .filter(PVData.created_at >= datetime.now())
-                        .first()
-                        .todays_max_power)
+    todays_max_power = (
+        PVData.query.with_entities(func.max(PVData.current_power).label("todays_max_power"))
+        .filter(PVData.created_at >= datetime.now())
+        .first()
+        .todays_max_power
+    )
 
     if todays_max_power is None:
         todays_max_power = 0
@@ -32,13 +33,22 @@ def get_daily_energy_series(current_date):
     :return: energy series
     """
     tomorrow = current_date + timedelta(days=1)
-    return (PVData.query
-            .with_entities(PVData.created_at, PVData.current_power, PVData.daily_energy, PVData.dc_1_u,
-                           PVData.dc_2_u, PVData.ac_1_u, PVData.ac_2_u, PVData.ac_3_u)
-            .filter(PVData.created_at > current_date.strftime('%Y-%m-%d'))
-            .filter(PVData.created_at < tomorrow.strftime('%Y-%m-%d'))
-            .filter(PVData.current_power > 0)
-            .all())
+    return (
+        PVData.query.with_entities(
+            PVData.created_at,
+            PVData.current_power,
+            PVData.daily_energy,
+            PVData.dc_1_u,
+            PVData.dc_2_u,
+            PVData.ac_1_u,
+            PVData.ac_2_u,
+            PVData.ac_3_u,
+        )
+        .filter(PVData.created_at > current_date.strftime("%Y-%m-%d"))
+        .filter(PVData.created_at < tomorrow.strftime("%Y-%m-%d"))
+        .filter(PVData.current_power > 0)
+        .all()
+    )
 
 
 def get_7_day_max_energy_series(current_date):
@@ -46,14 +56,17 @@ def get_7_day_max_energy_series(current_date):
     :param current_date: pivot date of the energy series
     :return: theoretical maximum energy series ± 3 days around current date
     """
-    return (PVData.query
-            .with_entities(func.strftime('%H:%M:00', PVData.created_at).label('pvdata_created_at'),
-                           func.max(PVData.current_power).label('pv_max'))
-            .filter(PVData.created_at >= (current_date - timedelta(days=3)).strftime('%Y-%m-%d'))
-            .filter(PVData.created_at <= (current_date + timedelta(days=3)).strftime('%Y-%m-%d'))
-            .filter(PVData.current_power > 0)
-            .group_by(func.strftime('%H:%M:00', PVData.created_at))
-            .all())
+    return (
+        PVData.query.with_entities(
+            func.strftime("%H:%M:00", PVData.created_at).label("pvdata_created_at"),
+            func.max(PVData.current_power).label("pv_max"),
+        )
+        .filter(PVData.created_at >= (current_date - timedelta(days=3)).strftime("%Y-%m-%d"))
+        .filter(PVData.created_at <= (current_date + timedelta(days=3)).strftime("%Y-%m-%d"))
+        .filter(PVData.current_power > 0)
+        .group_by(func.strftime("%H:%M:00", PVData.created_at))
+        .all()
+    )
 
 
 @cache.memoize(timeout=300)
@@ -62,61 +75,73 @@ def get_last_n_days(n):
     :param n: number of last days
     :return: list of daily yields
     """
-    return (PVData.query.
-            with_entities(func.strftime('%Y-%m-%dT00:00:00', PVData.created_at).label('created_at'),
-                          func.max(PVData.daily_energy).label('daily_energy'))
-            .filter(PVData.created_at > (datetime.now() - timedelta(days=n)))
-            .group_by(func.strftime('%Y-%m-%d', PVData.created_at))
-            .all())
+    return (
+        PVData.query.with_entities(
+            func.strftime("%Y-%m-%dT00:00:00", PVData.created_at).label("created_at"),
+            func.max(PVData.daily_energy).label("daily_energy"),
+        )
+        .filter(PVData.created_at > (datetime.now() - timedelta(days=n)))
+        .group_by(func.strftime("%Y-%m-%d", PVData.created_at))
+        .all()
+    )
 
 
-@cache.cached(timeout=3600, key_prefix='yearly_series')
+@cache.cached(timeout=3600, key_prefix="yearly_series")
 def get_yearly_series():
     """Returns a list of yearly generated energy for past years
     :return: list of yearly generated energy for past years
     """
-    return (PVData.query
-            .with_entities(func.strftime('%Y', PVData.created_at).label('year'),
-                           (func.max(PVData.total_energy) - func.min(PVData.total_energy)).label('yearly_output'))
-            .group_by(func.strftime('%Y', PVData.created_at))
-            .all())
+    return (
+        PVData.query.with_entities(
+            func.strftime("%Y", PVData.created_at).label("year"),
+            (func.max(PVData.total_energy) - func.min(PVData.total_energy)).label("yearly_output"),
+        )
+        .group_by(func.strftime("%Y", PVData.created_at))
+        .all()
+    )
 
 
-@cache.cached(timeout=3600, key_prefix='max_daily_energy_last_seven_days')
+@cache.cached(timeout=3600, key_prefix="max_daily_energy_last_seven_days")
 def get_max_daily_energy_last_seven_days():
     """Returns the maximum daily yield within the last 7 days
     :return: returns the maximum energy yielded in the last 7 days
     """
-    return (PVData.query
-            .with_entities(func.max(PVData.daily_energy).label('max_daily_energy'))
-            .filter(PVData.created_at >= (datetime.now() - timedelta(days=7)))
-            .first().max_daily_energy)
+    return (
+        PVData.query.with_entities(func.max(PVData.daily_energy).label("max_daily_energy"))
+        .filter(PVData.created_at >= (datetime.now() - timedelta(days=7)))
+        .first()
+        .max_daily_energy
+    )
 
 
-@cache.cached(timeout=3600, key_prefix='last_years_energy')
+@cache.cached(timeout=3600, key_prefix="last_years_energy")
 def get_last_years_energy():
     """Returns the total yielded energy for the previous year
     :return: total energy yielded in the previous year
     """
     current_year = datetime.now().year
-    return (PVData.query
-            .with_entities(PVData.total_energy)
-            .filter(func.strftime('%Y', PVData.created_at) == str(current_year - 1))
-            .order_by(PVData.id.desc())
-            .first())
+    return (
+        PVData.query.with_entities(PVData.total_energy)
+        .filter(func.strftime("%Y", PVData.created_at) == str(current_year - 1))
+        .order_by(PVData.id.desc())
+        .first()
+    )
 
 
-@cache.cached(timeout=3600, key_prefix='get_yearly_data')
+@cache.cached(timeout=3600, key_prefix="get_yearly_data")
 def get_yearly_data(year):
     """Returns the yielded energy for the current year
     :param year: year of the data
     :return: returns an array of monthly energy for a given year
     """
-    return (PVData.query
-            .with_entities((func.max(PVData.total_energy) - func.min(PVData.total_energy)).label('total_energy'))
-            .filter(func.strftime('%Y', PVData.created_at) == str(year))
-            .group_by(func.strftime('%Y-%m', PVData.created_at))
-            .all())
+    return (
+        PVData.query.with_entities(
+            (func.max(PVData.total_energy) - func.min(PVData.total_energy)).label("total_energy")
+        )
+        .filter(func.strftime("%Y", PVData.created_at) == str(year))
+        .group_by(func.strftime("%Y-%m", PVData.created_at))
+        .all()
+    )
 
 
 def get_yearly_average_data():
@@ -156,13 +181,11 @@ def get_current_month_prediction(current_month_energy, last_years_average):
     :return: series with predicted energy yield for the current month
     """
     now = datetime.now()
-    current_month_prediction = int(current_month_energy
-                                   + last_years_average * (calendar.monthrange(now.year, now.month)[1] - now.day + 1))
+    current_month_prediction = int(
+        current_month_energy + last_years_average * (calendar.monthrange(now.year, now.month)[1] - now.day + 1)
+    )
 
-    current_month_prediction_series = [current_month_prediction
-                                       if i == (now.month - 1)
-                                       else 'null'
-                                       for i in range(12)]
+    current_month_prediction_series = [current_month_prediction if i == (now.month - 1) else "null" for i in range(12)]
     return current_month_prediction_series
 
 
@@ -234,7 +257,7 @@ def get_first_date():
 
 
 def get_sec(s):
-    l = map(int, s.split(':'))
+    l = map(int, s.split(":"))
     return sum(n * sec for n, sec in zip(l[::-1], (1, 60, 3600)))
 
 

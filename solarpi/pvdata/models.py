@@ -10,7 +10,7 @@ from solarpi.database import (
 
 
 class PVData(SurrogatePK, Model):
-    __tablename__ = 'pvdata'
+    __tablename__ = "pvdata"
 
     id = Column(db.Integer(), nullable=False, primary_key=True)
     created_at = Column(db.Text(), nullable=False, default=dt.datetime.utcnow)

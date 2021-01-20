@@ -28,15 +28,12 @@ def create_app(config_object=ProdConfig):
 
 def register_extensions(app):
     assets.init_app(app)
-    cache.init_app(app, config={'CACHE_TYPE': 'simple'})
+    cache.init_app(app, config={"CACHE_TYPE": "simple"})
     db.init_app(app)
     debug_toolbar.init_app(app)
     migrate.init_app(app, db)
     if ProdConfig.SENTRY_DNS is not None:
-        sentry_sdk.init(
-            dsn=ProdConfig.SENTRY_DNS,
-            integrations=[FlaskIntegration()]
-        )
+        sentry_sdk.init(dsn=ProdConfig.SENTRY_DNS, integrations=[FlaskIntegration()])
     return None
 
 
@@ -53,7 +50,7 @@ def register_blueprints(app):
 def register_errorhandlers(app):
     def render_error(error):
         # If a HTTPException, pull the `code` attribute; default to 500
-        error_code = getattr(error, 'code', 500)
+        error_code = getattr(error, "code", 500)
         return render_template("{0}.html".format(error_code)), error_code
 
     for errcode in [401, 404, 500]:
