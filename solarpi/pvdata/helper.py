@@ -257,7 +257,7 @@ def get_first_date():
 
 
 def get_sec(s):
-    l = map(int, s.split(":"))
+    l = list(map(int, s.split(":")))
     return sum(n * sec for n, sec in zip(l[::-1], (1, 60, 3600)))
 
 
