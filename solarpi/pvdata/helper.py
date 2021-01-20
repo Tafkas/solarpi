@@ -162,7 +162,7 @@ def get_current_month_prediction(current_month_energy, last_years_average):
     current_month_prediction_series = [current_month_prediction
                                        if i == (now.month - 1)
                                        else 'null'
-                                       for i in xrange(12)]
+                                       for i in range(12)]
     return current_month_prediction_series
 
 
