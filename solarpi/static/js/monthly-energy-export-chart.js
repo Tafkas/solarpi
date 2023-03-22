@@ -1,11 +1,11 @@
 $(document).ready(function () {
     $(function () {
-        $('#monthly-import-chart').highcharts({
+        $('#monthly-export-chart').highcharts({
             chart: {
                 type: 'column'
             },
             title: {
-                text: 'Last 30 Days Energy Import'
+                text: 'Last 30 Days Energy Export'
             },
             xAxis: {
                 type: 'datetime'
@@ -32,8 +32,8 @@ $(document).ready(function () {
             },
             series: [
                 {
-                    name: 'Daily Energy Import',
-                    data: importData
+                    name: 'Daily Energy Export',
+                    data: exportData
                 }
             ]
         });

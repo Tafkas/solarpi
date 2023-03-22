@@ -13,18 +13,20 @@ def statistics():
     """
     data = list(
         db.engine.execute(
-            """SELECT
-              Strftime('%Y-%m', created_at) AS month,
-              Min(daily_yield) AS min_yield,
-              Max(daily_yield) AS max_yield,
-              Avg(daily_yield) AS avg_yield
-            FROM (
-              SELECT
-                Strftime('%Y-%m-%d', created_at) AS created_at,
-                Max(total_energy) - Min(total_energy) AS daily_yield
-              FROM pvdata
-              GROUP BY Strftime('%Y-%m-%d', created_at))
-            GROUP BY Strftime('%Y-%m', created_at) ORDER BY month DESC LIMIT 12 """
+            """WITH daily_yield AS (SELECT DATE(created_at)                      AS created_at,
+                            MAX(total_energy) - MIN(total_energy) AS daily_yield
+                     FROM pvdata
+                     GROUP BY DATE(created_at))
+
+                SELECT Strftime('%Y-%m', created_at) AS month,
+                       Min(daily_yield)              AS min_yield,
+                       Max(daily_yield)              AS max_yield,
+                       ROUND(Avg(daily_yield), 2)    AS avg_yield
+                FROM daily_yield
+                GROUP BY Strftime('%Y-%m', created_at)
+                ORDER BY month DESC
+                LIMIT 12;
+"""
         )
     )
     return render_template("statistics/statistics.html", data=data)

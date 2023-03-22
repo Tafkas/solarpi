@@ -26,29 +26,26 @@ def get_todays_max_power():
     return todays_max_power
 
 
-@cache.memoize(timeout=300)
+# @cache.memoize(timeout=300)
 def get_daily_energy_series(current_date):
     """
     :param current_date: date of the energy series
     :return: energy series
     """
-    tomorrow = current_date + timedelta(days=1)
-    return (
-        PVData.query.with_entities(
-            PVData.created_at,
-            PVData.current_power,
-            PVData.daily_energy,
-            PVData.dc_1_u,
-            PVData.dc_2_u,
-            PVData.ac_1_u,
-            PVData.ac_2_u,
-            PVData.ac_3_u,
-        )
-        .filter(PVData.created_at > current_date.strftime("%Y-%m-%d"))
-        .filter(PVData.created_at < tomorrow.strftime("%Y-%m-%d"))
-        .filter(PVData.current_power > 0)
-        .all()
-    )
+    query = """SELECT created_at,
+                       current_power,
+                       daily_energy,
+                       dc_1_u,
+                       dc_2_u,
+                       ac_1_u,
+                       ac_2_u,
+                       ac_3_u
+                FROM pvdata
+                WHERE DATE(created_at) = ?
+                  AND current_power > 0;
+    """
+    result = db.engine.execute(query, current_date)
+    return list(result)
 
 
 def get_7_day_max_energy_series(current_date):
@@ -69,21 +66,20 @@ def get_7_day_max_energy_series(current_date):
     )
 
 
-@cache.memoize(timeout=300)
+# @cache.memoize(timeout=300)
 def get_last_n_days(n):
     """Returns a list of daily yields
     :param n: number of last days
     :return: list of daily yields
     """
-    return (
-        PVData.query.with_entities(
-            func.strftime("%Y-%m-%dT00:00:00", PVData.created_at).label("created_at"),
-            func.max(PVData.daily_energy).label("daily_energy"),
-        )
-        .filter(PVData.created_at > (datetime.now() - timedelta(days=n)))
-        .group_by(func.strftime("%Y-%m-%d", PVData.created_at))
-        .all()
-    )
+    query = f"""SELECT strftime('%Y-%m-%dT00:00:00', created_at) AS created_at,
+                       MAX(daily_energy) AS daily_energy
+                FROM pvdata
+                WHERE DATE(created_at) > DATE('now','-{n} day' )
+                GROUP BY DATE(created_at);
+    """
+    result = db.engine.execute(query)
+    return list(result)
 
 
 @cache.cached(timeout=3600, key_prefix="yearly_series")
@@ -91,14 +87,13 @@ def get_yearly_series():
     """Returns a list of yearly generated energy for past years
     :return: list of yearly generated energy for past years
     """
-    return (
-        PVData.query.with_entities(
-            func.strftime("%Y", PVData.created_at).label("year"),
-            (func.max(PVData.total_energy) - func.min(PVData.total_energy)).label("yearly_output"),
-        )
-        .group_by(func.strftime("%Y", PVData.created_at))
-        .all()
-    )
+    query = """SELECT strftime('%Y', created_at)            AS year,
+                       MAX(total_energy) - MIN(total_energy) AS yearly_output
+                FROM pvdata
+                GROUP BY strftime('%Y', created_at);
+    """
+    result = db.engine.execute(query)
+    return list(result)
 
 
 @cache.cached(timeout=3600, key_prefix="max_daily_energy_last_seven_days")
@@ -128,20 +123,30 @@ def get_last_years_energy():
     )
 
 
-@cache.cached(timeout=3600, key_prefix="get_yearly_data")
+def get_current_year_total_energy():
+    query = """SELECT MAX(total_energy) - MIN(total_energy) as current_year_total_energy
+               FROM pvdata
+               WHERE strftime('%Y', created_at) = strftime('%Y', 'now')
+               GROUP BY strftime('%Y', 'now');
+    """
+    result = db.engine.execute(query).first()[0]
+    return result
+
+
+# @cache.cached(timeout=3600, key_prefix="get_yearly_data")
 def get_yearly_data(year):
     """Returns the yielded energy for the current year
     :param year: year of the data
     :return: returns an array of monthly energy for a given year
     """
-    return (
-        PVData.query.with_entities(
-            (func.max(PVData.total_energy) - func.min(PVData.total_energy)).label("total_energy")
-        )
-        .filter(func.strftime("%Y", PVData.created_at) == str(year))
-        .group_by(func.strftime("%Y-%m", PVData.created_at))
-        .all()
-    )
+    query = """
+    SELECT MAX(total_energy) - MIN(total_energy) AS total_energy
+    FROM pvdata
+    WHERE strftime('%Y', created_at) = ?
+    GROUP BY strftime('%Y-%m', created_at);
+    """
+    result = db.engine.execute(query, str(year))
+    return result
 
 
 def get_yearly_average_data():
@@ -149,26 +154,19 @@ def get_yearly_average_data():
     :return: returns an array of monthly averages for previous years
     """
     current_year = str(datetime.now().year)
-    query = """SELECT 
-                   avg(monthly_yield),
-                   min(monthly_yield),
-                   max(monthly_yield) 
-               FROM 
-                   (
-                       SELECT 
-                           strftime('%m', created_at) AS month, 
-                           max(total_energy) - min(total_energy) AS monthly_yield 
-                       FROM 
-                           pvdata 
-                       WHERE 
-                           strftime('%Y', created_at) < ?
-                       GROUP BY 
-                           strftime('%Y-%m', created_at)
-                   ) subq 
-               WHERE 
-                   monthly_yield > 0 
-               GROUP BY 
-                   month;"""
+    query = """WITH monthly_yields AS (SELECT strftime('%m', created_at)            AS month,
+                               max(total_energy) - min(total_energy)                AS monthly_yield
+                        FROM pvdata
+                        WHERE strftime('%Y', created_at) < ?
+                        GROUP BY strftime('%Y-%m', created_at))
+
+                SELECT ROUND(avg(monthly_yield), 2) AS avg_monthly_yield,
+                       min(monthly_yield)           AS minimum_monthly_yield,
+                       max(monthly_yield)           AS maximum_monthly_yield
+                FROM monthly_yields
+                WHERE monthly_yield > 0
+                GROUP BY month;
+"""
     result = db.engine.execute(query, current_year)
     return result
 
@@ -194,52 +192,42 @@ def get_current_year_prediction():
 
     :return: the number of kWh for the remaining year
     """
-    query = """SELECT 
-                    SUM(energy) AS prediction 
-                FROM (
-                    SELECT 
-                        max(total_energy) - min(total_energy) AS energy 
-                    FROM 
-                        pvdata 
-                    WHERE 
-                        strftime('%Y', created_at) = strftime('%Y', 'now') 
-                    UNION 
-                    SELECT 
-                        AVG(max_rest_year - min_rest_year) AS energy 
-                    FROM 
-                        (
-                            SELECT 
-                                min(total_energy) min_rest_year, 
-                                max(total_energy) max_rest_year 
-                            FROM 
-                                pvdata 
-                            WHERE 
-                                strftime('%j', created_at) > strftime('%j', 'now') 
-                                AND strftime('%Y', created_at) < strftime('%Y', 'now') 
-                            GROUP BY 
-                                strftime('%Y', created_at)
-                        ) q
-                );"""
+    query = """WITH rest_of_year AS (SELECT min(total_energy) min_rest_year,
+                             max(total_energy) max_rest_year
+                      FROM pvdata
+                      WHERE strftime('%j', created_at) > strftime('%j', 'now')
+                        AND strftime('%Y', created_at) < strftime('%Y', 'now')
+                      GROUP BY strftime('%Y', created_at)),
+
+                     combo AS (SELECT max(total_energy) - min(total_energy) AS energy
+                               FROM pvdata
+                               WHERE strftime('%Y', created_at) = strftime('%Y', 'now')
+                               UNION
+                               SELECT AVG(max_rest_year - min_rest_year) AS energy
+                               FROM rest_of_year)
+                SELECT SUM(energy) AS prediction
+                FROM combo;"""
     result = db.engine.execute(query)
     return result
 
 
-def get_efficiency(pv):
+def get_efficiency():
     """
-    :param pv: current photo voltaic values from the inverter
     :return: efficiency of the inverter between 0 and 1
     """
-    efficiency = 0.0
-    pv_dc_u = [pv.dc_1_u, pv.dc_2_u, pv.dc_3_u]
-    pv_dc_i = [pv.dc_1_i, pv.dc_2_i, pv.dc_3_i]
-    if all(pv_dc_u):
-        pdc = sum([u * i for u, i in zip(pv_dc_u, pv_dc_i)])
-        if pdc > 0:
-            pv_ac = [pv.ac_1_p, pv.ac_2_p, pv.ac_3_p]
-            if all(pv_ac):
-                pac = sum(pv_ac)
-                efficiency = 1.0 * pac / pdc
-    return efficiency
+    query = """WITH current_values AS (SELECT *
+                        FROM pvdata
+                        ORDER BY created_at DESC
+                        LIMIT 1)
+
+                SELECT ROUND((ac_1_p + ac_2_p + ac_3_p)
+                                 / (dc_1_i * dc_1_u +
+                                    dc_2_i * dc_2_u +
+                                    dc_3_i * dc_3_u), 2) as current_efficiency
+                FROM current_values;
+    """
+    result = db.engine.execute(query).first()[0]
+    return result
 
 
 def get_current_values():
@@ -257,8 +245,8 @@ def get_first_date():
 
 
 def get_sec(s):
-    l = list(map(int, s.split(":")))
-    return sum(n * sec for n, sec in zip(l[::-1], (1, 60, 3600)))
+    hours, minutes, seconds = map(int, s.split(":"))
+    return hours * 3600 + minutes * 60 + seconds
 
 
 def get_todays_date():

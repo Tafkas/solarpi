@@ -10,6 +10,7 @@
     <script>
         var pvData = {{ pvdata|safe }};
         var importData = {{ importData|safe }};
+        var exportData = {{ exportData|safe }};
     </script>
     <div id="page-wrapper">
         <div class="row">
@@ -42,6 +43,18 @@
                 </div>
             </div>
         </div>
+    <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Last {{ number_of_days }} Export Chart
+                    </div>
+                    <div class="panel-body">
+                        <div id="monthly-export-chart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 {% block scripts %}
@@ -54,6 +67,5 @@
     </script>
     <script src="{{ url_for('static', filename='js/monthly-pv-chart.js') }}"></script>
     <script src="{{ url_for('static', filename='js/monthly-energy-import-chart.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/monthly-energy-export-chart.js') }}"></script>
 {% endblock %}
-
-

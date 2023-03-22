@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from flask import Blueprint, render_template
 
 from solarpi.charts.helper import get_timestamps, get_daily_pv_chart_data
-from solarpi.electricity.helper import get_last_n_days_import
+from solarpi.electricity.helper import get_last_n_days_import, get_last_n_days_export
 from solarpi.pvdata.helper import (
     get_sec,
     get_todays_date,
@@ -103,12 +103,15 @@ def get_last_days_chart(number_of_days=7):
     pv_chart_data = [list(x) for x in zip(timestamps, series)]
 
     electricity_import = [(float(d.electricity_import or 0)) for d in list(get_last_n_days_import(number_of_days))]
-    chart_data = [list(x) for x in zip(timestamps, electricity_import)]
+    electricity_export = [(float(d.electricity_export or 0)) for d in list(get_last_n_days_export(number_of_days))]
+    import_chart_data = [list(x) for x in zip(timestamps, electricity_import)]
+    export_chart_data = [list(x) for x in zip(timestamps, electricity_export)]
     return render_template(
         "charts/last_days.html",
         number_of_days=number_of_days,
         pvdata=pv_chart_data,
-        importData=chart_data,
+        importData=import_chart_data,
+        exportData=export_chart_data,
         total_energy=total_energy,
     )
 
