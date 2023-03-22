@@ -25,7 +25,6 @@ class ProdConfig(Config):
     DB_PATH = os.path.join(Config.PROJECT_ROOT, DB_NAME)
     SQLALCHEMY_DATABASE_URI = "sqlite:///{0}".format(DB_PATH)
     DEBUG_TB_ENABLED = False  # Disable Debug toolbar
-    SENTRY_DNS = os_env.get("SENTRY_DNS", None)
 
 
 class DevConfig(Config):
