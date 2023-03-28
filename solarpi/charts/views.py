@@ -30,7 +30,7 @@ def daily(date=None):
     current_date = get_todays_date()
     try:
         if date:
-            current_date = datetime.strptime(date, "%Y-%m-%d")
+            current_date = datetime.strptime(date, "%Y-%m-%d").date()
     except ValueError:
         error = "invalid date, displaying today's data instead"
         current_date = get_todays_date()
@@ -102,8 +102,8 @@ def get_last_days_chart(number_of_days=7):
     total_energy = sum(series)
     pv_chart_data = [list(x) for x in zip(timestamps, series)]
 
-    electricity_import = [(float(d.electricity_import or 0)) for d in list(get_last_n_days_import(number_of_days))]
-    electricity_export = [(float(d.electricity_export or 0)) for d in list(get_last_n_days_export(number_of_days))]
+    electricity_import = [(float(d.daily_import or 0)) for d in get_last_n_days_import(number_of_days)]
+    electricity_export = [(float(d.daily_export or 0)) for d in get_last_n_days_export(number_of_days)]
     import_chart_data = [list(x) for x in zip(timestamps, electricity_import)]
     export_chart_data = [list(x) for x in zip(timestamps, electricity_export)]
     return render_template(

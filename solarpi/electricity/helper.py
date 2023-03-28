@@ -20,30 +20,27 @@ def get_todays_electricity():
     return result
 
 
-@cache.memoize(timeout=300)
 def get_last_n_days_import(n):
-    return (
-        Electricity.query.with_entities(
-            func.strftime("%Y-%m-%dT00:00:00", Electricity.created_at).label("created_at"),
-            (func.max(Electricity.meter_180) - func.min(Electricity.meter_180)).label("electricity_import"),
-        )
-        .filter(Electricity.created_at > (datetime.now() - timedelta(days=n)))
-        .group_by(func.strftime("%Y-%m-%d", Electricity.created_at))
-        .all()
-    )
+    query = f"""SELECT strftime('%Y-%m-%dT00:00:00', created_at) AS created_at,
+                           MAX(meter_180) - MIN(meter_180)       AS daily_import
+                    FROM electricity_data
+                    WHERE DATE(created_at) > DATE('now', '-{n} day')
+                    GROUP BY DATE(created_at);
+            """
+    result = db.engine.execute(query)
+    return list(result)
 
 
 @cache.memoize(timeout=300)
 def get_last_n_days_export(n):
-    return (
-        Electricity.query.with_entities(
-            func.strftime("%Y-%m-%dT00:00:00", Electricity.created_at).label("created_at"),
-            (func.max(Electricity.meter_280) - func.min(Electricity.meter_280)).label("electricity_export"),
-        )
-        .filter(Electricity.created_at > (datetime.now() - timedelta(days=n)))
-        .group_by(func.strftime("%Y-%m-%d", Electricity.created_at))
-        .all()
-    )
+    query = f"""SELECT strftime('%Y-%m-%dT00:00:00', created_at) AS created_at,
+                       MAX(meter_280) - MIN(meter_280)           AS daily_export
+                FROM electricity_data
+                WHERE DATE(created_at) > DATE('now', '-{n} day')
+                GROUP BY DATE(created_at);
+        """
+    result = db.engine.execute(query)
+    return list(result)
 
 
 @cache.cached(timeout=3600, key_prefix="last_year_export")
